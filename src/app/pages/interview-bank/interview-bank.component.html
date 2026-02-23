@@ -1,0 +1,268 @@
+<div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-6">
+
+  <!-- ── Header ── -->
+  <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="flex-1">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30">
+          <span class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-xl" style="font-variation-settings: 'FILL' 1;">school</span>
+        </div>
+        Interview Bank
+      </h1>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        {{ totalCount() }} questions · {{ reviewedCount() }} reviewed · {{ favoriteCount() }} favorites
+      </p>
+    </div>
+    <button (click)="openForm()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm font-semibold
+                   shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+      <span class="material-symbols-outlined text-lg">add</span> Add Question
+    </button>
+  </div>
+
+  <!-- ── Stats Cards ── -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    @for (cat of categories().slice(1, 5); track cat) {
+      <button (click)="activeCategory.set(cat)"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl border shadow-sm transition-all hover:shadow-md"
+              [class]="activeCategory() === cat ? 'border-accent bg-accent/5 dark:bg-accent/10' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800'">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" [ngClass]="getCategoryColor(cat)">
+          <span class="material-symbols-outlined text-base">{{ getCategoryIcon(cat) }}</span>
+        </div>
+        <div class="text-left">
+          <p class="text-sm font-bold text-gray-900 dark:text-white">{{ cat }}</p>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400">{{ getCategoryCount(cat) }} questions</p>
+        </div>
+      </button>
+    }
+  </div>
+
+  <!-- ── Filters ── -->
+  <div class="flex flex-col sm:flex-row gap-3">
+    <div class="relative flex-1 max-w-md">
+      <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+      <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search questions, answers, or tags…"
+             class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all" />
+    </div>
+
+    <!-- Category filter -->
+    <div class="flex flex-wrap gap-2">
+      @for (cat of categories(); track cat) {
+        <button (click)="activeCategory.set(cat)"
+                [class]="activeCategory() === cat ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-accent/40'"
+                class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all capitalize">
+          {{ cat }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Difficulty + Reviewed filter -->
+  <div class="flex items-center gap-3">
+    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Difficulty:</span>
+    @for (d of difficulties; track d.key) {
+      <button (click)="activeDifficulty.set(d.key)"
+              [class]="activeDifficulty() === d.key ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'"
+              class="px-3 py-1 rounded-lg text-xs font-medium border transition-all">
+        {{ d.label }}
+      </button>
+    }
+    <div class="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" [ngModel]="showReviewedOnly()" (ngModelChange)="showReviewedOnly.set($event)"
+             class="rounded border-slate-300 dark:border-slate-600 text-accent focus:ring-accent/30 w-3.5 h-3.5" />
+      <span class="text-xs text-slate-600 dark:text-slate-400 font-medium">Reviewed only</span>
+    </label>
+  </div>
+
+  <!-- ── Questions List ── -->
+  <div class="space-y-3">
+    @for (q of filteredQuestions(); track q.id) {
+      <div class="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800
+                  shadow-sm hover:shadow-md transition-all overflow-hidden">
+
+        <!-- Question Header -->
+        <button (click)="toggleExpand(q.id)"
+                class="w-full flex items-start gap-4 p-5 text-left hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-colors">
+
+          <!-- Number/Icon -->
+          <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" [ngClass]="getCategoryColor(q.category)">
+            <span class="material-symbols-outlined text-base">{{ getCategoryIcon(q.category) }}</span>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold" [ngClass]="getDifficultyClass(q.difficulty)">
+                {{ q.difficulty }}
+              </span>
+              <span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">{{ q.category }}</span>
+              @if (q.isReviewed) {
+                <span class="inline-flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span> Reviewed
+                </span>
+              }
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white text-sm sm:text-base leading-snug">
+              {{ q.question }}
+            </h3>
+            @if (q.tags?.length) {
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                @for (tag of q.tags!; track tag) {
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">{{ tag }}</span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Actions + Expand icon -->
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <button (click)="toggleFavorite(q); $event.stopPropagation()"
+                    class="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+                    [class]="q.isFavorite ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600 hover:text-amber-400'">
+              <span class="material-symbols-outlined text-lg" [class.filled-icon]="q.isFavorite">star</span>
+            </button>
+            <span class="material-symbols-outlined text-slate-400 text-xl transition-transform duration-200"
+                  [class.rotate-180]="expandedQuestion() === q.id">
+              expand_more
+            </span>
+          </div>
+        </button>
+
+        <!-- Expanded Answer -->
+        @if (expandedQuestion() === q.id) {
+          <div class="border-t border-slate-100 dark:border-slate-700/50 animate-expand">
+
+            <!-- Answer -->
+            <div class="px-5 py-4 bg-slate-50/50 dark:bg-slate-800/50">
+              <h4 class="text-xs font-semibold text-accent uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">lightbulb</span> Answer
+              </h4>
+              <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">{{ q.answer }}</p>
+            </div>
+
+            <!-- Code Example -->
+            @if (q.codeExample) {
+              <div class="px-5 py-4 border-t border-slate-100 dark:border-slate-700/50">
+                <h4 class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm">code</span> Code Example
+                </h4>
+                <div class="relative">
+                  <pre class="p-4 rounded-xl bg-slate-900 dark:bg-black text-slate-100 text-sm overflow-x-auto font-mono leading-relaxed"><code>{{ q.codeExample }}</code></pre>
+                </div>
+              </div>
+            }
+
+            <!-- Notes -->
+            @if (q.notes) {
+              <div class="px-5 py-4 border-t border-slate-100 dark:border-slate-700/50">
+                <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">📝 Notes</h4>
+                <p class="text-sm text-slate-600 dark:text-slate-400">{{ q.notes }}</p>
+              </div>
+            }
+
+            <!-- Action Bar -->
+            <div class="px-5 py-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center gap-2 bg-slate-50/30 dark:bg-slate-800/30">
+              <button (click)="toggleReviewed(q)"
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                      [class]="q.isReviewed
+                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 hover:bg-emerald-200'
+                        : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 hover:bg-slate-200'">
+                <span class="material-symbols-outlined text-sm" [class.filled-icon]="q.isReviewed">check_circle</span>
+                {{ q.isReviewed ? 'Reviewed' : 'Mark as Reviewed' }}
+              </button>
+              <div class="flex-1"></div>
+              <button (click)="openForm(q)"
+                      class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-accent transition-colors">
+                <span class="material-symbols-outlined text-base">edit</span>
+              </button>
+              <button (click)="deleteQuestion(q)"
+                      class="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 transition-colors">
+                <span class="material-symbols-outlined text-base">delete</span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (filteredQuestions().length === 0) {
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600">quiz</span>
+      <p class="mt-4 text-lg font-medium text-slate-500 dark:text-slate-400">No questions found</p>
+      <p class="text-sm text-slate-400 dark:text-slate-500">Try a different search or add a new question</p>
+    </div>
+  }
+</div>
+
+<!-- ── ADD/EDIT MODAL ── -->
+@if (showForm()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm" (click)="closeForm()"></div>
+    <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-2xl p-6 space-y-5 animate-modal-in">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ editingQuestion() ? 'Edit Question' : 'New Question' }}</h2>
+        <button (click)="closeForm()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Question *</label>
+          <textarea rows="2" [ngModel]="formData().question" (ngModelChange)="updateField('question', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Answer *</label>
+          <textarea rows="4" [ngModel]="formData().answer" (ngModelChange)="updateField('answer', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Category</label>
+            <select [ngModel]="formData().category" (ngModelChange)="updateField('category', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30">
+              <option>JavaScript</option><option>TypeScript</option><option>Angular</option>
+              <option>React</option><option>Node.js</option><option>System Design</option>
+              <option>CSS</option><option>HTML</option><option>Data Structures</option>
+              <option>Behavioral</option><option>General</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Difficulty</label>
+            <select [ngModel]="formData().difficulty" (ngModelChange)="updateField('difficulty', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30">
+              <option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Code Example</label>
+          <textarea rows="4" [ngModel]="formData().codeExample" (ngModelChange)="updateField('codeExample', $event)"
+                    placeholder="// paste code example here"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Personal Notes</label>
+          <textarea rows="2" [ngModel]="formData().notes" (ngModelChange)="updateField('notes', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tags</label>
+          <div class="flex gap-2">
+            <input type="text" [ngModel]="tagInput()" (ngModelChange)="tagInput.set($event)" (keydown.enter)="addTag()" placeholder="Add tag…"
+                   class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30" />
+            <button (click)="addTag()" class="px-3 py-2 rounded-xl bg-accent/10 text-accent text-sm font-medium hover:bg-accent/20 transition-colors">Add</button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-2">
+            @for (tag of formData().tags; track tag) {
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-accent/10 text-accent">{{ tag }} <button (click)="removeTag(tag)" class="hover:text-red-500">×</button></span>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button (click)="closeForm()" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+        <button (click)="saveQuestion()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm font-semibold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">{{ editingQuestion() ? 'Update' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+}

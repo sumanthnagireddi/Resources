@@ -1,0 +1,680 @@
+<!-- ============================================================ -->
+<!-- ROADMAP — LIST VIEW (roadmap.sh homepage style)              -->
+<!-- ============================================================ -->
+@if (activeView() === 'list') {
+<div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-8">
+
+  <!-- ── Hero ── -->
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-700">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+    <div class="relative z-10 py-14 sm:py-20 px-6 sm:px-10 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-5 rounded-full bg-white/10 border border-white/10 text-xs text-slate-300 font-medium">
+        <span class="material-symbols-outlined text-sm">map</span> Developer Roadmaps
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+        Developer <span class="text-accent">Roadmaps</span>
+      </h1>
+      <p class="mt-3 text-base text-slate-400 max-w-xl mx-auto">
+        Community driven roadmaps, guides, and resources to help you pick your path and grow in your career.
+      </p>
+      <div class="mt-8 max-w-md mx-auto relative">
+        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search roadmaps…"
+               class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/40" />
+      </div>
+      <div class="mt-5 flex flex-wrap justify-center gap-2">
+        @for (cat of categories; track cat.key) {
+          <button (click)="activeCategory.set(cat.key)"
+                  [class]="activeCategory() === cat.key ? 'bg-accent text-white border-accent' : 'bg-white/5 text-slate-300 border-white/10 hover:border-accent/40'"
+                  class="px-4 py-1.5 rounded-full text-xs font-medium border transition-all">{{ cat.label }}</button>
+        }
+      </div>
+      <button (click)="openRoadmapForm()"
+              class="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent-hover transition-colors">
+        <span class="material-symbols-outlined text-base">add</span> Create New Roadmap
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Role-based ── -->
+  @if (activeCategory() === 'all' || activeCategory() === 'role') {
+    @if (roleRoadmaps().length) {
+      <section>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-base">badge</span>
+          </div>
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white">Role-based Roadmaps</h2>
+          <span class="text-[10px] font-medium text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-400 px-2 py-0.5 rounded-full">{{ roleRoadmaps().length }}</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          @for (rm of roleRoadmaps(); track rm.id) { <ng-container *ngTemplateOutlet="roadmapCard; context: { $implicit: rm }"></ng-container> }
+        </div>
+      </section>
+    }
+  }
+
+  <!-- ── Skill-based ── -->
+  @if (activeCategory() === 'all' || activeCategory() === 'skill') {
+    @if (skillRoadmaps().length) {
+      <section>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+            <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-base">psychology</span>
+          </div>
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white">Skill-based Roadmaps</h2>
+          <span class="text-[10px] font-medium text-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-slate-400 px-2 py-0.5 rounded-full">{{ skillRoadmaps().length }}</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          @for (rm of skillRoadmaps(); track rm.id) { <ng-container *ngTemplateOutlet="roadmapCard; context: { $implicit: rm }"></ng-container> }
+        </div>
+      </section>
+    }
+  }
+
+  <!-- ── Custom ── -->
+  @if (activeCategory() === 'all' || activeCategory() === 'custom') {
+    @if (customRoadmaps().length) {
+      <section>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+            <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-base">edit_note</span>
+          </div>
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white">Custom Roadmaps</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          @for (rm of customRoadmaps(); track rm.id) { <ng-container *ngTemplateOutlet="roadmapCard; context: { $implicit: rm }"></ng-container> }
+        </div>
+      </section>
+    }
+  }
+
+  @if (filteredRoadmaps().length === 0) {
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-600">search_off</span>
+      <p class="mt-3 text-base font-medium text-slate-500 dark:text-slate-400">No roadmaps found</p>
+    </div>
+  }
+</div>
+}
+
+
+<!-- ============================================================ -->
+<!-- ROADMAP — DETAIL VIEW (roadmap.sh/frontend flowchart style)  -->
+<!-- ============================================================ -->
+@if (activeView() === 'detail' && activeRoadmap()) {
+<div class="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6" [class.detail-with-panel]="showNodePanel()">
+
+  <!-- ── Breadcrumb & Header ── -->
+  <div class="mb-8 space-y-3">
+    <button (click)="backToList()"
+            class="inline-flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-accent transition-colors">
+      <span class="material-symbols-outlined text-base">arrow_back</span> All Roadmaps
+    </button>
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">{{ activeRoadmap()!.title }}</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ activeRoadmap()!.description }}</p>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button (click)="openNodeForm()"
+                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-xs font-semibold hover:bg-accent-hover transition-colors">
+          <span class="material-symbols-outlined text-sm">add</span> Add Section
+        </button>
+        <button (click)="openRoadmapForm(activeRoadmap()!)"
+                class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-accent hover:border-accent/30 transition-colors">
+          <span class="material-symbols-outlined text-base">edit</span>
+        </button>
+        <button (click)="deleteRoadmap(activeRoadmap()!)"
+                class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-red-500 hover:border-red-300 transition-colors">
+          <span class="material-symbols-outlined text-base">delete</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Stats (roadmap.sh style) -->
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+      <div class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-emerald-500"></span>
+        <span class="font-semibold text-slate-700 dark:text-slate-200">{{ progressStats().done }}</span>
+        <span class="text-slate-500 dark:text-slate-400">Done</span>
+      </div>
+      <span class="text-slate-300 dark:text-slate-600">·</span>
+      <div class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-blue-500"></span>
+        <span class="font-semibold text-slate-700 dark:text-slate-200">{{ progressStats().inProgress }}</span>
+        <span class="text-slate-500 dark:text-slate-400">In Progress</span>
+      </div>
+      <span class="text-slate-300 dark:text-slate-600">·</span>
+      <div class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-slate-400"></span>
+        <span class="font-semibold text-slate-700 dark:text-slate-200">{{ progressStats().skipped }}</span>
+        <span class="text-slate-500 dark:text-slate-400">Skipped</span>
+      </div>
+    </div>
+
+    <!-- Segmented Progress Bar -->
+    <div class="h-[6px] bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex">
+      <div class="h-full bg-emerald-500 transition-all duration-500" [style.width.%]="progressPercent('done')"></div>
+      <div class="h-full bg-blue-500 transition-all duration-500" [style.width.%]="progressPercent('in-progress')"></div>
+      <div class="h-full bg-slate-400 transition-all duration-500" [style.width.%]="progressPercent('skip')"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
+      <span>Right-click on any topic to toggle progress</span>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1.5">
+          <span class="w-3 h-3 rounded border-2 border-amber-400 bg-amber-50 dark:bg-amber-950/40"></span>
+          <span>Recommended</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-3 h-3 rounded border-2 border-slate-300 dark:border-slate-500 bg-white dark:bg-slate-800"></span>
+          <span>Alternative</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ FLOWCHART ═══════════════════════ -->
+  <div class="roadmap-flow relative overflow-x-auto pb-12">
+
+    @for (section of activeRoadmap()!.nodes; track section.id; let sIdx = $index; let isLast = $last) {
+
+      <!-- ── CHECKPOINT NODE (full-width banner) ── -->
+      @if (section.type === 'checkpoint') {
+        <!-- Spine segment above -->
+        @if (sIdx > 0) {
+          <div class="flex justify-center"><div class="w-[3px] h-6 bg-slate-300 dark:bg-slate-600"></div></div>
+        }
+        <div class="flex justify-center relative z-10 py-1">
+          <div class="px-6 py-3 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-700 bg-purple-50 dark:bg-purple-950/30 text-center max-w-lg">
+            <p class="text-sm font-bold text-purple-700 dark:text-purple-300">{{ section.label }}</p>
+            @if (section.annotation) {
+              <p class="text-xs text-purple-500 dark:text-purple-400 mt-0.5">{{ section.annotation }}</p>
+            }
+          </div>
+        </div>
+        <!-- Spine segment below -->
+        @if (!isLast) {
+          <div class="flex justify-center"><div class="w-[3px] h-6 bg-slate-300 dark:bg-slate-600"></div></div>
+        }
+      }
+
+      <!-- ── MILESTONE NODE (centered on spine) ── -->
+      @if (section.type === 'milestone') {
+
+        <!-- Spine segment above (except first) -->
+        @if (sIdx > 0) {
+          <div class="flex justify-center"><div class="w-[3px] h-6 bg-slate-300 dark:bg-slate-600"></div></div>
+        }
+
+        <!-- Annotation text above milestone -->
+        @if (section.annotation) {
+          <div class="flex justify-center mb-1.5">
+            <p class="text-[11px] italic text-slate-400 dark:text-slate-500 text-center max-w-sm">{{ section.annotation }}</p>
+          </div>
+        }
+
+        <!-- Milestone box -->
+        <div class="flex justify-center relative z-10">
+          <button (click)="selectNode(section)"
+                  (contextmenu)="rightClickNode($event, section)"
+                  class="milestone-node px-8 py-3 rounded-lg border-2 text-sm font-bold shadow-sm cursor-pointer transition-all hover:shadow-md"
+                  [ngClass]="getMilestoneClass(section)">
+            {{ section.label }}
+          </button>
+        </div>
+
+        <!-- ── TOPIC BRANCHES ── -->
+        @if (section.children?.length) {
+          <!-- Spine into branches -->
+          <div class="flex justify-center"><div class="w-[3px] h-4 bg-slate-300 dark:bg-slate-600"></div></div>
+
+          @for (pair of getTopicPairs(section.children!); track $index; let pIdx = $index; let pLast = $last) {
+            <div class="grid grid-cols-[1fr_3rem_1fr] max-w-3xl mx-auto items-center">
+
+              <!-- LEFT CELL -->
+              <div class="flex items-center justify-end my-2">
+                @if (pair.left) {
+                  <button (click)="selectNode(pair.left)"
+                          (contextmenu)="rightClickNode($event, pair.left)"
+                          class="topic-node relative px-4 py-2 rounded-lg  border-2 text-[13px] font-medium cursor-pointer transition-all hover:shadow-md max-w-[220px] text-right"
+                          [ngClass]="getNodeClass(pair.left)">
+                    {{ pair.left.label }}
+                    @if (pair.left.isRecommended) {
+                      <span class="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-amber-400 border-2 border-white dark:border-slate-900"></span>
+                    }
+                  </button>
+                  <div class="w-6 h-[3px] bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
+                }
+              </div>
+
+              <!-- CENTER SPINE -->
+              <div class="flex justify-center">
+                <div class="w-[3px] bg-slate-300 dark:bg-slate-600 min-h-[2.75rem]"></div>
+              </div>
+
+              <!-- RIGHT CELL -->
+              <div class="flex items-center justify-start">
+                @if (pair.right) {
+                  <div class="w-6 h-[3px] bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
+                  <button (click)="selectNode(pair.right)"
+                          (contextmenu)="rightClickNode($event, pair.right)"
+                          class="topic-node relative px-4 py-2 rounded-lg border-2 text-[13px] font-medium cursor-pointer transition-all hover:shadow-md max-w-[220px] text-left"
+                          [ngClass]="getNodeClass(pair.right)">
+                    {{ pair.right.label }}
+                    @if (pair.right.isRecommended) {
+                      <span class="absolute -top-1.5 -left-1.5 w-3 h-3 rounded-full bg-amber-400 border-2 border-white dark:border-slate-900"></span>
+                    }
+                  </button>
+                }
+              </div>
+
+            </div>
+          }
+        }
+      }
+    }
+
+    <!-- END marker -->
+    <div class="flex justify-center mt-2">
+      <div class="w-[3px] h-6 bg-slate-300 dark:bg-slate-600"></div>
+    </div>
+    <div class="flex justify-center">
+      <div class="px-5 py-2 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500 text-xs font-medium flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">flag</span> End of Roadmap
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── NODE DETAIL PANEL (Slide-over — same as roadmap.sh) ── -->
+@if (showNodePanel() && selectedNode()) {
+  <div class="fixed inset-0 bg-black/20 dark:bg-black/40 z-40 backdrop-blur-sm" (click)="closeNodePanel()"></div>
+  <div class="fixed right-0 top-0 h-full w-full sm:w-[380px] z-50 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 shadow-2xl overflow-y-auto animate-slide-in">
+
+    <!-- Panel Header -->
+    <div class="sticky top-0 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-100 dark:border-slate-800 px-5 py-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">{{ selectedNode()!.label }}</h3>
+          <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                [ngClass]="getStatusBadgeClass(selectedNode()!.status)">{{ getStatusLabel(selectedNode()!.status) }}</span>
+        </div>
+        <button (click)="closeNodePanel()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="px-5 py-5 space-y-5">
+      <!-- Description -->
+      @if (selectedNode()!.description) {
+        <div>
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Description</h4>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{{ selectedNode()!.description }}</p>
+        </div>
+      }
+
+      <!-- Status Toggle -->
+      <div>
+        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Update Status</h4>
+        <div class="grid grid-cols-2 gap-2">
+          <button (click)="setNodeStatus(selectedNode()!, 'not-started')"
+                  [class]="selectedNode()!.status === 'not-started' ? 'ring-2 ring-slate-400' : ''"
+                  class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <span class="w-2.5 h-2.5 rounded-sm bg-slate-300"></span> Not Started
+          </button>
+          <button (click)="setNodeStatus(selectedNode()!, 'in-progress')"
+                  [class]="selectedNode()!.status === 'in-progress' ? 'ring-2 ring-blue-400' : ''"
+                  class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+            <span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> In Progress
+          </button>
+          <button (click)="setNodeStatus(selectedNode()!, 'done')"
+                  [class]="selectedNode()!.status === 'done' ? 'ring-2 ring-emerald-400' : ''"
+                  class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+            <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Done
+          </button>
+          <button (click)="setNodeStatus(selectedNode()!, 'skip')"
+                  [class]="selectedNode()!.status === 'skip' ? 'ring-2 ring-slate-500' : ''"
+                  class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <span class="w-2.5 h-2.5 rounded-sm bg-slate-400"></span> Skip
+          </button>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      @if (selectedNode()!.resources?.length) {
+        <div>
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Resources</h4>
+          <div class="space-y-1.5">
+            @for (res of selectedNode()!.resources!; track res.title) {
+              <a [href]="res.url" target="_blank" rel="noopener noreferrer"
+                 class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-accent/30 hover:bg-accent/5 transition-all group">
+                <span class="material-symbols-outlined text-base text-slate-400 group-hover:text-accent">{{ getResourceIcon(res.type) }}</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-700 dark:text-slate-300 truncate group-hover:text-accent">{{ res.title }}</p>
+                  <p class="text-[10px] text-slate-400 capitalize">{{ res.type }}</p>
+                </div>
+                <span class="material-symbols-outlined text-xs text-slate-300 group-hover:text-accent">open_in_new</span>
+              </a>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Sub-topics -->
+      @if (selectedNode()!.children?.length) {
+        <div>
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Sub-topics</h4>
+          <div class="space-y-1.5">
+            @for (child of selectedNode()!.children!; track child.id) {
+              <button (click)="selectNode(child)"
+                      class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800 text-left hover:border-accent/30 hover:bg-accent/5 transition-all">
+                <span class="w-2 h-2 rounded-sm flex-shrink-0" [ngClass]="getStatusBadgeClass(child.status)"></span>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex-1">{{ child.label }}</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded" [ngClass]="getStatusBadgeClass(child.status)">{{ getStatusLabel(child.status) }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Actions: Edit / Add Child / Delete -->
+      <div>
+        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Actions</h4>
+        <div class="space-y-2">
+          <button (click)="openNodeForm(null, selectedNode()!)"
+                  class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-accent/30 hover:bg-accent/5 transition-all">
+            <span class="material-symbols-outlined text-base text-accent">edit</span> Edit this node
+          </button>
+          @if (selectedNode()!.type === 'milestone') {
+            <button (click)="openNodeForm(selectedNode()!)"
+                    class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-accent/30 hover:bg-accent/5 transition-all">
+              <span class="material-symbols-outlined text-base text-emerald-500">add_circle</span> Add topic under this
+            </button>
+          }
+          <button (click)="deleteNode(selectedNode()!)"
+                  class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg border border-red-200 dark:border-red-900/30 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all">
+            <span class="material-symbols-outlined text-base">delete</span> Delete this node
+          </button>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Personal Notes</h4>
+        <textarea rows="3" placeholder="Add your notes here…"
+                  class="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-300 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+      </div>
+    </div>
+  </div>
+}
+}
+
+
+<!-- ============================================================ -->
+<!-- ROADMAP CARD TEMPLATE (List View)                            -->
+<!-- ============================================================ -->
+<ng-template #roadmapCard let-roadmap>
+  <button (click)="openRoadmap(roadmap)"
+          class="group flex items-start gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700
+                 bg-white dark:bg-slate-800/80 hover:border-accent/30
+                 shadow-sm hover:shadow-md transition-all text-left w-full">
+    <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+      <span class="material-symbols-outlined text-accent text-lg filled-icon">{{ roadmap.icon }}</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h3 class="font-bold text-sm text-gray-900 dark:text-white group-hover:text-accent transition-colors truncate">{{ roadmap.title }}</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">{{ roadmap.description }}</p>
+      @if (roadmap.tags?.length) {
+        <div class="flex flex-wrap gap-1 mt-2">
+          @for (tag of roadmap.tags.slice(0, 3); track tag) {
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">{{ tag }}</span>
+          }
+        </div>
+      }
+      <div class="mt-3 flex items-center gap-2">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+          <div class="h-full rounded-full bg-accent transition-all" [style.width.%]="getProgress(roadmap)"></div>
+        </div>
+        <span class="text-[10px] font-bold text-accent tabular-nums">{{ getProgress(roadmap) }}%</span>
+      </div>
+    </div>
+    <span class="material-symbols-outlined text-base text-slate-300 group-hover:text-accent mt-1 flex-shrink-0">chevron_right</span>
+  </button>
+</ng-template>
+
+
+<!-- ============================================================ -->
+<!-- ROADMAP FORM MODAL (Add / Edit)                              -->
+<!-- ============================================================ -->
+@if (showRoadmapForm()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" (click)="closeRoadmapForm()"></div>
+
+  <!-- Modal -->
+  <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+      <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+        {{ editingRoadmap() ? 'Edit Roadmap' : 'New Roadmap' }}
+      </h2>
+      <button (click)="closeRoadmapForm()"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+      <!-- Title -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Title</label>
+        <input type="text" [ngModel]="roadmapForm().title" (ngModelChange)="updateRoadmapField('title', $event)"
+               placeholder="e.g. Frontend Developer"
+               class="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent" />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Description</label>
+        <textarea rows="3" [ngModel]="roadmapForm().description" (ngModelChange)="updateRoadmapField('description', $event)"
+                  placeholder="Step by step guide to becoming a..."
+                  class="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+      </div>
+
+      <!-- Icon Picker -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Icon</label>
+        <div class="flex flex-wrap gap-2">
+          @for (ic of iconOptions; track ic) {
+            <button (click)="updateRoadmapField('icon', ic)"
+                    [class]="roadmapForm().icon === ic ? 'ring-2 ring-accent bg-accent/10 text-accent' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-accent'"
+                    class="w-9 h-9 rounded-lg flex items-center justify-center transition-all">
+              <span class="material-symbols-outlined text-lg">{{ ic }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Category</label>
+        <div class="flex gap-2">
+          @for (cat of ['role', 'skill', 'custom']; track cat) {
+            <button (click)="updateRoadmapField('category', cat)"
+                    [class]="roadmapForm().category === cat ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-accent/30'"
+                    class="flex-1 px-3 py-2 rounded-lg border text-xs font-semibold capitalize transition-all">{{ cat }}</button>
+          }
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tags</label>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+          @for (tag of roadmapForm().tags; track tag) {
+            <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-accent/10 text-accent text-xs font-medium">
+              {{ tag }}
+              <button (click)="removeRoadmapTag(tag)" class="hover:text-red-400 transition-colors">
+                <span class="material-symbols-outlined text-xs">close</span>
+              </button>
+            </span>
+          }
+        </div>
+        <div class="flex gap-2">
+          <input type="text" [ngModel]="roadmapTagInput()" (ngModelChange)="roadmapTagInput.set($event)"
+                 (keydown.enter)="addRoadmapTag()"
+                 placeholder="Add a tag..."
+                 class="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent" />
+          <button (click)="addRoadmapTag()"
+                  class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-accent text-xs font-semibold transition-colors">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+      <button (click)="closeRoadmapForm()"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+      <button (click)="saveRoadmap()"
+              class="px-5 py-2 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent-hover transition-colors">
+        {{ editingRoadmap() ? 'Save Changes' : 'Create Roadmap' }}
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+
+<!-- ============================================================ -->
+<!-- NODE FORM MODAL (Add / Edit)                                 -->
+<!-- ============================================================ -->
+@if (showNodeForm()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" (click)="closeNodeForm()"></div>
+
+  <!-- Modal -->
+  <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+      <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+        {{ editingNode() ? 'Edit Node' : parentNodeForAdd() ? 'Add Topic to ' + parentNodeForAdd()!.label : 'Add New Section' }}
+      </h2>
+      <button (click)="closeNodeForm()"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+      <!-- Label -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Label</label>
+        <input type="text" [ngModel]="nodeForm().label" (ngModelChange)="updateNodeField('label', $event)"
+               placeholder="e.g. Learn CSS Fundamentals"
+               class="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent" />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Description</label>
+        <textarea rows="3" [ngModel]="nodeForm().description" (ngModelChange)="updateNodeField('description', $event)"
+                  placeholder="What should the learner know?"
+                  class="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+      </div>
+
+      <!-- Type -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Node Type</label>
+        <div class="grid grid-cols-4 gap-2">
+          @for (t of ['milestone', 'topic', 'subtopic', 'checkpoint']; track t) {
+            <button (click)="updateNodeField('type', t)"
+                    [class]="nodeForm().type === t ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-accent/30'"
+                    class="px-2 py-2 rounded-lg border text-xs font-semibold capitalize text-center transition-all">{{ t }}</button>
+          }
+        </div>
+      </div>
+
+      <!-- Annotation (for milestones/checkpoints) -->
+      @if (nodeForm().type === 'milestone' || nodeForm().type === 'checkpoint') {
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Annotation (optional)</label>
+        <input type="text" [ngModel]="nodeForm().annotation" (ngModelChange)="updateNodeField('annotation', $event)"
+               placeholder="e.g. ✅ Checkpoint: Build a project"
+               class="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent" />
+      </div>
+      }
+
+      <!-- Is Recommended -->
+      <div class="flex items-center gap-3">
+        <button (click)="updateNodeField('isRecommended', !nodeForm().isRecommended)"
+                [class]="nodeForm().isRecommended ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600'"
+                class="relative w-10 h-5 rounded-full transition-colors">
+          <span [class]="nodeForm().isRecommended ? 'translate-x-5' : 'translate-x-0.5'"
+                class="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform"></span>
+        </button>
+        <span class="text-sm text-slate-600 dark:text-slate-300 font-medium">Mark as recommended (⭐)</span>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Resources</label>
+          <button (click)="addNodeResource()"
+                  class="text-xs font-semibold text-accent hover:text-accent-hover transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">add</span> Add Resource
+          </button>
+        </div>
+        @if (nodeForm().resources?.length) {
+          <div class="space-y-2.5">
+            @for (res of nodeForm().resources; track $index; let i = $index) {
+              <div class="flex gap-2 items-start p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
+                <div class="flex-1 space-y-2">
+                  <input type="text" [ngModel]="res.title" (ngModelChange)="updateNodeField('resourceTitle', $event, i)"
+                         placeholder="Resource title"
+                         class="w-full px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-accent/30" />
+                  <input type="url" [ngModel]="res.url" (ngModelChange)="updateNodeField('resourceUrl', $event, i)"
+                         placeholder="https://..."
+                         class="w-full px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-gray-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-accent/30" />
+                  <select [ngModel]="res.type" (ngModelChange)="updateNodeField('resourceType', $event, i)"
+                          class="w-full px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-accent/30">
+                    <option value="article">📄 Article</option>
+                    <option value="video">🎬 Video</option>
+                    <option value="course">📚 Course</option>
+                    <option value="docs">📖 Docs</option>
+                    <option value="tool">🔧 Tool</option>
+                    <option value="github">🐙 GitHub</option>
+                  </select>
+                </div>
+                <button (click)="removeNodeResource(i)"
+                        class="p-1 rounded text-slate-400 hover:text-red-500 transition-colors flex-shrink-0 mt-1">
+                  <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-xs text-slate-400 italic text-center py-3">No resources yet. Click "Add Resource" above.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+      <button (click)="closeNodeForm()"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+      <button (click)="saveNode()"
+              class="px-5 py-2 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent-hover transition-colors">
+        {{ editingNode() ? 'Save Changes' : 'Add Node' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

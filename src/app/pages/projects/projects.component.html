@@ -1,0 +1,284 @@
+<div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-6">
+
+  <!-- ── Header ── -->
+  <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="flex-1">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10">
+          <span class="material-symbols-outlined text-accent text-xl" style="font-variation-settings: 'FILL' 1;">work</span>
+        </div>
+        Projects
+      </h1>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your portfolio of projects</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
+        <button (click)="viewMode.set('grid')"
+                [class]="viewMode() === 'grid' ? 'bg-white dark:bg-slate-700 shadow-sm text-accent' : 'text-slate-500'"
+                class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base">grid_view</span> Grid
+        </button>
+        <button (click)="viewMode.set('list')"
+                [class]="viewMode() === 'list' ? 'bg-white dark:bg-slate-700 shadow-sm text-accent' : 'text-slate-500'"
+                class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base">view_list</span> List
+        </button>
+      </div>
+      <button (click)="openForm()"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold
+                     shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <span class="material-symbols-outlined text-lg">add</span> New Project
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stats ── -->
+  <div class="grid grid-cols-3 gap-3">
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">folder</span>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ totalProjects() }}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Total</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+        <span class="material-symbols-outlined text-amber-600 dark:text-amber-400">pending</span>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ inProgressCount() }}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">In Progress</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+        <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ completedCount() }}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Completed</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Filters ── -->
+  <div class="flex flex-col sm:flex-row gap-3">
+    <div class="relative flex-1 max-w-md">
+      <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+      <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search projects…"
+             class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all" />
+    </div>
+    <div class="flex flex-wrap gap-2">
+      @for (s of statuses; track s.key) {
+        <button (click)="activeFilter.set(s.key)"
+                [class]="activeFilter() === s.key ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-accent/40'"
+                class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">{{ s.icon }}</span> {{ s.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- ── Grid View ── -->
+  @if (viewMode() === 'grid') {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (project of filteredProjects(); track project.id) {
+        <div class="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-lg hover:border-accent/30 transition-all duration-200 overflow-hidden">
+          <!-- Gradient top bar -->
+          <div class="h-1.5 bg-gradient-to-r" [ngClass]="getProgressColor(project.progress)"></div>
+
+          <div class="p-5 flex-1 flex flex-col">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-bold text-gray-900 dark:text-white group-hover:text-accent transition-colors">{{ project.name }}</h3>
+              <span class="flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold" [ngClass]="getStatusClasses(project.status)">
+                {{ project.status }}
+              </span>
+            </div>
+            <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-2 flex-1">{{ project.description }}</p>
+
+            <!-- Tech Stack -->
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              @for (tech of project.techStack.slice(0, 4); track tech) {
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-accent/5 dark:bg-accent/10 text-accent border border-accent/10">{{ tech }}</span>
+              }
+              @if (project.techStack.length > 4) {
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-400">+{{ project.techStack.length - 4 }}</span>
+              }
+            </div>
+
+            <!-- Progress -->
+            <div class="mt-4 flex items-center gap-3">
+              <div class="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r transition-all duration-500" [ngClass]="getProgressColor(project.progress)" [style.width.%]="project.progress"></div>
+              </div>
+              <span class="text-xs font-bold text-slate-600 dark:text-slate-300 tabular-nums">{{ project.progress }}%</span>
+            </div>
+
+            <!-- Tasks preview (expandable) -->
+            @if (project.tasks?.length) {
+              <button (click)="toggleExpand(project.id)" class="mt-3 flex items-center gap-1.5 text-xs text-slate-500 hover:text-accent transition-colors">
+                <span class="material-symbols-outlined text-sm">{{ expandedProject() === project.id ? 'expand_less' : 'expand_more' }}</span>
+                {{ project.tasks?.length }} tasks
+              </button>
+              @if (expandedProject() === project.id) {
+                <div class="mt-2 space-y-1.5">
+                  @for (task of project.tasks; track task.id) {
+                    <label class="flex items-center gap-2 cursor-pointer group/task">
+                      <input type="checkbox" [checked]="task.completed" (change)="toggleTask(project, task)"
+                             class="rounded border-slate-300 dark:border-slate-600 text-accent focus:ring-accent/30 w-3.5 h-3.5" />
+                      <span class="text-xs" [class]="task.completed ? 'line-through text-slate-400' : 'text-slate-600 dark:text-slate-300'">{{ task.title }}</span>
+                    </label>
+                  }
+                </div>
+              }
+            }
+
+            <!-- Links & Actions -->
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center gap-2">
+              @if (project.repoUrl) {
+                <a [href]="project.repoUrl" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-slate-500 hover:text-accent hover:bg-accent/5 transition-all">
+                  <span class="material-symbols-outlined text-sm">code</span> Repo
+                </a>
+              }
+              @if (project.demoUrl) {
+                <a [href]="project.demoUrl" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-slate-500 hover:text-accent hover:bg-accent/5 transition-all">
+                  <span class="material-symbols-outlined text-sm">open_in_new</span> Demo
+                </a>
+              }
+              <div class="flex-1"></div>
+              <button (click)="openForm(project)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-accent opacity-0 group-hover:opacity-100 transition-all">
+                <span class="material-symbols-outlined text-base">edit</span>
+              </button>
+              <button (click)="deleteProject(project)" class="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                <span class="material-symbols-outlined text-base">delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── List View ── -->
+  @if (viewMode() === 'list') {
+    <div class="space-y-3">
+      @for (project of filteredProjects(); track project.id) {
+        <div class="group flex items-center gap-4 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md hover:border-accent/30 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-violet-500/20 flex items-center justify-center text-lg font-bold text-accent flex-shrink-0">
+            {{ project.name.charAt(0) }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-gray-900 dark:text-white truncate">{{ project.name }}</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold flex-shrink-0" [ngClass]="getStatusClasses(project.status)">{{ project.status }}</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ project.description }}</p>
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5 flex-shrink-0">
+            @for (tech of project.techStack.slice(0, 3); track tech) {
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-accent/5 text-accent border border-accent/10">{{ tech }}</span>
+            }
+          </div>
+          <div class="w-24 flex-shrink-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r transition-all" [ngClass]="getProgressColor(project.progress)" [style.width.%]="project.progress"></div>
+              </div>
+              <span class="text-xs font-bold text-slate-500 tabular-nums">{{ project.progress }}%</span>
+            </div>
+          </div>
+          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+            <button (click)="openForm(project)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-accent"><span class="material-symbols-outlined text-base">edit</span></button>
+            <button (click)="deleteProject(project)" class="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500"><span class="material-symbols-outlined text-base">delete</span></button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (filteredProjects().length === 0) {
+    <div class="text-center py-20">
+      <span class="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600">folder_off</span>
+      <p class="mt-4 text-lg font-medium text-slate-500 dark:text-slate-400">No projects found</p>
+    </div>
+  }
+</div>
+
+<!-- ── ADD/EDIT MODAL ── -->
+@if (showForm()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm" (click)="closeForm()"></div>
+    <div class="relative w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-2xl p-6 space-y-5 animate-modal-in">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ editingProject() ? 'Edit Project' : 'New Project' }}</h2>
+        <button (click)="closeForm()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Project Name *</label>
+          <input type="text" [ngModel]="formData().name" (ngModelChange)="updateField('name', $event)"
+                 class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Description</label>
+          <textarea rows="2" [ngModel]="formData().description" (ngModelChange)="updateField('description', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Status</label>
+            <select [ngModel]="formData().status" (ngModelChange)="updateField('status', $event)"
+                    class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-accent/30">
+              <option value="planning">Planning</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="on-hold">On Hold</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Progress ({{ formData().progress }}%)</label>
+            <input type="range" min="0" max="100" step="5" [ngModel]="formData().progress" (ngModelChange)="updateField('progress', $event)"
+                   class="w-full accent-accent" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tech Stack</label>
+          <div class="flex gap-2">
+            <input type="text" [ngModel]="techInput()" (ngModelChange)="techInput.set($event)" (keydown.enter)="addTech()" placeholder="Add technology…"
+                   class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30" />
+            <button (click)="addTech()" class="px-3 py-2 rounded-xl bg-accent/10 text-accent text-sm font-medium hover:bg-accent/20 transition-colors">Add</button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-2">
+            @for (tech of formData().techStack; track tech) {
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-accent/10 text-accent">
+                {{ tech }}
+                <button (click)="removeTech(tech)" class="hover:text-red-500">×</button>
+              </span>
+            }
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Repo URL</label>
+            <input type="url" [ngModel]="formData().repoUrl" (ngModelChange)="updateField('repoUrl', $event)"
+                   class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Demo URL</label>
+            <input type="url" [ngModel]="formData().demoUrl" (ngModelChange)="updateField('demoUrl', $event)"
+                   class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30" />
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button (click)="closeForm()" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+        <button (click)="saveProject()" class="px-6 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold shadow-lg shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all">{{ editingProject() ? 'Update' : 'Create' }}</button>
+      </div>
+    </div>
+  </div>
+}

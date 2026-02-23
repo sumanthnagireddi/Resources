@@ -33,7 +33,7 @@
     <div class="px-2 py-1 mb-1 flex items-center gap-3 rounded-md cursor-pointer
              hover:bg-gray-100 dark:hover:bg-slate-800 text-sm font-medium transition-colors"
       [routerLink]="item.url"
-      [ngClass]="selectedMenuItem === item.id ? 'bg-slate-800 text-accent' : ''"
+      [ngClass]="selectedMenuItem === item.id ? 'bg-gray-100 dark:bg-slate-800 text-accent' : ''"
       (click)="onItemClick(item)">
 
       <div>
@@ -41,7 +41,7 @@
           {{ item.icon }}
         </span>
         <img *ngIf="item.icon == 'profile'" src="https://sumanthnagireddi1.web.app/assets/imag3.jpg"
-          class="w-5 h-5 rounded-full object-cover ring-2 ring-gray-200 dark:ring-slate-600" />
+          class="w-5 h-5  rounded-full object-cover ring-2 ring-gray-200 dark:ring-slate-600" />
 
       </div>
       <span class="flex-1 line-clamp-1">{{ item.label }}</span>
@@ -92,7 +92,7 @@
         <div class="px-2 py-1 flex items-center gap-2 rounded-md text-sm cursor-pointer
                  hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
           [routerLink]="!child.hasItems ? child.url : null"
-          [ngClass]="selectedMenuItem === child.id ? 'bg-accent-light text-accent' : ''"
+          [ngClass]="selectedMenuItem === child.id ? 'text-accent' : ''"
           (click)="selectMenuItem($event, child)">
 
           <span class="material-symbols-outlined text-lg">

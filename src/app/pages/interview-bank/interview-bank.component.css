@@ -1,0 +1,24 @@
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-modal-in { animation: modalIn 0.22s cubic-bezier(.21,1.02,.73,1) forwards; }
+
+@keyframes expand {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 2000px; }
+}
+.animate-expand { animation: expand 0.3s ease forwards; overflow: hidden; }
+
+.filled-icon { font-variation-settings: 'FILL' 1; }
+
+pre::-webkit-scrollbar {
+  height: 6px;
+}
+pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+pre::-webkit-scrollbar-track {
+  background: transparent;
+}

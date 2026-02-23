@@ -23,6 +23,12 @@ import { authGuard, guestGuard } from './guards/auth.guard';
 import { AiComponent } from './pages/ai/ai.component';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 import { IpWhitelistGuard } from './guards/ip-whitelist.guard';
+import { JobsComponent } from './pages/jobs/jobs.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
+import { IdeasComponent } from './pages/ideas/ideas.component';
+import { InterviewBankComponent } from './pages/interview-bank/interview-bank.component';
+import { RoadmapComponent } from './pages/roadmap/roadmap.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +57,30 @@ export const routes: Routes = [
       {
         path: 'starred',
         component: StarredComponent,
+      },
+      {
+        path: 'roadmap',
+        component: RoadmapComponent,
+      },
+      {
+        path:'jobs',
+        component: JobsComponent,
+      },
+      {
+        path: 'projects',
+        component: ProjectsComponent,
+      },
+      {
+        path: 'bookmarks',
+        component: BookmarksComponent,
+      },
+      {
+        path: 'ideas',
+        component: IdeasComponent,
+      },
+      {
+        path: 'interview-bank',
+        component: InterviewBankComponent,
       },
       {
         path: 'drafts',

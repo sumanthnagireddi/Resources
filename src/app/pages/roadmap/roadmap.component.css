@@ -1,0 +1,85 @@
+/* ── Slide-in panel animation ── */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Detail view shifts content when panel is open ── */
+.detail-with-panel {
+  padding-right: 400px;
+  transition: padding-right 0.3s ease;
+}
+@media (max-width: 640px) {
+  .detail-with-panel { padding-right: 0; }
+}
+
+/* ── Filled material icons ── */
+.filled-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* ── Line clamp ── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Milestone node hover ── */
+.milestone-node {
+  position: relative;
+}
+.milestone-node::before,
+.milestone-node::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* ── Topic node hover glow ── */
+.topic-node:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Node status indicator on hover ── */
+.topic-node::after {
+  content: 'Right-click to toggle status';
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  color: white;
+  background: #334155;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+.topic-node:hover::after {
+  opacity: 1;
+}
+
+/* ── Dark mode connector line colors are handled via Tailwind ── */
+
+/* ── Scrollbar styling for the flowchart ── */
+.roadmap-flow::-webkit-scrollbar {
+  height: 6px;
+}
+.roadmap-flow::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+.roadmap-flow::-webkit-scrollbar-track {
+  background: transparent;
+}
