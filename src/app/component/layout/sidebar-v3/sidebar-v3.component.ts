@@ -38,21 +38,14 @@ export class SidebarV3Component implements OnInit {
   isSidebarExpanded = signal(false);
   starredCount$: Observable<number>;
   menuItems: MenuItem[] = [
-    {
-      id: 'dashboard',
-      label: 'Dashboard',
-      icon: 'dashboard',
-      url: 'dashboard',
-    },
-    {
-      id: 'ai_copilot',
-      label: 'AI Copilot',
-      icon: 'auto_awesome_motion',
-      url: 'ai',
-      hasItems: true,
-      isOpen: false,
-    },
-    { id: 'for-you', label: 'For you', icon: 'account_circle', url: 'for-you' },
+    // {
+    //   id: 'dashboard',
+    //   label: 'Dashboard',
+    //   icon: 'dashboard',
+    //   url: 'dashboard',
+    // },
+   
+    { id: 'home', label: 'Home', icon: 'home', url: 'home' },
     { id: 'recent', label: 'Recent', icon: 'history', url: 'recent' },
     { id: 'starred', label: 'Starred', icon: 'star', url: 'starred' },
     { id: 'drafts', label: 'Drafts', icon: 'draft', url: 'drafts' },
@@ -62,6 +55,14 @@ export class SidebarV3Component implements OnInit {
       label: 'Finance',
       icon: 'account_balance_wallet',
       url: 'finance',
+    },
+     {
+      id: 'ai_copilot',
+      label: 'AI Copilot',
+      icon: 'auto_awesome_motion',
+      url: 'ai',
+      hasItems: true,
+      isOpen: false,
     },
     {
       id: 'content',

@@ -29,18 +29,40 @@
       JavaScript, Angular, React, Node.js, and cloud technologies.
     </p>
 
-    <!-- CTA Buttons -->
-    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-      <button
-        class="btn-accent px-8 py-3 rounded-lg text-white font-medium text-base shadow-lg hover:shadow-xl transition-all">
-        Get Started
-      </button>
-      <button [routerLink]="'/blogs'"
-        class="px-8 py-3 rounded-lg border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 font-medium text-base hover:border-accent hover:text-accent dark:hover:text-accent transition-all">
-        Browse Resources
-      </button>
-    </div>
-
+         <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button (click)="navigateTo('/home')"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
+                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
+                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
+                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
+          <span class="material-symbols-outlined text-base">explore</span>
+          Explore Topics
+        </button>
+        <button (click)="navigateTo('/blogs')"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
+                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
+                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
+                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
+          <span class="material-symbols-outlined text-base">post_add</span>
+          Read Blogs
+        </button>
+        <button (click)="navigateTo('/snippets')"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
+                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
+                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
+                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
+          <span class="material-symbols-outlined text-base">data_object</span>
+          Snippets
+        </button>
+        <button (click)="navigateTo('/starred')"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
+                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
+                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
+                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
+          <span class="material-symbols-outlined text-base">star</span>
+          Starred
+        </button>
+      </div>
     <!-- Stats -->
     <div class="mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto">
 

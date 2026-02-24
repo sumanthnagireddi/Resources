@@ -47,7 +47,7 @@ export const routes: Routes = [
         // canActivate: [IpWhitelistGuard],
       },
       {
-        path: 'for-you',
+        path: 'home',
         component: FeedComponent,
       },
       {
@@ -159,6 +159,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'home',
   },
 ];

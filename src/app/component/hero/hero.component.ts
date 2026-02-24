@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest, map, tap, catchError, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -20,8 +20,10 @@ export class HeroComponent implements OnInit {
   technologiesCount$!: Observable<number>;
   blogsCount$!: Observable<number>;
 
-  constructor(private store: Store, private blogsService: BlogsService) {}
-
+  constructor(private store: Store, private blogsService: BlogsService,private router:Router) {}
+  navigateTo(path: string): void {
+    this.router.navigate([path]);
+  }
   ngOnInit(): void {
     // Dispatch action to load technologies if not already loaded
     this.store.dispatch(getTechnologies());
