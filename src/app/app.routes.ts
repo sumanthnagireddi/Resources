@@ -38,7 +38,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'home',
         pathMatch: 'full',
       },
       {
@@ -124,10 +124,10 @@ export const routes: Routes = [
           },
         ],
       },
-      {
-        path: 'dashboard',
-        component: DashboardComponent,
-      },
+      // {
+      //   path: 'dashboard',
+      //   component: DashboardComponent,
+      // },
       {
         path: 'snippets',
         component: SnippetsComponent,
