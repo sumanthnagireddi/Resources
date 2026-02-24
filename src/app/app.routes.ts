@@ -34,7 +34,7 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -44,7 +44,7 @@ export const routes: Routes = [
       {
         path: 'ai',
         component: AiComponent,
-        canActivate: [IpWhitelistGuard],
+        // canActivate: [IpWhitelistGuard],
       },
       {
         path: 'for-you',
@@ -57,6 +57,10 @@ export const routes: Routes = [
       {
         path: 'starred',
         component: StarredComponent,
+      },
+       {
+        path: 'roadmap',
+        component: RoadmapComponent,
       },
       {
         path: 'roadmap',
@@ -131,7 +135,7 @@ export const routes: Routes = [
       {
         path: 'finance',
         component: FinanceComponent,
-        canActivate: [IpWhitelistGuard],
+        // canActivate: [IpWhitelistGuard],
       },
       {
         path: 'api-docs',
@@ -155,6 +159,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
   },
 ];

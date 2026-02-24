@@ -48,25 +48,25 @@ export class AuthService {
       loginAt: new Date().toISOString(),
     };
 
-    sessionStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
     this.currentUser.set(user);
     return null;
   }
 
   logout(): void {
-    sessionStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(AUTH_KEY);
     this.currentUser.set(null);
     this.router.navigate(['/login']);
   }
 
   private loadSession(): void {
     try {
-      const raw = sessionStorage.getItem(AUTH_KEY);
+      const raw = localStorage.getItem(AUTH_KEY);
       if (raw) {
         this.currentUser.set(JSON.parse(raw));
       }
     } catch {
-      sessionStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(AUTH_KEY);
     }
   }
 }
