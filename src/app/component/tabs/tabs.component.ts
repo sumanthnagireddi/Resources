@@ -48,7 +48,7 @@ export class TabsComponent implements AfterViewInit, OnInit {
   selectTab(tabName: string, index: number): void {
     // Map display name to store tab key
     const tabKey = tabName.toLowerCase().replace(' ', '') as
-      'overview' | 'transactions' | 'categories' | 'cards' | 'debts';
+      'overview' | 'transactions' | 'categories' | 'cards' | 'debts' | 'home';
 
     this.store.dispatch(FinanceActions.setActiveTab({ tab: tabKey }));
     this.updateIndicator(index);

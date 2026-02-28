@@ -53,6 +53,7 @@ export class FinanceComponent implements OnInit {
     { name: 'Categories', icon: 'tag' },
     { name: 'Cards', icon: 'card' },
     { name: 'Debts', icon: 'hand-holding-dollar' },
+      { name: 'Home', icon: 'home' },
   ];
 
   ngOnInit(): void {
@@ -91,7 +92,8 @@ export class FinanceComponent implements OnInit {
           | 'transactions'
           | 'categories'
           | 'cards'
-          | 'debts',
+          | 'debts'
+          | 'home',
       }),
     );
   }

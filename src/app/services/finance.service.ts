@@ -18,34 +18,34 @@ const BUDGET_KEY = 'finance_budgets'; // now stores MonthlyBudgetMap
 
 @Injectable({ providedIn: 'root' })
 export class FinanceService {
-  private api =  `${environment.API_URL}/finance`; // Adjust base URL as needed
+  private api = `${environment.API_URL}/finance`; // Adjust base URL as needed
   private apiUrl = `${environment.API_URL}`; // For debts endpoint
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // ───── Expenses CRUD ─────
 
-  getExpenses(): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${this.api}/get-expenses`);
+  getExpenses(type: string = 'expense'): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.api}/get-expenses?type=${type}`);
   }
 
-  addExpense(expense: Omit<Expense, 'id' | 'createdAt'>): Observable<Expense> {
-    return this.http.post<Expense>(`${this.api}/add-expense`, expense);
+  addExpense(expense: Omit<Expense, 'id' | 'createdAt'>, type: string = 'expense'): Observable<Expense> {
+    return this.http.post<Expense>(`${this.api}/add-expense?type=${type}`, { ...expense, type });
   }
 
-  addExpenses(items: Omit<Expense, 'id' | 'createdAt'>[]): Observable<Expense[]> {
-    return this.http.post<Expense[]>(`${this.api}/add-expenses`, items);
+  addExpenses(items: Omit<Expense, 'id' | 'createdAt'>[], type: string = 'expense'): Observable<Expense[]> {
+    return this.http.post<Expense[]>(`${this.api}/add-expenses?type=${type}`, items);
   }
 
- updateExpense(id: string, changes: Partial<Expense>): Observable<Expense> {
-  console.log('service updateExpense - id:', id); // debug
-  return this.http.patch<Expense>(
-    `${this.api}/update-expense/${id}`,
-    changes
-  );
-}
+  updateExpense(id: string, changes: Partial<Expense>, type: string = 'expense'): Observable<Expense> {
+    console.log('service updateExpense - id:', id); // debug
+    return this.http.patch<Expense>(
+      `${this.api}/update-expense/${id}?type=${type}`,
+      changes
+    );
+  }
 
-  deleteExpense(id: string): Observable<any> {
-    return this.http.delete(`${this.api}/delete-expense/${id}`);
+  deleteExpense(id: string, type: string = 'expense'): Observable<any> {
+    return this.http.delete(`${this.api}/delete-expense/${id}?type=${type}`);
   }
 
   // saveExpenses removed (no longer needed)
@@ -54,16 +54,16 @@ export class FinanceService {
 
   // getAllBudgets removed (no longer needed)
 
-  getBudgetForMonth(monthKey: string): Observable<BudgetSettings> {
-    return this.http.get<BudgetSettings>(`${this.api}/budget/${monthKey}`);
+  getBudgetForMonth(monthKey: string, type: string = 'expense'): Observable<BudgetSettings> {
+    return this.http.get<BudgetSettings>(`${this.api}/budget/${monthKey}?type=${type}`);
   }
 
-  saveBudgetForMonth(monthKey: string, settings: BudgetSettings): Observable<any> {
-    return this.http.put(`${this.api}/budget/${monthKey}`, settings);
+  saveBudgetForMonth(monthKey: string, settings: BudgetSettings, type: string = 'budget'): Observable<any> {
+    return this.http.put(`${this.api}/budget/${monthKey}?type=${type}`, { ...settings, type });
   }
 
-  copyBudgetToMonth(fromKey: string, toKey: string): Observable<any> {
-    return this.http.post(`${this.api}/budget/copy`, { fromKey, toKey });
+  copyBudgetToMonth(fromKey: string, toKey: string, type: string = 'expense'): Observable<any> {
+    return this.http.post(`${this.api}/budget/copy?type=${type}`, { fromKey, toKey });
   }
 
   // ───── Calculations ─────
@@ -72,11 +72,11 @@ export class FinanceService {
     return `${year}-${String(month).padStart(2, '0')}`;
   }
 
-  getExpensesForMonth(year: number, month: number): Observable<Expense[]> {
-  return this.http.get<Expense[]>(
-    `${this.api}/expenses?year=${year}&month=${month}`
-  );
-}
+  getExpensesForMonth(year: number, month: number, type: string = 'expense'): Observable<Expense[]> {
+    return this.http.get<Expense[]>(
+      `${this.api}/expenses?year=${year}&month=${month}&type=${type}`
+    );
+  }
 
   getMonthSummary(year: number, month: number): Observable<MonthSummary> {
     const monthKey = this.getMonthKey(year, month);
@@ -216,7 +216,7 @@ export class FinanceService {
           if (y.length === 2) y = '20' + y;
           const date = new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`);
           if (!isNaN(date.getTime())) return date.toISOString().split('T')[0];
-        } catch {}
+        } catch { }
       }
     }
     return new Date().toISOString().split('T')[0];

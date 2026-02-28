@@ -281,7 +281,7 @@ export const financeReducer = createReducer(
     ...state, debts: state.debts.map((d) => d._id === debt._id ? debt : d),
   })),
 
-  on(FinanceActions.openAddDebtForm,  (state) => ({ ...state, showAddDebtForm: true })),
+  on(FinanceActions.openAddDebtForm, (state) => ({ ...state, showAddDebtForm: true })),
   on(FinanceActions.closeAddDebtForm, (state) => ({ ...state, showAddDebtForm: false })),
   on(FinanceActions.openEditDebtForm, (state, { debt }) => ({
     ...state, showEditDebtForm: true, editingDebt: debt,
@@ -292,5 +292,10 @@ export const financeReducer = createReducer(
 
   on(FinanceActions.setDebtFilter, (state, { filter }) => ({
     ...state, debtFilter: filter,
+  })),
+
+  /* ── Payload Type ── */
+  on(FinanceActions.setFinancePayloadType, (state, { payloadType }) => ({
+    ...state, payloadType,
   })),
 );

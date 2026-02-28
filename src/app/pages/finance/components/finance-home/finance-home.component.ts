@@ -1,9 +1,6 @@
-// finance-debts.component.ts
-import { Component, inject, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { FormsModule } from '@angular/forms';
-import { NgClass, DatePipe, NgTemplateOutlet } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
 import {
   selectFilteredDebts,
   selectDebtSummary,
@@ -15,14 +12,16 @@ import {
   selectEditingDebt,
 } from '../../../../store/selectors/finance.selector';
 import * as DebtActions from '../../../../store/actions/finance.action';
+import { NgClass, DatePipe, NgTemplateOutlet } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
-  selector: 'app-finance-debts',
-  standalone: true,
+  selector: 'app-finance-home',
   imports: [FormsModule, NgClass, DatePipe, NgTemplateOutlet],
-  templateUrl: './finance-debts.component.html',
+  templateUrl: './finance-home.component.html',
+  styleUrl: './finance-home.component.css'
 })
-export class FinanceDebtsComponent implements OnInit {
-  private store = inject(Store);
+export class FinanceHomeComponent {
+ private store = inject(Store);
 
   // Signals from store
   filteredDebts = toSignal(this.store.select(selectFilteredDebts), {
@@ -172,3 +171,4 @@ export class FinanceDebtsComponent implements OnInit {
     }).format(amount);
   }
 }
+

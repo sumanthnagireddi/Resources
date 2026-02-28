@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { BudgetSettings, Expense, ExpenseCategory, ParsedSmsTransaction } from '../../model/finance.model';
+import { BudgetSettings, Expense, ExpenseCategory, FinancePayloadType, ParsedSmsTransaction } from '../../model/finance.model';
 
 
 /* =========================================================
@@ -191,7 +191,7 @@ export const copyBudgetFromPrevMonth = createAction(
    ========================================================= */
 export const setActiveTab = createAction(
   '[Finance] Set Active Tab',
-  props<{ tab: 'overview' | 'transactions' | 'categories' | 'cards' | 'debts' }>()
+  props<{ tab: 'overview' | 'transactions' | 'categories' | 'cards' | 'debts' | 'home' }>()
 );
 
 /* =========================================================
@@ -263,3 +263,5 @@ export const openEditDebtForm = createAction('[Finance] Open Edit Debt Form', pr
 export const closeEditDebtForm= createAction('[Finance] Close Edit Debt Form');
 
 export const setDebtFilter = createAction('[Finance] Set Debt Filter', props<{ filter: 'all' | 'owed_to_me' | 'i_owe' | 'settled' }>());
+
+export const setFinancePayloadType = createAction('[Finance] Set Type', props<{ payloadType: FinancePayloadType }>());

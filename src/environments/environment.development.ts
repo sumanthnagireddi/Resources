@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  API_URL: 'https://webservices-rqvr.onrender.com',
+  API_URL: 'http://localhost:3000',
   firebase: {
     projectId: 'sumanthnagireddi-interview',
     appId: '1:690782833147:web:85e61606f3f76fe1b7a35e',

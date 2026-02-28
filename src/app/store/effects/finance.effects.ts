@@ -9,6 +9,7 @@ import * as FinanceActions from '../actions/finance.action';
 import {
   selectCurrentMonthKey,
   selectParsedTransactions,
+  selectPayloadType,
   selectSelectedMonth,
 } from '../selectors/finance.selector';
 
@@ -37,12 +38,12 @@ export class FinanceEffects {
   );
 
   /* ── Load expenses for month ── */
-  // finance.effects.ts
   loadMonthExpenses$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.loadMonthExpenses),
-      switchMap(({ year, month }) =>
-        this.financeService.getExpensesForMonth(year, month).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ year, month }, payloadType]) =>
+        this.financeService.getExpensesForMonth(year, month, payloadType).pipe(
           map((expenses) =>
             FinanceActions.loadMonthExpensesSuccess({ expenses }),
           ),
@@ -73,8 +74,9 @@ export class FinanceEffects {
   loadBudget$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.loadBudgetForMonth),
-      switchMap(({ monthKey }) =>
-        this.financeService.getBudgetForMonth(monthKey).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ monthKey }, payloadType]) =>
+        this.financeService.getBudgetForMonth(monthKey, payloadType === 'construction' ? 'home_budget' : 'budget').pipe(
           map((budget) => FinanceActions.loadBudgetForMonthSuccess({ budget })),
           catchError((error) =>
             of(
@@ -101,8 +103,9 @@ export class FinanceEffects {
   copyBudgetFromPrevMonth$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.copyBudgetFromPrevMonth),
-      switchMap(({ prevMonthKey }) =>
-        this.financeService.getBudgetForMonth(prevMonthKey).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ prevMonthKey }, payloadType]) =>
+        this.financeService.getBudgetForMonth(prevMonthKey, payloadType).pipe(
           map((budget) => FinanceActions.loadBudgetForMonthSuccess({ budget })),
           catchError((error) =>
             of(
@@ -120,8 +123,9 @@ export class FinanceEffects {
   saveBudget$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.saveBudgetForMonth),
-      switchMap(({ monthKey, budget }) =>
-        this.financeService.saveBudgetForMonth(monthKey, budget).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ monthKey, budget }, payloadType]) =>
+        this.financeService.saveBudgetForMonth(monthKey, budget, payloadType === 'construction' ? 'home_budget' : 'budget').pipe(
           map((saved) =>
             FinanceActions.saveBudgetForMonthSuccess({
               monthKey,
@@ -144,8 +148,9 @@ export class FinanceEffects {
   addExpense$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.addExpense),
-      switchMap(({ expense }) =>
-        this.financeService.addExpense(expense).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ expense }, payloadType]) =>
+        this.financeService.addExpense(expense, payloadType).pipe(
           map((saved) => FinanceActions.addExpenseSuccess({ expense: saved })),
           catchError((error) =>
             of(FinanceActions.addExpenseFailure({ error: error.message })),
@@ -159,9 +164,10 @@ export class FinanceEffects {
   updateExpense$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.updateExpense),
-      switchMap(({ id, changes }) => {
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ id, changes }, payloadType]) => {
         console.log('updateExpense effect - id:', id, 'changes:', changes); // debug
-        return this.financeService.updateExpense(id, changes).pipe(
+        return this.financeService.updateExpense(id, changes, payloadType).pipe(
           map((updated) =>
             FinanceActions.updateExpenseSuccess({ expense: updated }),
           ),
@@ -173,43 +179,58 @@ export class FinanceEffects {
     ),
   );
 
- reloadExpensesOnUpdate$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(
-      FinanceActions.addExpenseSuccess,
-      FinanceActions.updateExpenseSuccess,
-      FinanceActions.deleteExpenseSuccess,
-      FinanceActions.addExpensesBulkSuccess,
-    ),
-    withLatestFrom(this.store.select(selectSelectedMonth)),
-    map(([, date]) =>
-      FinanceActions.loadMonthExpenses({
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-      })
-    ),
-  )
-);
-
-reloadBudgetOnUpdate$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(FinanceActions.saveBudgetForMonthSuccess),
-    withLatestFrom(this.store.select(selectSelectedMonth)),
-    map(([, date]) => {
-      const year  = date.getFullYear();
-      const month = date.getMonth() + 1;
-      return FinanceActions.loadBudgetForMonth({
-        monthKey: `${year}-${String(month).padStart(2, '0')}`,
-      });
-    }),
-  )
-);
+  reloadExpensesOnUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        FinanceActions.addExpenseSuccess,
+        FinanceActions.updateExpenseSuccess,
+        FinanceActions.deleteExpenseSuccess,
+        FinanceActions.addExpensesBulkSuccess,
+      ),
+      withLatestFrom(this.store.select(selectSelectedMonth)),
+      map(([, date]) =>
+        FinanceActions.loadMonthExpenses({
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+        })
+      ),
+    )
+  );
+  reloadExpensesandBudgetOnFinancePayloadTypeChange$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FinanceActions.setFinancePayloadType),
+      withLatestFrom(this.store.select(selectSelectedMonth)),
+      switchMap(([, date]) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+        return of(
+          FinanceActions.loadMonthExpenses({ year, month }),
+          FinanceActions.loadBudgetForMonth({ monthKey }),
+        );
+      }),
+    )
+  );
+  reloadBudgetOnUpdate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FinanceActions.saveBudgetForMonthSuccess),
+      withLatestFrom(this.store.select(selectSelectedMonth)),
+      map(([, date]) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        return FinanceActions.loadBudgetForMonth({
+          monthKey: `${year}-${String(month).padStart(2, '0')}`,
+        });
+      }),
+    )
+  );
   /* ── Delete expense ── */
   deleteExpense$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.deleteExpense),
-      switchMap(({ id }) =>
-        this.financeService.deleteExpense(id).pipe(
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([{ id }, payloadType]) =>
+        this.financeService.deleteExpense(id, payloadType).pipe(
           map(() => FinanceActions.deleteExpenseSuccess({ id })),
           catchError((error) =>
             of(FinanceActions.deleteExpenseFailure({ error: error.message })),
@@ -236,9 +257,10 @@ reloadBudgetOnUpdate$ = createEffect(() =>
     this.actions$.pipe(
       ofType(FinanceActions.importSelectedSms),
       withLatestFrom(this.store.select(selectParsedTransactions)),
-      switchMap(([, transactions]) => {
-        const selected = transactions.filter((t) => t.selected);
-        const expenses = selected.map((t) => ({
+      withLatestFrom(this.store.select(selectPayloadType)),
+      switchMap(([[, transactions], payloadType]) => {
+        const selected = transactions.filter((t: any) => t.selected);
+        const expenses = selected.map((t: any) => ({
           title: t.merchant,
           amount: t.amount,
           category: t.category,
@@ -246,7 +268,7 @@ reloadBudgetOnUpdate$ = createEffect(() =>
           notes: `SMS: ${t.rawText.substring(0, 100)}`,
           source: 'sms' as const,
         }));
-        return this.financeService.addExpenses(expenses).pipe(
+        return this.financeService.addExpenses(expenses, payloadType).pipe(
           map(() => FinanceActions.addExpensesBulkSuccess()),
           catchError((error) =>
             of(FinanceActions.addExpensesBulkFailure({ error: error.message })),

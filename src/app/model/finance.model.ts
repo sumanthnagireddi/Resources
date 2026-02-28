@@ -9,6 +9,7 @@ export interface Expense {
   createdAt: string; // ISO timestamp
   cardType?: string; // e.g. 'axis', 'hdfc' - optional field to track card used for transaction
 }
+export type FinancePayloadType = 'expense' | 'construction';
 
 export type ExpenseCategory =
   | 'food'

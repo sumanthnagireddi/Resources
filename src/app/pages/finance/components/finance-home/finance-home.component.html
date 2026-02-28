@@ -1,0 +1,404 @@
+<div class="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <span class="material-symbols-outlined text-accent text-3xl"
+          style="font-variation-settings: 'FILL' 1;">engineering</span>
+        Construction Expenses
+      </h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Track construction-related expenses and debts</p>
+    </div>
+    <button (click)="openAdd()" class="px-4 py-2 rounded-xl text-sm font-medium text-white btn-accent
+                   shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">add</span>
+      Add Expense
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+    <div
+      class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+          <span class="material-symbols-outlined text-green-500 text-lg">arrow_downward</span>
+        </div>
+        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Owed to Me</span>
+      </div>
+      <p class="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
+        {{ formatCurrency(summary().totalOwedToMe) }}
+      </p>
+    </div>
+
+    <div
+      class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+          <span class="material-symbols-outlined text-red-500 text-lg">arrow_upward</span>
+        </div>
+        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">I Owe</span>
+      </div>
+      <p class="text-xl sm:text-2xl font-bold text-red-500">
+        {{ formatCurrency(summary().totalIOwe) }}
+      </p>
+    </div>
+
+    <!-- <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+             [ngClass]="summary().netBalance >= 0 ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-orange-100 dark:bg-orange-900/30'">
+          <span class="material-symbols-outlined text-lg"
+                [ngClass]="summary().netBalance >= 0 ? 'text-blue-500' : 'text-orange-500'">
+            account_balance
+          </span>
+        </div>
+        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Net Balance</span>
+      </div>
+      <p class="text-xl sm:text-2xl font-bold"
+         [ngClass]="summary().netBalance >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-500'">
+        {{ summary().netBalance >= 0 ? '+' : '' }}{{ formatCurrency(summary().netBalance) }}
+      </p>
+    </div> -->
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+    @for (f of filters; track f.key) {
+    <button (click)="setFilter(f.key)" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+      [ngClass]="filter() === f.key
+                ? 'bg-accent text-white shadow-sm'
+                : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-slate-700 hover:border-accent hover:text-accent'">
+      {{ f.label }}
+    </button>
+    }
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+  <div class="flex items-center justify-center py-16">
+    <span class="material-symbols-outlined text-4xl text-accent animate-spin">progress_activity</span>
+  </div>
+  }
+
+  <!-- Debt Cards -->
+  @if (!loading()) {
+
+  @if (filteredDebts().length > 0) {
+
+  <div class="space-y-2">
+
+    @for (debt of filteredDebts(); track debt._id) {
+
+    <div class="group px-4 py-3 rounded-xl
+                    bg-white/70 dark:bg-slate-800/60
+                    backdrop-blur-sm
+                    border border-gray-200/60 dark:border-slate-700/60
+                    hover:shadow-sm hover:-translate-y-[1px]
+                    transition-all duration-200">
+
+      <div class="block md:flex items-center justify-between gap-4">
+
+        <!-- LEFT SIDE -->
+        <div class="flex items-center gap-3 min-w-0">
+
+          <!-- Minimal status dot -->
+          <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" [ngClass]="debt.debtType === 'owed_to_me'
+                     ? 'bg-green-500'
+                     : 'bg-red-500'">
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2  w-full">
+              <div class="flex gap-2 items-center">
+
+                <span class="text-sm font-semibold text-gray-900 dark:text-white w-full">
+                  {{ debt.name }}
+                </span>
+
+                <span class="text-[11px] w-[120px] text-center px-2 py-0.5 rounded-full font-medium" [ngClass]="debt.debtType === 'owed_to_me'
+                          ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'">
+                  {{ debt.debtType === 'owed_to_me' ? 'Owes You' : 'You Owe' }}
+                </span>
+              </div>
+
+              @if (debt.status === 'partial') {
+              <span class="text-[11px] text-amber-500 font-medium">
+                • Partial
+              </span>
+              }
+
+              @if (debt.status === 'settled') {
+              <span class="text-[11px] text-gray-400 font-medium">
+                • Settled
+              </span>
+              }
+
+            </div>
+
+            @if (debt.description) {
+            <p class="text-xs text-gray-400 truncate mt-0.5">
+              {{ debt.description }}
+            </p>
+            }
+
+            @if (debt.dueDate) {
+            <p class="text-[11px] text-gray-400 mt-0.5">
+              Due {{ debt.dueDate | date:'mediumDate' }}
+            </p>
+            }
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="flex items-center gap-4">
+
+          <!-- Amount -->
+          <div class="text-right">
+            <p class="text-base font-semibold tracking-tight" [ngClass]="debt.debtType === 'owed_to_me'
+                     ? 'text-green-600 dark:text-green-400'
+                     : 'text-red-500'">
+              {{ formatCurrency(getRemainingAmount(debt)) }}
+            </p>
+
+            @if (debt.paidAmount > 0 && debt.status !== 'settled') {
+            <p class="text-[11px] text-gray-400">
+              {{ getProgressPercent(debt) }}% paid
+            </p>
+            }
+
+            @if (debt.paidAmount > 0) {
+            <p class="text-[11px] text-gray-400">
+              of {{ formatCurrency(debt.amount) }}
+            </p>
+            }
+          </div>
+
+          <!-- Actions (show on hover desktop, visible mobile) -->
+          <div class="flex items-center gap-1 opacity-100 sm:opacity-0
+                          sm:group-hover:opacity-100
+                          transition-opacity duration-200">
+
+            @if (debt.status !== 'settled') {
+
+            <button (click)="openEdit(debt)" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700
+                                 flex items-center justify-center transition">
+              <span class="material-symbols-outlined text-base text-gray-500">
+                edit
+              </span>
+            </button>
+
+            <button (click)="markSettled(debt._id)" class="w-8 h-8 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30
+                                 flex items-center justify-center transition">
+              <span class="material-symbols-outlined text-base text-green-500">
+                check
+              </span>
+            </button>
+            }
+
+            <button (click)="delete(debt._id)" class="w-8 h-8 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30
+                               flex items-center justify-center transition">
+              <span class="material-symbols-outlined text-base text-red-500">
+                delete
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slim Progress Bar -->
+      @if (debt.paidAmount > 0 && debt.status !== 'settled') {
+      <div class="mt-2 h-[3px] bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+        <div class="h-full bg-accent transition-all duration-300" [style.width.%]="getProgressPercent(debt)">
+        </div>
+      </div>
+      }
+
+      <!-- Partial Payment (Compact Style) -->
+      @if (debt.status !== 'settled') {
+      <div class="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700
+                        flex items-center gap-2">
+
+        <input type="number" [(ngModel)]="partialAmounts[debt._id]" placeholder="Partial payment..." min="0"
+          [max]="getRemainingAmount(debt)" class="flex-1 px-3 py-1.5 rounded-lg
+                            border border-gray-200 dark:border-slate-700
+                            bg-gray-50 dark:bg-slate-900
+                            text-gray-900 dark:text-white text-sm
+                            focus:outline-none focus:ring-2 focus:ring-accent/40
+                            transition-all" />
+
+        <button (click)="recordPartial(debt._id)"
+          [disabled]="!partialAmounts[debt._id] || partialAmounts[debt._id] <= 0" class="px-3 py-1.5 rounded-lg text-sm font-medium
+                             text-white btn-accent
+                             disabled:opacity-50 disabled:cursor-not-allowed
+                             transition-all whitespace-nowrap">
+          Record
+        </button>
+
+      </div>
+      }
+
+    </div>
+    }
+
+  </div>
+
+  } @else {
+
+  <!-- Empty State (More Modern) -->
+  <div class="text-center py-20 px-4">
+    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl
+                  bg-gray-100 dark:bg-slate-800
+                  flex items-center justify-center">
+      <span class="material-symbols-outlined text-3xl text-gray-400">
+        handshake
+      </span>
+    </div>
+
+    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+      No debts tracked
+    </h3>
+
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">
+      Start tracking who owes you and whom you owe
+    </p>
+
+    <button (click)="openAdd()" class="px-4 py-2 rounded-lg text-sm font-medium
+                     text-white btn-accent shadow-sm hover:shadow-md
+                     transition-all">
+      Add your first debt
+    </button>
+  </div>
+
+  }
+
+  }
+
+  <!-- ADD MODAL -->
+  @if (showAdd()) {
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
+    (click)="closeAdd()">
+    <div
+      class="w-full sm:max-w-lg bg-white dark:bg-slate-900 sm:rounded-2xl rounded-t-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+      (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-slate-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-accent">handshake</span>
+          Add Debt
+        </h2>
+        <button (click)="closeAdd()"
+          class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined text-gray-500">close</span>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+        <ng-container *ngTemplateOutlet="debtFormFields; context: { form: newDebt }"></ng-container>
+      </div>
+      <div
+        class="flex items-center gap-3 px-5 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+        <button (click)="closeAdd()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300
+                         border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700">
+          Cancel
+        </button>
+        <button (click)="submitAdd()" [disabled]="!newDebt.name.trim() || newDebt.amount <= 0 || saving()"
+          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent disabled:opacity-50">
+          {{ saving() ? 'Saving...' : 'Add Debt' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- EDIT MODAL -->
+  @if (showEdit()) {
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
+    (click)="closeEdit()">
+    <div
+      class="w-full sm:max-w-lg bg-white dark:bg-slate-900 sm:rounded-2xl rounded-t-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+      (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-slate-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-accent">edit_note</span>
+          Edit Debt
+        </h2>
+        <button (click)="closeEdit()"
+          class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800">
+          <span class="material-symbols-outlined text-gray-500">close</span>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+        <ng-container *ngTemplateOutlet="debtFormFields; context: { form: editDebt }"></ng-container>
+      </div>
+      <div
+        class="flex items-center gap-3 px-5 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+        <button (click)="closeEdit()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300
+                         border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700">
+          Cancel
+        </button>
+        <button (click)="submitEdit()" [disabled]="!editDebt.name.trim() || editDebt.amount <= 0 || saving()"
+          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent disabled:opacity-50">
+          {{ saving() ? 'Saving...' : 'Update Debt' }}
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Shared Form Fields -->
+  <ng-template #debtFormFields let-form="form">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Type</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button (click)="form.debtType = 'owed_to_me'"
+          class="flex items-center justify-center gap-2 p-3 rounded-xl border transition-all" [ngClass]="form.debtType === 'owed_to_me'
+                  ? 'border-green-400 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                  : 'border-gray-200 dark:border-slate-700 text-gray-500 hover:border-gray-300'">
+          <span class="material-symbols-outlined text-lg">arrow_downward</span>
+          <span class="text-sm font-medium">They Owe Me</span>
+        </button>
+        <button (click)="form.debtType = 'i_owe'"
+          class="flex items-center justify-center gap-2 p-3 rounded-xl border transition-all" [ngClass]="form.debtType === 'i_owe'
+                  ? 'border-red-400 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                  : 'border-gray-200 dark:border-slate-700 text-gray-500 hover:border-gray-300'">
+          <span class="material-symbols-outlined text-lg">arrow_upward</span>
+          <span class="text-sm font-medium">I Owe Them</span>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Person's Name</label>
+      <input type="text" [(ngModel)]="form.name" placeholder="e.g. Rahul, Mom, Office" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm
+                    focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Amount (₹)</label>
+      <input type="number" [(ngModel)]="form.amount" placeholder="0.00" min="0" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm
+                    focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description (optional)</label>
+      <input type="text" [(ngModel)]="form.description" placeholder="e.g. Lunch split, Movie tickets" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm
+                    focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Due Date (optional)</label>
+      <input type="date" [(ngModel)]="form.dueDate" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm
+                    focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all" />
+    </div>
+  </ng-template>
+
+</div>

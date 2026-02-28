@@ -112,8 +112,8 @@ export const selectCategoryBreakdown = createSelector(
         .filter((e) => e.category === cat.key)
         .reduce((sum, e) => sum + e.amount, 0),
     }))
-    .filter((item) => item.total > 0)
-    .sort((a, b) => b.total - a.total) // ← highest spend first
+      .filter((item) => item.total > 0)
+      .sort((a, b) => b.total - a.total) // ← highest spend first
 );
 
 export const selectCategoryTotal = (key: string) =>
@@ -186,12 +186,12 @@ export const selectSmsImporting = createSelector(
   (s) => s.smsImporting
 );
 /* ── Debts ── */
-export const selectAllDebts    = createSelector(selectFinanceState, (s) => s.debts);
+export const selectAllDebts = createSelector(selectFinanceState, (s) => s.debts);
 export const selectDebtLoading = createSelector(selectFinanceState, (s) => s.loadingDebts);
-export const selectDebtSaving  = createSelector(selectFinanceState, (s) => s.savingDebt);
-export const selectDebtFilter  = createSelector(selectFinanceState, (s) => s.debtFilter);
+export const selectDebtSaving = createSelector(selectFinanceState, (s) => s.savingDebt);
+export const selectDebtFilter = createSelector(selectFinanceState, (s) => s.debtFilter);
 export const selectShowAddDebt = createSelector(selectFinanceState, (s) => s.showAddDebtForm);
-export const selectShowEditDebt= createSelector(selectFinanceState, (s) => s.showEditDebtForm);
+export const selectShowEditDebt = createSelector(selectFinanceState, (s) => s.showEditDebtForm);
 export const selectEditingDebt = createSelector(selectFinanceState, (s) => s.editingDebt);
 
 export const selectFilteredDebts = createSelector(
@@ -200,9 +200,9 @@ export const selectFilteredDebts = createSelector(
   (debts, filter) => {
     switch (filter) {
       case 'owed_to_me': return debts.filter((d) => d.debtType === 'owed_to_me' && d.status !== 'settled');
-      case 'i_owe':      return debts.filter((d) => d.debtType === 'i_owe'      && d.status !== 'settled');
-      case 'settled':    return debts.filter((d) => d.status === 'settled');
-      default:           return debts.filter((d) => d.status !== 'settled');
+      case 'i_owe': return debts.filter((d) => d.debtType === 'i_owe' && d.status !== 'settled');
+      case 'settled': return debts.filter((d) => d.status === 'settled');
+      default: return debts.filter((d) => d.status !== 'settled');
     }
   }
 );
@@ -219,4 +219,10 @@ export const selectDebtSummary = createSelector(
       .reduce((sum, d) => sum + (d.amount - (d.paidAmount ?? 0)), 0);
     return { totalOwedToMe, totalIOwe, netBalance: totalOwedToMe - totalIOwe };
   }
+);
+
+/* ── Payload Type ── */
+export const selectPayloadType = createSelector(
+  selectFinanceState,
+  (s) => s.payloadType
 );

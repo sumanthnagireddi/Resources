@@ -44,7 +44,7 @@ export class SidebarV3Component implements OnInit {
     //   icon: 'dashboard',
     //   url: 'dashboard',
     // },
-   
+
     { id: 'home', label: 'Home', icon: 'home', url: 'home' },
     { id: 'recent', label: 'Recent', icon: 'history', url: 'recent' },
     { id: 'starred', label: 'Starred', icon: 'star', url: 'starred' },
@@ -56,7 +56,7 @@ export class SidebarV3Component implements OnInit {
       icon: 'account_balance_wallet',
       url: 'finance',
     },
-     {
+    {
       id: 'ai_copilot',
       label: 'AI Copilot',
       icon: 'auto_awesome_motion',
