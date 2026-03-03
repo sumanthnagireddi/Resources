@@ -3,59 +3,66 @@
 
   <div class="flex items-center gap-2 font-semibold min-w-0 flex-shrink-0 h-full">
     <button class="flex-shrink-0 min-h-0 min-w-0 w-8 h-8 flex items-center justify-center">
-      <span (click)="toggleSidebar()" class="material-symbols-outlined cursor-pointer text-gray-700 dark:text-gray-200 leading-none">
+      <span (click)="toggleSidebar()"
+        class="material-symbols-outlined cursor-pointer text-gray-700 dark:text-gray-200 leading-none">
         {{ sidebarToggleStatus ? 'left_panel_open' : 'left_panel_close' }}
       </span>
     </button>
-    <div class="relative">
-      <button (click)="toggleAppsPopover($event)"
-              class="flex flex-shrink-0 min-h-0 min-w-0 w-8 h-8 items-center justify-center rounded-lg
-                     hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-              title="My Apps">
-        <span class="material-symbols-outlined cursor-pointer text-gray-700 dark:text-gray-200 leading-none">
-          apps
+    <div>
+
+      <div [routerLink]="'/'" (click)="toggleAppsPopover($event)" class="flex">
+        <span aria-label="Home">
+          <svg viewBox="0 0 130 24" aria-hidden="true" class="h-6">
+            <!-- Icon -->
+            <path class="fill-accent"
+              d="M16 8a5 5 0 0 0-5-5H5a5 5 0 0 0-5 5v13.927a1 1 0 0 0 1.623.782l3.684-2.93a4 4 0 0 1 2.49-.87H11a5 5 0 0 0 5-5V8Z">
+            </path>
+            <!-- "Resources" text -->
+            <text x="24" y="18" class="fill-zinc-900 dark:fill-white" font-family="inherit" font-size="15"
+              font-weight="600" letter-spacing="0">
+              Resources
+            </text>
+          </svg>
         </span>
-      </button>
+      </div>
 
       <!-- Apps Popover -->
       @if (showAppsPopover) {
-        <div class="absolute left-0 top-12 w-72 rounded-2xl z-[100] overflow-hidden
+      <div class="absolute left-0 top-12 w-72 rounded-2xl z-[100] overflow-hidden
                     bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl
                     border border-gray-200/50 dark:border-slate-700/50
                     shadow-2xl shadow-black/10 dark:shadow-black/30">
 
-          <!-- Header -->
-          <div class="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
-            <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">My Apps</h3>
-          </div>
-
-          <!-- Apps List -->
-          <div class="p-2">
-            @for (app of personalApps; track app.name) {
-              <a [href]="app.url" target="_blank" rel="noopener noreferrer"
-                 class="flex items-center gap-3 p-3 rounded-xl transition-all duration-200
-                        hover:bg-gray-100 dark:hover:bg-slate-800">
-                <img [src]="app.image" [alt]="app.name"
-                     class="w-10 h-10 rounded-xl object-cover shadow-sm ring-2 ring-gray-100 dark:ring-slate-700">
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{app.name}}</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{app.description}}</p>
-                </div>
-                <span class="material-symbols-outlined text-gray-400 text-lg">open_in_new</span>
-              </a>
-            }
-          </div>
+        <!-- Header -->
+        <div class="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">My Apps</h3>
         </div>
+
+        <!-- Apps List -->
+        <div class="p-2">
+          @for (app of personalApps; track app.name) {
+          <a [href]="app.url" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-xl transition-all duration-200
+                        hover:bg-gray-100 dark:hover:bg-slate-800">
+            <img [src]="app.image" [alt]="app.name"
+              class="w-10 h-10 rounded-xl object-cover shadow-sm ring-2 ring-gray-100 dark:ring-slate-700">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 dark:text-white">{{app.name}}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{app.description}}</p>
+            </div>
+            <span class="material-symbols-outlined text-gray-400 text-lg">open_in_new</span>
+          </a>
+          }
+        </div>
+      </div>
       }
     </div>
-    <span class="text-lg sm:text-xl text-gray-900 dark:text-white font-medium cursor-pointer truncate max-w-[100px] sm:max-w-none leading-none" [routerLink]="'/'">Resources</span>
+
   </div>
 
 
   <!-- Desktop Search Bar -->
   <div class="hidden md:flex items-center justify-center gap-4 flex-1 mx-4 min-w-0 h-full">
-    <button (click)="openGlobalSearch()"
-            class="flex-1 max-w-2xl flex items-center gap-3 px-4 py-2 rounded-lg border text-sm text-left
+    <button (click)="openGlobalSearch()" class="flex-1 max-w-2xl flex items-center gap-3 px-4 py-2 rounded-lg border text-sm text-left
                    bg-white dark:bg-slate-800 dark:border-slate-600
                    hover:border-accent dark:hover:border-accent transition-all group">
       <span class="material-symbols-outlined text-gray-400 group-hover:text-accent transition-colors">
@@ -94,31 +101,26 @@
     </div>
 
     <!-- API Documentation -->
-    <div [routerLink]="'/api-docs'" title="API documentation"
-         class="hidden sm:flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg cursor-pointer
+    <div [routerLink]="'/api-docs'" title="API documentation" class="hidden sm:flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg cursor-pointer
                 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
       <span class="material-symbols-outlined text-gray-700 dark:text-gray-200 text-lg sm:text-xl">
         api
       </span>
     </div>
     <div class="flex md:hidden items-center justify-center flex-1 min-w-0 h-full">
-    <button (click)="openGlobalSearch()"
-            class="flex items-center justify-center w-9 h-9 rounded-lg
-                   hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-            title="Search (Ctrl+K)">
-      <span class="material-symbols-outlined text-gray-700 dark:text-gray-200">
-        search
-      </span>
-    </button>
-  </div>
+      <button (click)="openGlobalSearch()" class="flex items-center justify-center w-9 h-9 rounded-lg
+                   hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" title="Search (Ctrl+K)">
+        <span class="material-symbols-outlined text-gray-700 dark:text-gray-200">
+          search
+        </span>
+      </button>
+    </div>
 
     <!-- Theme Toggle Button -->
     <div class="relative">
-      <button (click)="toggleThemePopover($event)"
-              class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl min-h-0 min-w-0
+      <button (click)="toggleThemePopover($event)" class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl min-h-0 min-w-0
                      hover:bg-gray-100 dark:hover:bg-slate-800/80 transition-all duration-300
-                     hover:scale-105 active:scale-95"
-              [title]="'Theme: ' + (themeService.themeMode() | titlecase)">
+                     hover:scale-105 active:scale-95" [title]="'Theme: ' + (themeService.themeMode() | titlecase)">
         <span class="material-symbols-outlined text-gray-600 dark:text-gray-300 text-2xl">
           {{ themeService.isDarkMode() ? 'dark_mode' : 'light_mode' }}
         </span>
@@ -126,256 +128,243 @@
 
       <!-- Theme Popover -->
       @if (showThemePopover) {
-        <div class="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-14
+      <div class="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-14
                     w-auto sm:w-80 max-w-[calc(100vw-24px)] sm:max-w-80 rounded-2xl z-[100] overflow-hidden
                     bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl
                     border border-gray-200/50 dark:border-slate-700/50
                     shadow-2xl shadow-black/10 dark:shadow-black/30">
 
-          <!-- Header with gradient -->
-          <div class="relative px-5 py-4 overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-purple-500/10"></div>
-            <div class="relative flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-500
+        <!-- Header with gradient -->
+        <div class="relative px-5 py-4 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-purple-500/10"></div>
+          <div class="relative flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-500
                           flex items-center justify-center shadow-lg shadow-accent/25">
-                <span class="material-symbols-outlined text-white text-xl">palette</span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 dark:text-white text-base">Appearance</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Customize your experience</p>
-              </div>
+              <span class="material-symbols-outlined text-white text-xl">palette</span>
             </div>
-          </div>
-
-          <!-- Theme Mode Section -->
-          <div class="px-5 py-4 border-t border-gray-100 dark:border-slate-800">
-            <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Theme Mode</p>
-            <div class="grid grid-cols-3 gap-2">
-              @for (mode of themeModes; track mode.value) {
-                <button (click)="setThemeMode(mode.value)"
-                        class="group flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-300
-                               hover:-translate-y-0.5"
-                        [ngClass]="themeService.themeMode() === mode.value
-                          ? 'bg-gradient-to-br from-accent/20 to-purple-500/20 shadow-lg shadow-accent/10'
-                          : 'bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800'">
-                  <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
-                       [ngClass]="themeService.themeMode() === mode.value
-                         ? 'bg-gradient-to-br from-accent to-purple-500 shadow-md shadow-accent/30'
-                         : 'bg-gray-200 dark:bg-slate-700 group-hover:bg-gray-300 dark:group-hover:bg-slate-600'">
-                    <span class="material-symbols-outlined text-lg"
-                          [ngClass]="themeService.themeMode() === mode.value
-                            ? 'text-white'
-                            : 'text-gray-600 dark:text-gray-300'">
-                      {{ mode.icon }}
-                    </span>
-                  </div>
-                  <span class="text-xs font-medium"
-                        [ngClass]="themeService.themeMode() === mode.value
-                          ? 'text-accent'
-                          : 'text-gray-600 dark:text-gray-400'">
-                    {{ mode.label }}
-                  </span>
-                </button>
-              }
-            </div>
-          </div>
-
-          <!-- Accent Color Section -->
-          <div class="px-5 py-4 border-t border-gray-100 dark:border-slate-800">
-            <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Accent Color</p>
-            <div class="grid grid-cols-4 gap-3">
-              @for (color of accentColors; track color.name) {
-                <button (click)="setAccentColor(color)"
-                        class="group relative flex items-center justify-center w-full aspect-square rounded-xl
-                               transition-all duration-300 hover:scale-110 hover:-translate-y-0.5
-                               hover:shadow-lg"
-                        [style.background]="'linear-gradient(135deg, ' + color.value + ', ' + color.value + 'cc)'"
-                        [style.box-shadow]="themeService.accentColor().name === color.name
-                          ? '0 8px 20px -4px ' + color.value + '60'
-                          : 'none'"
-                        [title]="color.name">
-                  <!-- Checkmark for selected -->
-                  @if (themeService.accentColor().name === color.name) {
-                    <div class="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-                      <svg class="w-5 h-5 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                  }
-                </button>
-              }
-            </div>
-            <div class="mt-4 flex items-center justify-center gap-2 py-2 px-3 rounded-xl
-                        bg-gray-50 dark:bg-slate-800/50">
-              <div class="w-3 h-3 rounded-full shadow-sm"
-                   [style.background-color]="themeService.accentColor().value"></div>
-              <span class="text-xs font-medium text-gray-600 dark:text-gray-300">
-                {{ themeService.accentColor().name }}
-              </span>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white text-base">Appearance</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Customize your experience</p>
             </div>
           </div>
         </div>
+
+        <!-- Theme Mode Section -->
+        <div class="px-5 py-4 border-t border-gray-100 dark:border-slate-800">
+          <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Theme Mode
+          </p>
+          <div class="grid grid-cols-3 gap-2">
+            @for (mode of themeModes; track mode.value) {
+            <button (click)="setThemeMode(mode.value)" class="group flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-300
+                               hover:-translate-y-0.5" [ngClass]="themeService.themeMode() === mode.value
+                          ? 'bg-gradient-to-br from-accent/20 to-purple-500/20 shadow-lg shadow-accent/10'
+                          : 'bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800'">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300" [ngClass]="themeService.themeMode() === mode.value
+                         ? 'bg-gradient-to-br from-accent to-purple-500 shadow-md shadow-accent/30'
+                         : 'bg-gray-200 dark:bg-slate-700 group-hover:bg-gray-300 dark:group-hover:bg-slate-600'">
+                <span class="material-symbols-outlined text-lg" [ngClass]="themeService.themeMode() === mode.value
+                            ? 'text-white'
+                            : 'text-gray-600 dark:text-gray-300'">
+                  {{ mode.icon }}
+                </span>
+              </div>
+              <span class="text-xs font-medium" [ngClass]="themeService.themeMode() === mode.value
+                          ? 'text-accent'
+                          : 'text-gray-600 dark:text-gray-400'">
+                {{ mode.label }}
+              </span>
+            </button>
+            }
+          </div>
+        </div>
+
+        <!-- Accent Color Section -->
+        <div class="px-5 py-4 border-t border-gray-100 dark:border-slate-800">
+          <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Accent
+            Color</p>
+          <div class="grid grid-cols-4 gap-3">
+            @for (color of accentColors; track color.name) {
+            <button (click)="setAccentColor(color)" class="group relative flex items-center justify-center w-full aspect-square rounded-xl
+                               transition-all duration-300 hover:scale-110 hover:-translate-y-0.5
+                               hover:shadow-lg"
+              [style.background]="'linear-gradient(135deg, ' + color.value + ', ' + color.value + 'cc)'"
+              [style.box-shadow]="themeService.accentColor().name === color.name
+                          ? '0 8px 20px -4px ' + color.value + '60'
+                          : 'none'" [title]="color.name">
+              <!-- Checkmark for selected -->
+              @if (themeService.accentColor().name === color.name) {
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
+                <svg class="w-5 h-5 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              }
+            </button>
+            }
+          </div>
+          <div class="mt-4 flex items-center justify-center gap-2 py-2 px-3 rounded-xl
+                        bg-gray-50 dark:bg-slate-800/50">
+            <div class="w-3 h-3 rounded-full shadow-sm" [style.background-color]="themeService.accentColor().value">
+            </div>
+            <span class="text-xs font-medium text-gray-600 dark:text-gray-300">
+              {{ themeService.accentColor().name }}
+            </span>
+          </div>
+        </div>
+      </div>
       }
     </div>
 
     <!-- Notifications -->
     <div class="relative">
-      <button (click)="toggleNotificationsPopover($event)"
-              class="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg min-h-0 min-w-0
-                     hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-              title="Notifications">
+      <button (click)="toggleNotificationsPopover($event)" class="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg min-h-0 min-w-0
+                     hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" title="Notifications">
         <span class="material-symbols-outlined text-gray-600 dark:text-gray-300 text-2xl">
           notifications
         </span>
         <!-- Unread badge -->
         @if (unreadCount > 0) {
-          <span class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4 h-4 px-1
+        <span class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-4 h-4 px-1
                        bg-red-500 text-white text-[10px] font-semibold rounded-full">
-            {{ unreadCount > 9 ? '9+' : unreadCount }}
-          </span>
+          {{ unreadCount > 9 ? '9+' : unreadCount }}
+        </span>
         }
       </button>
 
       <!-- Notifications Popover -->
       @if (showNotificationsPopover) {
-        <div class="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-12
+      <div class="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-16 sm:top-12
                     w-auto sm:w-72 max-w-[calc(100vw-24px)] sm:max-w-72 rounded-lg z-[100] overflow-hidden
                     bg-white dark:bg-slate-800
                     border border-gray-200 dark:border-slate-700
                     shadow-2xl">
 
-          <!-- Header -->
-          <div class="px-3 py-2 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-accent text-lg">notifications</span>
-              <div>
-                <h3 class="font-semibold text-gray-900 dark:text-white text-sm leading-tight">Notifications</h3>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
-                  {{ unreadCount > 0 ? unreadCount + ' unread' : 'All caught up!' }}
-                </p>
-              </div>
+        <!-- Header -->
+        <div class="px-3 py-2 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-accent text-lg">notifications</span>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white text-sm leading-tight">Notifications</h3>
+              <p class="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
+                {{ unreadCount > 0 ? unreadCount + ' unread' : 'All caught up!' }}
+              </p>
             </div>
-            @if (notifications.length > 0 && unreadCount > 0) {
-              <button (click)="markAllAsRead()"
-                      class="text-[10px] font-medium text-accent hover:underline">
-                Mark all read
-              </button>
-            }
           </div>
+          @if (notifications.length > 0 && unreadCount > 0) {
+          <button (click)="markAllAsRead()" class="text-[10px] font-medium text-accent hover:underline">
+            Mark all read
+          </button>
+          }
+        </div>
 
-          <!-- Notifications List -->
-          <div class="max-h-64 overflow-y-auto">
-            @if (notifications.length === 0) {
-              <div class="flex flex-col items-center justify-center py-6 px-3">
-                <span class="material-symbols-outlined text-2xl text-gray-300 dark:text-slate-600 mb-1">
-                  notifications_off
-                </span>
-                <p class="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
-              </div>
-            } @else {
-              <div class="divide-y divide-gray-100 dark:divide-slate-700">
-                @for (notification of notifications; track notification.id) {
-                  <div (click)="markAsRead(notification)"
-                       class="group px-3 py-2 cursor-pointer transition-colors
+        <!-- Notifications List -->
+        <div class="max-h-64 overflow-y-auto">
+          @if (notifications.length === 0) {
+          <div class="flex flex-col items-center justify-center py-6 px-3">
+            <span class="material-symbols-outlined text-2xl text-gray-300 dark:text-slate-600 mb-1">
+              notifications_off
+            </span>
+            <p class="text-xs text-gray-500 dark:text-gray-400">No notifications</p>
+          </div>
+          } @else {
+          <div class="divide-y divide-gray-100 dark:divide-slate-700">
+            @for (notification of notifications; track notification.id) {
+            <div (click)="markAsRead(notification)" class="group px-3 py-2 cursor-pointer transition-colors
                               hover:bg-gray-50 dark:hover:bg-slate-700/50"
-                       [ngClass]="notification.read ? 'opacity-50' : 'bg-blue-50/50 dark:bg-blue-500/5'">
+              [ngClass]="notification.read ? 'opacity-50' : 'bg-blue-50/50 dark:bg-blue-500/5'">
 
-                    <div class="flex gap-2 items-start">
-                      <!-- Icon -->
-                      <div class="flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center mt-0.5"
-                           [ngClass]="{
+              <div class="flex gap-2 items-start">
+                <!-- Icon -->
+                <div class="flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center mt-0.5" [ngClass]="{
                              'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400': notification.type === 'info',
                              'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400': notification.type === 'success',
                              'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400': notification.type === 'warning',
                              'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400': notification.type === 'error'
                            }">
-                        <span class="material-symbols-outlined text-sm">{{ notification.icon }}</span>
-                      </div>
+                  <span class="material-symbols-outlined text-sm">{{ notification.icon }}</span>
+                </div>
 
-                      <!-- Content -->
-                      <div class="flex-1 min-w-0">
-                        <div class="flex items-start justify-between gap-1">
-                          <p class="text-[13px] font-medium text-gray-800 dark:text-gray-100 leading-tight">
-                            {{ notification.title }}
-                          </p>
-                          <button (click)="removeNotification(notification.id, $event)"
-                                  class="opacity-0 group-hover:opacity-100 flex-shrink-0 p-0.5 rounded
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-1">
+                    <p class="text-[13px] font-medium text-gray-800 dark:text-gray-100 leading-tight">
+                      {{ notification.title }}
+                    </p>
+                    <button (click)="removeNotification(notification.id, $event)" class="opacity-0 group-hover:opacity-100 flex-shrink-0 p-0.5 rounded
                                          hover:bg-gray-200 dark:hover:bg-slate-600
                                          text-gray-400 hover:text-red-500 transition-all">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-snug line-clamp-2">
-                          {{ notification.message }}
-                        </p>
-                        <div class="flex items-center gap-1.5 mt-0.5">
-                          <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ notification.time }}</span>
-                          @if (!notification.read) {
-                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-                          }
-                        </div>
-                      </div>
-                    </div>
+                      <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
-                }
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-snug line-clamp-2">
+                    {{ notification.message }}
+                  </p>
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ notification.time }}</span>
+                    @if (!notification.read) {
+                    <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                    }
+                  </div>
+                </div>
               </div>
+            </div>
             }
           </div>
-
-          <!-- Footer -->
-          @if (notifications.length > 0) {
-            <div class="px-3 py-2 border-t border-gray-100 dark:border-slate-700
-                        bg-gray-50 dark:bg-slate-800/50 flex justify-between items-center">
-              <button (click)="clearAllNotifications()"
-                      class="text-[10px] text-gray-500 dark:text-gray-400 hover:text-red-500
-                             font-medium transition-colors">
-                Clear all
-              </button>
-              <a [routerLink]="'/notifications'"
-                 class="text-[10px] font-medium text-accent hover:underline">
-                View all
-              </a>
-            </div>
           }
         </div>
+
+        <!-- Footer -->
+        @if (notifications.length > 0) {
+        <div class="px-3 py-2 border-t border-gray-100 dark:border-slate-700
+                        bg-gray-50 dark:bg-slate-800/50 flex justify-between items-center">
+          <button (click)="clearAllNotifications()" class="text-[10px] text-gray-500 dark:text-gray-400 hover:text-red-500
+                             font-medium transition-colors">
+            Clear all
+          </button>
+          <a [routerLink]="'/notifications'" class="text-[10px] font-medium text-accent hover:underline">
+            View all
+          </a>
+        </div>
+        }
+      </div>
       }
     </div>
 
     <!-- Profile -->
     <div class="relative">
-      <button (click)="toggleProfilePopover($event)"
-              class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white
+      <button (click)="toggleProfilePopover($event)" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white
                      bg-accent hover:ring-2 hover:ring-accent/40 transition-all cursor-pointer">
         {{ authService.user()?.avatar || 'U' }}
       </button>
 
       @if (showProfilePopover) {
-        <div class="absolute right-0 top-full mt-2 w-64 rounded-xl border border-gray-200 dark:border-slate-700
+      <div class="absolute right-0 top-full mt-2 w-64 rounded-xl border border-gray-200 dark:border-slate-700
                     bg-white dark:bg-slate-900 shadow-xl z-50 overflow-hidden">
-          <!-- User info -->
-          <div class="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white font-bold text-sm">
-                {{ authService.user()?.avatar || 'U' }}
-              </div>
-              <div class="min-w-0">
-                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ authService.user()?.displayName }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ authService.user()?.username }}</p>
-              </div>
+        <!-- User info -->
+        <div class="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white font-bold text-sm">
+              {{ authService.user()?.avatar || 'U' }}
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ authService.user()?.displayName
+                }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ authService.user()?.username }}</p>
             </div>
           </div>
-          <!-- Actions -->
-          <div class="py-1">
-            <button (click)="logout()"
-                    class="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50
-                           dark:hover:bg-red-900/20 transition-colors flex items-center gap-3">
-              <span class="material-symbols-outlined text-lg">logout</span>
-              Sign out
-            </button>
-          </div>
         </div>
+        <!-- Actions -->
+        <div class="py-1">
+          <button (click)="logout()" class="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50
+                           dark:hover:bg-red-900/20 transition-colors flex items-center gap-3">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Sign out
+          </button>
+        </div>
+      </div>
       }
     </div>
   </div>
