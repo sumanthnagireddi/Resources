@@ -1,123 +1,123 @@
-<!-- Search Trigger Button (hidden, will be triggered from header) -->
-
-<!-- Search Modal/Popover -->
 @if (isOpen()) {
-  <!-- Backdrop -->
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] transition-opacity"
-       (click)="closeSearch()">
-  </div>
+<!-- Backdrop -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]" (click)="closeSearch()"></div>
 
-  <!-- Search Modal -->
-  <div class="fixed top-16 sm:top-20 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2
-              w-auto sm:w-full sm:max-w-2xl z-[101]">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700
-                overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200"
-         (click)="$event.stopPropagation()">
+<!-- Modal -->
+<div class="fixed top-16 sm:top-20 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2
+              w-auto sm:w-full sm:max-w-2xl z-[101]" (click)="$event.stopPropagation()">
 
-      <!-- Search Input -->
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-slate-700">
-        <span class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-2xl">
-          search
-        </span>
-        <input
-          id="global-search-input"
-          type="text"
-          [value]="searchQuery()"
-          (input)="onSearchChange($any($event.target).value)"
-          placeholder="Search resources, topics, blogs..."
-          class="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400
-                 text-base focus:outline-none"
-          autofocus
-        />
-        <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs font-medium
+  <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl
+                border border-gray-200 dark:border-slate-700 overflow-hidden
+                animate-in fade-in slide-in-from-top-4 duration-200">
+
+    <!-- Input -->
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-slate-700">
+      @if (isLoading()) {
+      <span class="material-symbols-outlined text-accent text-2xl animate-spin">
+        progress_activity
+      </span>
+      } @else {
+      <span class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-2xl">
+        search
+      </span>
+      }
+
+      <input id="global-search-input" type="text" [formControl]="searchControl"
+        placeholder="Search resources, topics, blogs..." autocomplete="off" class="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400
+                 text-base focus:outline-none" autofocus />
+
+      <kbd class="hidden sm:inline-flex items-center px-2 py-1 text-xs font-medium
                    text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-800
                    rounded border border-gray-200 dark:border-slate-700">
-          ESC
-        </kbd>
-      </div>
+        ESC
+      </kbd>
+    </div>
 
-      <!-- Search Results -->
-      <div class="max-h-[60vh] overflow-y-auto">
-        @if (filteredResults().length > 0) {
-          <div class="p-2">
-            @for (result of filteredResults(); track result.id; let i = $index) {
-              <div
-                (click)="onResultClick(i)"
-                [class.search-result-selected]="selectedIndex() === i"
-                class="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-150
-                       hover:bg-gray-100 dark:hover:bg-slate-800"
-                [class.bg-gray-100]="selectedIndex() === i"
-                [class.dark:bg-slate-800]="selectedIndex() === i">
+    <!-- Results -->
+    <div class="max-h-[60vh] overflow-y-auto">
+      @if (hasResults()) {
+      <div class="p-2">
+        @for (result of filteredResults(); track result._id; let i = $index) {
+        <div (click)="selectResult(result)" [class.search-result-selected]="selectedIndex() === i"
+          [class.bg-gray-100]="selectedIndex() === i" [class.dark:bg-slate-800]="selectedIndex() === i" class="flex items-start gap-3 p-3 rounded-xl cursor-pointer
+                       transition-all duration-150 hover:bg-gray-100 dark:hover:bg-slate-800">
 
-                <!-- Icon -->
-                <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg
-                           bg-accent/10 text-accent">
-                  <span class="material-symbols-outlined text-xl">
-                    {{ result.icon }}
-                  </span>
-                </div>
-
-                <!-- Content -->
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2 mb-1">
-                    <h4 class="font-medium text-gray-900 dark:text-white text-sm truncate">
-                      {{ result.title }}
-                    </h4>
-                    <span class="px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0"
-                          [ngClass]="getTypeColor(result.type)">
-                      {{ result.type }}
-                    </span>
-                  </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
-                    {{ result.description }}
-                  </p>
-                </div>
-
-                <!-- Enter hint for selected -->
-                @if (selectedIndex() === i) {
-                  <kbd class="hidden sm:inline-flex items-center px-2 py-1 text-xs font-medium
-                             text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-900
-                             rounded border border-gray-200 dark:border-slate-700">
-                    ↵
-                  </kbd>
-                }
-              </div>
-            }
+          <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center
+                           rounded-lg bg-accent/10 text-accent">
+            <span class="material-symbols-outlined text-xl">{{ result.icon }}</span>
           </div>
-        } @else {
-          <!-- No Results -->
-          <div class="flex flex-col items-center justify-center py-12 px-4">
-            <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-3">
-              search_off
-            </span>
-            <h3 class="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
-              No results found
-            </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-500">
-              Try searching for something else
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <h4 class="font-medium text-gray-900 dark:text-white text-sm truncate">
+                {{ result.title }}
+              </h4>
+              <span class="px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0"
+                [ngClass]="getTypeColor(result.type)">
+                {{ result.type }}
+              </span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+              {{ result.description }}
             </p>
           </div>
+
+          @if (selectedIndex() === i) {
+          <kbd class="hidden sm:inline-flex items-center px-2 py-1 text-xs
+                             text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-900
+                             rounded border border-gray-200 dark:border-slate-700">
+            ↵
+          </kbd>
+          }
+        </div>
         }
       </div>
+      } @else if (!isLoading() && searchControl.value?.trim()) {
+      <!-- No results -->
+      <div class="flex flex-col items-center justify-center py-12 px-4">
+        <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-3">
+          search_off
+        </span>
+        <h3 class="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
+          No results found
+        </h3>
+        <p class="text-sm text-gray-500 dark:text-gray-500">
+          Try a different search term
+        </p>
+      </div>
+      }
+    </div>
 
-      <!-- Footer with keyboard shortcuts -->
-      <div class="hidden sm:flex items-center justify-between px-4 py-2 border-t border-gray-200 dark:border-slate-700
+    <!-- Footer -->
+    <div class="hidden sm:flex items-center justify-between px-4 py-2
+                  border-t border-gray-200 dark:border-slate-700
                   bg-gray-50 dark:bg-slate-800/50">
-        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-          <div class="flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↑</kbd>
-            <kbd class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↓</kbd>
-            <span>to navigate</span>
-          </div>
-          <div class="flex items-center gap-1">
-            <kbd class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↵</kbd>
-            <span>to select</span>
-          </div>
+      <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+        <div class="flex items-center gap-1">
+          <kbd
+            class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↑</kbd>
+          <kbd
+            class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↓</kbd>
+          <span>navigate</span>
         </div>
-        <div class="text-xs text-gray-400 dark:text-gray-500">
-          {{ filteredResults().length }} results
+        <div class="flex items-center gap-1">
+          <kbd
+            class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">↵</kbd>
+          <span>select</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <kbd
+            class="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">esc</kbd>
+          <span>close</span>
         </div>
       </div>
+      @if (hasResults()) {
+      <span class="text-xs text-gray-400 dark:text-gray-500">
+        {{ resultCount() }} results
+      </span>
+      }
     </div>
+
   </div>
+</div>
 }
