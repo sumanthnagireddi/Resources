@@ -37,7 +37,7 @@ import { FinanceDebtsComponent } from './components/finance-debts/finance-debts.
     FinanceExpenseModalsComponent,
     TabsComponent,
     FinanceCardsComponent,
-    FinanceDebtsComponent
+    FinanceDebtsComponent,
   ],
   templateUrl: './finance.component.html',
   styleUrl: './finance.component.css',
@@ -51,9 +51,9 @@ export class FinanceComponent implements OnInit {
     { name: 'Overview', icon: 'chart-bar' },
     { name: 'Transactions', icon: 'list' },
     { name: 'Categories', icon: 'tag' },
-    { name: 'Cards', icon: 'card' },
+    // { name: 'Cards', icon: 'card' },
     { name: 'Debts', icon: 'hand-holding-dollar' },
-      { name: 'Home', icon: 'home' },
+    // { name: 'Home', icon: 'home' },
   ];
 
   ngOnInit(): void {
