@@ -1,9 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewChecked,
+  ViewChild,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../../services/theme.service';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { AiService } from '../../services/ai.service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -22,11 +31,12 @@ interface Chat {
   templateUrl: './ai.component.html',
   styleUrls: ['./ai.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule],
 })
 export class AiComponent implements OnInit, AfterViewChecked {
   private http = inject(HttpClient);
   readonly themeService = inject(ThemeService);
+  readonly ragService = inject(AiService);
 
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
@@ -66,7 +76,7 @@ export class AiComponent implements OnInit, AfterViewChecked {
   }
 
   get currentMessages(): Message[] {
-    const chat = this.chats.find(c => c.id === this.activeChatId);
+    const chat = this.chats.find((c) => c.id === this.activeChatId);
     return chat ? chat.messages : [];
   }
 
@@ -82,7 +92,7 @@ export class AiComponent implements OnInit, AfterViewChecked {
 
   loadChat(id: string) {
     this.activeChatId = id;
-    const chat = this.chats.find(c => c.id === id);
+    const chat = this.chats.find((c) => c.id === id);
     if (chat) this.chatTitle = chat.title;
     this.sidebarOpen = false;
     this.shouldScrollToBottom = true;
@@ -94,55 +104,75 @@ export class AiComponent implements OnInit, AfterViewChecked {
   }
 
   sendMessage() {
-  const text = this.userInput.trim();
-  if (!text || this.isGenerating) return;
+    const text = this.userInput.trim();
+    if (!text || this.isGenerating) return;
 
-  if (!this.activeChatId) {
-    const id = Date.now().toString();
-    this.activeChatId = id;
-    this.chats.unshift({
-      id,
-      title: text.length > 45 ? text.slice(0, 45) + '…' : text,
-      messages: [],
-      createdAt: new Date().toISOString()
-    });
-  }
+    if (!this.activeChatId) {
+      const id = Date.now().toString();
+      this.activeChatId = id;
+      this.chats.unshift({
+        id,
+        title: text.length > 45 ? text.slice(0, 45) + '…' : text,
+        messages: [],
+        createdAt: new Date().toISOString(),
+      });
+    }
 
-  const chat = this.chats.find(c => c.id === this.activeChatId)!;
-  chat.messages.push({ role: 'user', content: text });
-  this.userInput = '';
-  this.isGenerating = true;
-  this.saveChats();
-  this.shouldScrollToBottom = true;
+    const chat = this.chats.find((c) => c.id === this.activeChatId)!;
+    chat.messages.push({ role: 'user', content: text });
+    this.userInput = '';
+    this.isGenerating = true;
+    this.saveChats();
+    this.shouldScrollToBottom = true;
 
-  // Reset textarea height
-  setTimeout(() => {
-    const ta = document.querySelector('textarea');
-    if (ta) { ta.style.height = 'auto'; }
-  });
-
-  // Real API call
-  this.http.post<{ data: string }>(`${environment.API_URL}/ai/ask`, { question: text })
-    .subscribe({
-      next: (res) => {
-        chat.messages.push({
-          role: 'assistant',
-          content: res.data
-        });
-        this.isGenerating = false;
-        this.saveChats();
-        this.shouldScrollToBottom = true;
-      },
-      error: (err) => {
-        chat.messages.push({
-          role: 'assistant',
-          content: 'Sorry, something went wrong. Please try again.'
-        });
-        this.isGenerating = false;
-        this.saveChats();
+    // Reset textarea height
+    setTimeout(() => {
+      const ta = document.querySelector('textarea');
+      if (ta) {
+        ta.style.height = 'auto';
       }
     });
-}
+
+    // Real API call
+    this.http
+      .post<{
+        data: string;
+      }>(`${environment.API_URL}/ai/ask`, { question: text })
+      .subscribe({
+        next: (res) => {
+          chat.messages.push({
+            role: 'assistant',
+            content: res.data,
+          });
+          this.isGenerating = false;
+          this.saveChats();
+          this.shouldScrollToBottom = true;
+        },
+        error: (err) => {
+          chat.messages.push({
+            role: 'assistant',
+            content: 'Sorry, something went wrong. Please try again.',
+          });
+          this.isGenerating = false;
+          this.saveChats();
+        },
+      });
+  }
+  answer = '';
+  isStreaming = false;
+
+  ask() {
+    this.answer = '';
+    this.isStreaming = true;
+  const text = this.userInput.trim();
+    if (!text || this.isGenerating) return;
+
+    this.ragService.askStream(text).subscribe({
+      next: (token) => (this.answer += token), // ✅ appends each token
+      complete: () => (this.isStreaming = false),
+      error: () => (this.isStreaming = false),
+    });
+  }
 
   private getMockResponse(input: string): string {
     const responses = [
@@ -155,7 +185,7 @@ export class AiComponent implements OnInit, AfterViewChecked {
 
   deleteChat(e: Event, id: string) {
     e.stopPropagation();
-    this.chats = this.chats.filter(c => c.id !== id);
+    this.chats = this.chats.filter((c) => c.id !== id);
     if (this.activeChatId === id) {
       this.activeChatId = null;
       this.chatTitle = 'New conversation';
@@ -166,9 +196,10 @@ export class AiComponent implements OnInit, AfterViewChecked {
   searchChats(event: Event) {
     const val = (event.target as HTMLInputElement).value.toLowerCase().trim();
     this.filteredChats = val
-      ? this.chats.filter(c =>
-          c.title.toLowerCase().includes(val) ||
-          c.messages.some(m => m.content.toLowerCase().includes(val))
+      ? this.chats.filter(
+          (c) =>
+            c.title.toLowerCase().includes(val) ||
+            c.messages.some((m) => m.content.toLowerCase().includes(val)),
         )
       : [...this.chats];
   }
@@ -195,7 +226,10 @@ export class AiComponent implements OnInit, AfterViewChecked {
     if (!md) return '';
     let html = md
       // Code blocks
-      .replace(/```(\w+)?\n?([\s\S]*?)```/g, '<pre class="code-block"><code>$2</code></pre>')
+      .replace(
+        /```(\w+)?\n?([\s\S]*?)```/g,
+        '<pre class="code-block"><code>$2</code></pre>',
+      )
       // Inline code
       .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
       // Bold
@@ -211,7 +245,10 @@ export class AiComponent implements OnInit, AfterViewChecked {
       // Unordered list items
       .replace(/^[\-\*] (.+)$/gm, '<li class="md-li">$1</li>')
       // Wrap consecutive <li> in <ul>
-      .replace(/(<li class="md-li">.*<\/li>\n?)+/g, (m) => `<ul class="md-ul">${m}</ul>`)
+      .replace(
+        /(<li class="md-li">.*<\/li>\n?)+/g,
+        (m) => `<ul class="md-ul">${m}</ul>`,
+      )
       // Paragraphs (double newline)
       .replace(/\n\n/g, '</p><p class="md-p">')
       // Single newline to <br>
