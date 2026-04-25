@@ -1,0 +1,100 @@
+<div class="relative flex h-full min-h-0 overflow-hidden bg-stone-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl dark:bg-orange-500/10"></div>
+    <div class="absolute right-0 top-16 h-80 w-80 rounded-full bg-indigo-200/40 blur-3xl dark:bg-indigo-500/10"></div>
+  </div>
+
+  <div
+    class="absolute inset-0 z-20 bg-slate-950/45 transition md:hidden"
+    [class.pointer-events-none]="!sidebarOpen()"
+    [class.opacity-0]="!sidebarOpen()"
+    [class.opacity-100]="sidebarOpen()"
+    (click)="closeSidebar()"
+  ></div>
+
+  <app-ai-sidebar
+    class="relative z-30"
+    [isOpen]="sidebarOpen()"
+    [agents]="store.agents"
+    [selectedAgentId]="store.selectedAgentId()"
+    [searchTerm]="store.searchTerm()"
+    [conversations]="store.filteredConversations()"
+    [activeConversationId]="store.activeConversationId()"
+    (closeSidebar)="closeSidebar()"
+    (newChat)="startFreshChat()"
+    (searchTermChange)="updateSearchTerm($event)"
+    (agentSelected)="selectAgent($event)"
+    (conversationOpened)="openConversation($event)"
+    (conversationDeleted)="deleteConversation($event)"
+    (conversationPinned)="togglePin($event)"
+  ></app-ai-sidebar>
+
+  <main class="relative z-10 flex min-w-0 flex-1 flex-col gap-4 p-3 md:p-5">
+    <header
+      class="flex flex-col gap-4 rounded-[28px] border border-stone-200/80 bg-white/80 px-4 py-4 shadow-[0_18px_50px_rgba(69,43,24,0.08)] backdrop-blur xl:flex-row xl:items-center xl:justify-between dark:border-white/10 dark:bg-slate-900/75 dark:shadow-black/20"
+    >
+      <div class="flex min-w-0 items-start gap-3">
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-stone-200/70 bg-white text-slate-600 transition hover:border-accent/40 hover:text-accent md:hidden dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"
+          (click)="toggleSidebar()"
+        >
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+
+        <div class="min-w-0">
+          <p class="mb-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+            {{ store.selectedAgent().badge }}
+          </p>
+          <h1 class="truncate font-serif text-3xl tracking-tight text-slate-900 dark:text-white">
+            {{ store.activeConversation()?.title || 'How can I help?' }}
+          </h1>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            {{ store.selectedAgent().description }}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <span
+          class="inline-flex items-center rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold text-accent"
+        >
+          {{ store.selectedAgent().label }}
+        </span>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-stone-200/80 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"
+          [disabled]="store.isGenerating()"
+          (click)="regenerate()"
+        >
+          <span class="material-symbols-outlined text-[18px]">refresh</span>
+          Regenerate
+        </button>
+      </div>
+    </header>
+
+    <section #messageContainer class="min-h-0 flex-1 overflow-y-auto px-1">
+      <app-ai-thread
+        [activeConversation]="store.activeConversation()"
+        [currentThinking]="store.currentThinking()"
+        [welcomePrompts]="store.welcomePrompts()"
+        (suggestionSelected)="useSuggestion($event)"
+        (messageReaction)="reactToMessage($event)"
+      ></app-ai-thread>
+    </section>
+
+    <app-ai-composer
+      [text]="composerText()"
+      [attachments]="attachments()"
+      [webSearchEnabled]="store.composerOptions().webSearch"
+      [deepThinkEnabled]="store.composerOptions().deepThink"
+      [isGenerating]="store.isGenerating()"
+      (textChange)="updateComposerText($event)"
+      (filesSelected)="handleFilesSelected($event)"
+      (removeAttachment)="removeAttachment($event)"
+      (toggleOption)="toggleOption($event)"
+      (sendMessage)="sendMessage()"
+      (stopGeneration)="stopGeneration()"
+    ></app-ai-composer>
+  </main>
+</div>

@@ -15,6 +15,8 @@ import { SkeletonComponent } from '../../component/skeleton/skeleton.component';
 import { catchError, delay, throwError, Observable } from 'rxjs';
 import { toggleStarred } from '../../store/actions/starred.actions';
 import { selectIsStarred } from '../../store/selectors/starred.selector';
+import { AiButtonComponent } from '../../component/ai-button/ai-button.component';
+import { AiService } from '../../services/ai.service';
 
 @Component({
   selector: 'app-content-layout',
@@ -24,6 +26,7 @@ import { selectIsStarred } from '../../store/selectors/starred.selector';
     BreadcrumbComponent,
     RouterLink,
     SkeletonComponent,
+    AiButtonComponent,
   ],
   templateUrl: './content-layout.component.html',
   styleUrl: './content-layout.component.css',
@@ -49,8 +52,9 @@ export class ContentLayoutComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private store: Store,
     private service: ContentService,
-    private route: Router
-  ) { }
+    private route: Router,
+    private aiService: AiService,
+  ) {}
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.currentId = params['pageId'];
@@ -67,7 +71,7 @@ export class ContentLayoutComponent implements OnInit {
       (match, level, attrs, text) => {
         const id = `heading-${idx++}`;
         return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
-      }
+      },
     );
   }
 
@@ -90,6 +94,39 @@ export class ContentLayoutComponent implements OnInit {
       }
     }
   }
+ handleAiClick() {
+  const question = `
+You are an expert technical content writer and HTML formatter.
+
+Your task is to IMPROVE and EXPAND the given content.
+
+STRICT RULES:
+- Return ONLY valid HTML (no markdown, no explanations)
+- Use <h3>, <ul>, <li>, <p> tags
+- Keep Yoopta-compatible attributes (data-meta-align, data-meta-depth, style)
+- Improve grammar and clarity
+
+EXPANSION RULES:
+- Add more useful details to each point
+- Expand bullet points with clear explanations
+- Add missing context wherever helpful
+- Do NOT repeat the same sentence — enrich it
+- Keep it concise but more informative than input
+
+FORMATTING RULES:
+- Each section should have a heading (<h3>)
+- Each point should be inside <ul><li>
+- Add <p> if explanation is needed
+
+Content:
+${this.content}
+`;
+
+  this.aiService.ask(question).subscribe((data) => {
+    this.content = data.text.trim();
+    this.headings = this.extractHeadings(this.content);
+  });
+}
   // cacheHeadings(): void {
   //   if (!this.contentContainer) return;
   //   const container = this.contentContainer.nativeElement;
@@ -120,9 +157,7 @@ export class ContentLayoutComponent implements OnInit {
 
     this.service
       .fetchContent(id)
-      .pipe(
-        catchError((err) => throwError(() => err).pipe(delay(500)))
-      )
+      .pipe(catchError((err) => throwError(() => err).pipe(delay(500))))
       .subscribe({
         next: (data: any) => {
           const rawHtml = data?.body ?? null;
@@ -131,7 +166,6 @@ export class ContentLayoutComponent implements OnInit {
           setTimeout(() => {
             // this.cacheHeadings();
             this.onScroll(); // initialize active heading
-
           }, 0);
           this.contentAvailable = !!this.content;
           this.contentLoader = false;
@@ -160,9 +194,7 @@ export class ContentLayoutComponent implements OnInit {
     let currentActive: string | null = null;
 
     // 🔑 ALWAYS READ FROM DOM, NOT STRING ARRAY
-    const domHeadings = container.querySelectorAll(
-      'h1, h2, h3, h4, h5, h6'
-    );
+    const domHeadings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
     for (const heading of Array.from(domHeadings)) {
       const headingTop = heading.getBoundingClientRect().top;
@@ -180,16 +212,13 @@ export class ContentLayoutComponent implements OnInit {
     // Top fallback
     if (!currentActive && domHeadings.length) {
       currentActive =
-        domHeadings[0].textContent
-          ?.trim()
-          .replace(/^\d+\.\s*/, '') ?? null;
+        domHeadings[0].textContent?.trim().replace(/^\d+\.\s*/, '') ?? null;
     }
 
     if (this.activeHeading !== currentActive) {
       this.activeHeading = currentActive;
       this.scrollActiveTocItem(); // 👈 auto-scroll sidebar
     }
-
   }
 
   scrollActiveTocItem(): void {
@@ -197,11 +226,8 @@ export class ContentLayoutComponent implements OnInit {
 
     const container = this.tocContainer.nativeElement;
 
-    const activeItem = Array.from(
-      container.querySelectorAll('a')
-    ).find(
-      (el) =>
-        el.textContent?.trim() === this.activeHeading
+    const activeItem = Array.from(container.querySelectorAll('a')).find(
+      (el) => el.textContent?.trim() === this.activeHeading,
     );
 
     if (activeItem) {
@@ -224,5 +250,4 @@ export class ContentLayoutComponent implements OnInit {
       this.store.dispatch(toggleStarred({ contentId: this.currentId }));
     }
   }
-
 }

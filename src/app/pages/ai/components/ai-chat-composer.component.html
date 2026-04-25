@@ -1,0 +1,53 @@
+<div class="flex-shrink-0 bg-[#fafaf9] px-4 py-4 transition-colors duration-300 dark:bg-slate-950 md:px-6">
+  <div class="mx-auto max-w-3xl">
+    <div
+      class="rounded-3xl border border-black/[0.09] bg-white shadow-sm transition-all duration-200 focus-within:shadow-md dark:border-white/[0.09] dark:bg-[#1e1f20]">
+      <div class="px-5 pb-2 pt-3 flex items-end gap-2">
+        <textarea #composerInput rows="1"
+          class="min-h-[28px] max-h-[200px] w-full resize-none border-0 bg-transparent text-[15px] leading-relaxed text-[#1a1a1a] placeholder-black/35 focus:outline-none focus:ring-0 dark:text-white dark:placeholder-white/30"
+          placeholder="How can I help you today?" [value]="text()" (input)="handleInput($event)"
+          (keydown.enter)="handleEnter($event)"></textarea>
+
+        <!-- Send / Stop button -->
+        <button (click)="send()"  [disabled]="!isGenerating() && !text().trim()">
+          <!-- Send icon -->
+          <span *ngIf="!isGenerating()" class="material-symbols-outlined mt-2">
+            send
+          </span>
+
+          <!-- Stop icon -->
+          <span *ngIf="isGenerating()" class="material-symbols-outlined">
+            stop_circle
+          </span>
+        </button>
+      </div>
+      <!-- <button
+          type="button"
+          class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all duration-150 enabled:bg-[#1a1a1a] enabled:hover:bg-black/80 disabled:cursor-not-allowed disabled:bg-black/8 dark:enabled:bg-white dark:enabled:hover:bg-white/90 dark:disabled:bg-white/10"
+          [disabled]="!text().trim() || isGenerating()"
+          (click)="send()"
+        >
+          <svg
+            class="h-[15px] w-[15px]"
+            [ngClass]="
+              !text().trim() || isGenerating()
+                ? 'text-black/25 dark:text-white/25'
+                : 'text-white dark:text-[#1a1a1a]'
+            "
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+          </svg>
+        </button> -->
+    </div>
+
+    <p class="mt-2.5 text-center text-[11px] text-black/25 dark:text-white/20">
+      AI can make mistakes. Consider checking important information.
+    </p>
+  </div>
+</div>

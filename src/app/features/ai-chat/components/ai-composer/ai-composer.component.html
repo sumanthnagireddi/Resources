@@ -1,0 +1,80 @@
+<section
+  class="mx-auto w-full max-w-5xl rounded-[30px] border border-stone-200/80 bg-white/90 p-3 shadow-[0_18px_50px_rgba(69,43,24,0.08)] backdrop-blur dark:border-white/10 dark:bg-slate-900/85 dark:shadow-black/20"
+>
+  <div *ngIf="attachments().length" class="mb-3 flex flex-wrap gap-2">
+    <div
+      *ngFor="let attachment of attachments(); trackBy: trackById"
+      class="inline-flex max-w-full items-center gap-3 rounded-2xl border border-accent/15 bg-accent/10 px-3 py-2 text-left"
+    >
+      <img
+        *ngIf="attachment.previewUrl"
+        [src]="attachment.previewUrl"
+        [alt]="attachment.name"
+        class="h-11 w-11 rounded-xl object-cover"
+      />
+
+      <div class="min-w-0">
+        <strong class="block truncate text-sm text-slate-900 dark:text-white">{{ attachment.name }}</strong>
+        <span class="block text-xs text-slate-500 dark:text-slate-400">
+          {{ attachment.status === 'limited' ? 'Preview only in current version' : 'Context included' }}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-black/5 hover:text-slate-700 dark:hover:bg-white/10 dark:hover:text-slate-200"
+        (click)="removeAttachmentById(attachment.id)"
+      >
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+  </div>
+
+  <textarea
+    #composerInput
+    rows="1"
+    class="max-h-[260px] min-h-[96px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[15px] leading-7 text-slate-800 outline-none ring-0 placeholder:text-slate-400 focus:border-0 focus:ring-0 dark:text-slate-100 dark:placeholder:text-slate-500"
+    placeholder="Message your AI workspace..."
+    [value]="text()"
+    (input)="handleInput($event)"
+    (keydown.enter)="handleEnter($event)"
+  ></textarea>
+
+  <div class="flex flex-col gap-3 border-t border-stone-200/80 px-1 pt-3 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
+  
+
+    <div class="flex flex-wrap items-center justify-between gap-3 lg:justify-end">
+      <span class="text-xs text-slate-400">AI can make mistakes. Check important details.</span>
+
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="isGenerating()"
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-stone-200/80 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"
+          (click)="stop()"
+        >
+          <span class="material-symbols-outlined text-[18px]">stop</span>
+          Stop
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-orange-400 text-white shadow-lg shadow-orange-300/30 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none dark:shadow-orange-950/30"
+          [disabled]="(!text().trim() && attachments().length === 0) || isGenerating()"
+          (click)="send()"
+        >
+          <span class="material-symbols-outlined">north</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <input
+    #fileInput
+    type="file"
+    hidden
+    multiple
+    accept=".txt,.md,.json,.js,.ts,.tsx,.jsx,.html,.css,.scss,.png,.jpg,.jpeg,.webp,.svg"
+    (change)="handleFileChange($event)"
+  />
+</section>

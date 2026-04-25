@@ -1,0 +1,40 @@
+<div class="flex h-full flex-col items-center justify-center px-6 py-16 text-center">
+  <div class="relative mb-8">
+    <div
+      class="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-black/5 dark:border-white/10 dark:bg-white/5"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-[#c97b4b]/20 to-transparent opacity-40 dark:from-[#e07b4b]/30"
+      ></div>
+      <svg
+        class="relative z-10 h-6 w-6 text-[#c97b4b] dark:text-[#e07b4b]"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      >
+        <circle cx="12" cy="12" r="10" opacity="0.3"></circle>
+        <path d="M8 12h8M12 8v8"></path>
+      </svg>
+    </div>
+  </div>
+
+  <h1 class="mb-2 text-[2rem] font-semibold leading-none tracking-tight text-[#1a1a1a] dark:text-white">
+    How can I help?
+  </h1>
+  <p class="mb-10 max-w-xs text-sm leading-relaxed text-black/40 dark:text-white/40">
+    Ask anything, I&apos;ll do my best to help.
+  </p>
+
+  <div class="flex max-w-lg flex-wrap justify-center gap-2">
+    <button
+      *ngFor="let suggestion of suggestions(); trackBy: trackByValue"
+      type="button"
+      class="rounded-xl border border-black/10 bg-white px-4 py-2 text-[13px] text-black/55 shadow-sm transition-all duration-150 hover:border-[#c97b4b]/40 hover:bg-[#fdf6f1] hover:text-black/80 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/60 dark:hover:border-[#e07b4b]/30 dark:hover:bg-white/[0.08] dark:hover:text-white/90"
+      (click)="chooseSuggestion(suggestion)"
+    >
+      {{ suggestion }}
+    </button>
+  </div>
+</div>

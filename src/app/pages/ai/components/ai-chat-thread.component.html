@@ -1,0 +1,11 @@
+<div class="mx-auto w-full max-w-3xl space-y-6 px-4 py-8 md:px-6">
+  <app-ai-chat-message
+    *ngFor="let message of messages(); trackBy: trackById"
+    [message]="message"
+  ></app-ai-chat-message>
+
+  <app-ai-chat-typing-indicator
+    *ngIf="isGenerating()"
+    [spinnerVerb]="spinnerVerb()"
+  ></app-ai-chat-typing-indicator>
+</div>
