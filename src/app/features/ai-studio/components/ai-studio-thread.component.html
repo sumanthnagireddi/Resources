@@ -1,0 +1,12 @@
+<div class="mx-auto flex w-full max-w-[58rem] flex-col gap-8 px-4 py-8 md:px-8 md:py-10">
+  @for (message of messages(); track trackByMessageId($index, message)) {
+    <app-ai-studio-message
+      [message]="message"
+      (followUpSelected)="followUpSelected.emit($event)"
+    ></app-ai-studio-message>
+  }
+
+  @if (liveRun(); as run) {
+    <app-ai-studio-run-status [run]="run"></app-ai-studio-run-status>
+  }
+</div>

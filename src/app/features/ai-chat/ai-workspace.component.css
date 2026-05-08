@@ -1,0 +1,67 @@
+
+:host {
+  display: block;
+}
+
+.agent-page {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Space Mono', monospace;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(16, 20, 20, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 20, 20, 0.055) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.runtime-shell::before {
+  content: '';
+  position: absolute;
+  inset: 18px -10px -10px 18px;
+  z-index: -1;
+  border: 1px solid rgba(16, 20, 20, 0.18);
+  border-radius: 1.5rem;
+}
+
+.capability-card {
+  box-shadow: 0 1px 0 rgba(16, 20, 20, 0.05);
+}
+
+.pulse-dot {
+  animation: pulse 1.15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(0.78);
+  }
+}
+
+textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 20, 20, 0.22);
+  border-radius: 999px;
+}

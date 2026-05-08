@@ -1,0 +1,51 @@
+<section class="border-b border-[#ece3d8] bg-white/42 px-4 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.02] md:px-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex min-w-0 items-center gap-3">
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-full border border-[#e7ddcf] bg-white/88 px-3 py-2 text-sm font-medium text-[#6d5c4d] transition hover:border-[#caa88b] hover:text-[#8f5738] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#ccb9a8]"
+        (click)="workspaceRequested.emit()"
+      >
+        <span class="material-symbols-outlined text-[18px]">widgets</span>
+        <span class="hidden sm:inline">Workspace</span>
+      </button>
+
+      <div class="min-w-0">
+        <p class="truncate text-lg font-semibold text-[#201914] dark:text-[#f7efe6]">{{ title() }}</p>
+        @if (isGenerating()) {
+          <p class="truncate text-xs text-[#7b6a59] dark:text-[#c4b19f]">Streaming response in progress</p>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="inline-flex items-center gap-2 rounded-full border border-[#e7ddcf] bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#ccb9a8]">
+        <span class="material-symbols-outlined text-[15px]">{{ activeAgent().icon }}</span>
+        {{ activeAgent().name }}
+      </span>
+
+      <span
+        class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium"
+        [ngClass]="responseMode() === 'local'
+          ? 'border-[#e3d5c8] bg-[#fff4ea] text-[#9b6646] dark:border-[#5c4637] dark:bg-[#241a14] dark:text-[#f3bf92]'
+          : responseMode() === 'live'
+            ? 'border-[#dfe9dc] bg-[#eff8ef] text-[#4f7a5f] dark:border-[#36543e] dark:bg-[#172117] dark:text-[#98d0a7]'
+            : 'border-[#e7ddcf] bg-white/88 text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#ccb9a8]'"
+      >
+        <span class="material-symbols-outlined text-[15px]">
+          {{ responseMode() === 'local' ? 'dns_off' : responseMode() === 'live' ? 'cloud_done' : 'play_circle' }}
+        </span>
+        {{ modeLabel() }}
+      </span>
+
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-full bg-[#1d1917] px-3.5 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 dark:bg-[#f7efe6] dark:text-[#1b1512]"
+        (click)="newConversation.emit()"
+      >
+        <span class="material-symbols-outlined text-[18px]">edit_square</span>
+        <span class="hidden sm:inline">New</span>
+      </button>
+    </div>
+  </div>
+</section>

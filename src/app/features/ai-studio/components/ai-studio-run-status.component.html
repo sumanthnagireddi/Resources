@@ -1,0 +1,60 @@
+<section aria-live="polite" class="rounded-[32px] border border-[#ddd1c4] bg-[#faf6f1] p-4 shadow-[0_20px_48px_rgba(56,40,24,0.08)] backdrop-blur-xl dark:border-[#4d3b31] dark:bg-[#1d1714] dark:shadow-[0_30px_90px_rgba(0,0,0,0.38)] md:p-5">
+  <div class="grid gap-5 xl:grid-cols-[0.88fr_1.12fr]">
+    <div>
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8f5738] dark:bg-black/20 dark:text-[#f1d0b3]">
+        <span class="h-2 w-2 animate-pulse rounded-full bg-current"></span>
+        Streaming
+      </div>
+      <h3 class="mt-3 text-xl font-semibold tracking-tight text-[#201914] dark:text-[#f7efe6]">
+        {{ run().agentName }} is building the response
+      </h3>
+      <p class="mt-2 text-sm leading-6 text-[#6f6255] dark:text-[#ccb9a8]">
+        {{ run().commandLabel ? run().commandLabel + ' mode is active with visible progress and live drafting.' : 'The workspace is routing, gathering context, drafting, and packaging the final answer.' }}
+      </p>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        @for (tool of run().tools; track trackByValue($index, tool)) {
+          <span class="rounded-full border border-[#ebe1d4] bg-white/88 px-3 py-1.5 text-xs font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8]">
+            {{ tool }}
+          </span>
+        }
+      </div>
+
+      <div class="mt-5 space-y-2">
+        @for (step of run().steps; track trackByStepId($index, step)) {
+          <div class="rounded-[22px] border p-3 transition" [ngClass]="stepClasses(step)">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ step.title }}</p>
+                <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ step.detail }}</p>
+              </div>
+              <span class="rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]" [ngClass]="statusTextClasses(step)">
+                {{ step.status }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="rounded-[26px] border border-white/80 bg-white/92 p-4 dark:border-white/10 dark:bg-white/[0.05]">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7b6a59] dark:text-[#c4b19f]">
+          <span class="material-symbols-outlined text-[16px] text-[#8f77ff] dark:text-[#cabdff]">ink_pen</span>
+          Live draft
+        </div>
+        <span class="rounded-full bg-[#f3ecff] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7058cf] dark:bg-[#2a213f] dark:text-[#c9bcff]">
+          typing
+        </span>
+      </div>
+
+      @if (run().partialResponse) {
+        <div [innerHTML]="renderContent(run().partialResponse)"></div>
+      } @else {
+        <div class="rounded-[22px] border border-dashed border-[#d8cab6] bg-[#faf5ee] p-4 text-sm leading-6 text-[#6f6255] dark:border-[#3a2f27] dark:bg-[#1d1713] dark:text-[#ccb9a8]">
+          The draft appears here as soon as streaming starts. Progress cards keep moving in parallel so the user can see what the agent is doing before the final answer lands.
+        </div>
+      }
+    </div>
+  </div>
+</section>

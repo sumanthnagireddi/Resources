@@ -1,0 +1,42 @@
+<div class="mx-auto flex h-full w-full max-w-[64rem] flex-col items-center justify-center px-4 pt-8 text-center md:px-8">
+  <div class="relative mb-7">
+    <div class="absolute inset-0 rounded-full bg-[#8f77ff]/24 blur-2xl dark:bg-[#8f77ff]/20"></div>
+    <div class="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/80 bg-white/88 shadow-[0_18px_40px_rgba(143,119,255,0.18)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.06]">
+      <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#9f86ff] via-[#8f77ff] to-[#77d2c2] text-white">
+        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="max-w-4xl text-4xl font-semibold tracking-tight text-[#201914] dark:text-[#f7efe6] md:text-6xl">
+    What should we work on next?
+  </h2>
+
+  <div class="mt-7 flex max-w-3xl flex-wrap items-center justify-center gap-3">
+    @for (prompt of prompts().slice(0, 4); track trackByPromptTitle($index, prompt)) {
+      <button
+        type="button"
+        class="rounded-2xl border border-[#e6dcca] bg-white/88 px-4 py-3 text-sm font-medium text-[#5e5044] shadow-[0_10px_24px_rgba(56,40,24,0.04)] transition hover:-translate-y-0.5 hover:border-[#caa88b] hover:bg-white hover:text-[#8f5738] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#d7c7b9] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06] dark:hover:text-[#f1d0b3]"
+        (click)="promptSelected.emit(prompt.prompt)"
+      >
+        {{ prompt.title }}
+      </button>
+    }
+  </div>
+
+  <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+    @for (agent of agents(); track trackByAgentId($index, agent)) {
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition"
+        [ngClass]="activeAgentId() === agent.id
+          ? 'border-[#d8ccb8] bg-white text-[#8f5738] shadow-[0_10px_20px_rgba(56,40,24,0.05)] dark:border-[#5c4637] dark:bg-[#241d18] dark:text-[#f1d0b3]'
+          : 'border-[#e6dcca] bg-white/75 text-[#6f6255] hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-[#d0bead] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06]'"
+        (click)="agentSelected.emit(agent.id)"
+      >
+        <span class="material-symbols-outlined text-[14px]">{{ agent.icon }}</span>
+        {{ agent.name }}
+      </button>
+    }
+  </div>
+</div>

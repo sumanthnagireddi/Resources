@@ -1,0 +1,106 @@
+<div class="flex gap-4" [class.justify-end]="message().role === 'user'">
+  @if (message().role === 'assistant') {
+    <div class="mt-1 hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-white/88 text-[#8f77ff] shadow-[0_10px_24px_rgba(143,119,255,0.16)] dark:border-white/10 dark:bg-white/[0.06] dark:text-[#cabdff] md:flex">
+      <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+    </div>
+  }
+
+  <div class="min-w-0 max-w-[54rem]">
+    @if (message().role === 'assistant') {
+      <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-[#7b6a59] dark:text-[#c4b19f]">
+        <span class="font-semibold text-[#4d3f33] dark:text-[#f7efe6]">{{ message().agentName }}</span>
+        @if (message().commandLabel) {
+          <span class="rounded-full bg-[#f1e4ff] px-2.5 py-1 font-medium text-[#7058cf] dark:bg-[#2a213f] dark:text-[#c9bcff]">
+            {{ message().commandLabel }}
+          </span>
+        }
+        <span>{{ formatTime(message().createdAt) }}</span>
+      </div>
+
+      <article class="rounded-[32px] border p-6 shadow-[0_16px_40px_rgba(77,55,26,0.08)] dark:shadow-[0_24px_56px_rgba(0,0,0,0.32)]" [ngClass]="assistantCardClasses()">
+        <div
+          class="min-w-0 text-[#201914] dark:text-[#f7efe6]"
+          [innerHTML]="renderContent(message().content)"
+        ></div>
+
+        @if (message().toolLabels?.length) {
+          <div class="mt-5 flex flex-wrap gap-2">
+            @for (tool of message().toolLabels ?? []; track trackByValue($index, tool)) {
+              <span class="rounded-full border border-[#ebe1d4] bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8]">
+                {{ tool }}
+              </span>
+            }
+          </div>
+        }
+
+        @if (message().artifacts?.length) {
+          <div class="mt-6 grid gap-3 md:grid-cols-2">
+            @for (artifact of message().artifacts ?? []; track trackByArtifact($index, artifact)) {
+              <div class="rounded-[24px] border p-4" [ngClass]="artifactCardClasses(artifact)">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined mt-0.5 text-[18px] text-[#8f5738] dark:text-[#e2b08f]">
+                      {{ artifactIcon(artifact) }}
+                    </span>
+                    <div>
+                      <div class="mb-2">
+                        <span class="rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]" [ngClass]="artifactPillClasses(artifact)">
+                          {{ artifactLabel(artifact) }}
+                        </span>
+                      </div>
+                      <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ artifact.title }}</p>
+                      <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ artifact.detail }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (message().followUps?.length) {
+          <div class="mt-6 border-t border-[#efe5d8] pt-5 dark:border-white/10">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7c6c5d] dark:text-[#c4b09f]">
+              Suggested follow-ups
+            </p>
+            <div class="flex flex-wrap gap-2">
+              @for (followUp of message().followUps ?? []; track trackByValue($index, followUp)) {
+                <button
+                  type="button"
+                  class="rounded-full border border-[#ebe1d4] bg-white px-3 py-2 text-xs font-medium text-[#6d5c4d] transition hover:border-[#caa88b] hover:bg-[#fff7ef] hover:text-[#8f5738] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8] dark:hover:bg-white/[0.07] dark:hover:text-[#e2b08f]"
+                  (click)="followUpSelected.emit(followUp)"
+                >
+                  {{ followUp }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </article>
+    } @else {
+      <article class="rounded-[28px] border border-[#ddd1c4] bg-[#faf6f1] px-5 py-4 text-[#201914] shadow-[0_12px_30px_rgba(56,40,24,0.06)] dark:border-[#4b3a30] dark:bg-[#241d18] dark:text-[#f7efe6]">
+        <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-[#7b6a59] dark:text-[#ccb9a8]">
+          <span class="font-semibold text-[#4d3f33] dark:text-[#f7efe6]">You</span>
+          @if (message().commandLabel) {
+            <span class="rounded-full bg-white/80 px-2 py-1 font-medium text-[#8f5738] dark:bg-black/20 dark:text-[#e2b08f]">
+              {{ message().commandLabel }}
+            </span>
+          }
+          <span>{{ formatTime(message().createdAt) }}</span>
+        </div>
+
+        <p class="whitespace-pre-wrap text-[15px] leading-7 text-[#201914] dark:text-[#f7efe6]">{{ message().content }}</p>
+
+        @if (message().contexts?.length) {
+          <div class="mt-4 flex flex-wrap gap-2">
+            @for (context of message().contexts ?? []; track trackByValue($index, context)) {
+              <span class="rounded-full border border-white/80 bg-white px-2.5 py-1 text-[11px] font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-black/20 dark:text-[#cdb9a8]">
+                {{ context }}
+              </span>
+            }
+          </div>
+        }
+      </article>
+    }
+  </div>
+</div>

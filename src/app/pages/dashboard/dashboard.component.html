@@ -1,500 +1,778 @@
-<div class="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-6 space-y-6">
+<div class="px-2 py-4 sm:px-4 sm:py-6 lg:px-6">
+  <div
+    class="relative mx-auto max-w-[1400px] overflow-hidden rounded-[36px] border border-violet-100/70 bg-[#f7f4ff] p-4 shadow-[0_24px_80px_rgba(109,40,217,0.10)] dark:border-slate-700 dark:bg-slate-950"
+  >
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(196,181,253,0.55),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(147,197,253,0.18),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.10),transparent_28%)]"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.10)_1px,transparent_1px)] bg-[size:52px_52px] dark:opacity-20"></div>
 
-  <!-- =================== HERO SECTION =================== -->
-  <div class="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-accent/10 via-indigo-50 to-violet-50
-              dark:from-accent/5 dark:via-slate-800 dark:to-slate-900
-              border border-accent/10 dark:border-slate-700">
+    <div class="relative">
+      <div class="grid gap-6 xl:grid-cols-[1.45fr_0.95fr]">
+        <section
+          class="relative overflow-hidden rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88 sm:p-8"
+        >
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.10),transparent_28%)]"></div>
 
-    <!-- Decorative blobs -->
-    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-accent/10 dark:bg-accent/5 blur-3xl"></div>
-    <div class="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-violet-200/40 dark:bg-violet-900/20 blur-3xl"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-accent/5 dark:bg-accent/3 blur-3xl"></div>
-
-    <div class="relative z-10 mx-auto max-w-5xl py-12 sm:py-16 px-6 sm:px-10">
-
-      <!-- Badge -->
-      <div class="flex justify-center mb-6">
-        <div class="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 backdrop-blur-sm">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-          </span>
-          <span class="text-sm text-slate-600 dark:text-slate-300">
-            {{ greeting }} — {{ todayDate }}
-          </span>
-        </div>
-      </div>
-
-      <!-- Main Heading -->
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-center text-gray-900 dark:text-white leading-tight">
-        Your <span class="text-accent">Command Center</span>
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="mt-6 text-lg sm:text-xl text-center text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Track your progress, manage resources, and stay on top of everything — all in one place.
-      </p>
-
-      <!-- Quick Action Pills -->
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <button (click)="navigateTo('/home')"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
-                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
-                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
-                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
-          <span class="material-symbols-outlined text-base">explore</span>
-          Explore Topics
-        </button>
-        <button (click)="navigateTo('/blogs')"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
-                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
-                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
-                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
-          <span class="material-symbols-outlined text-base">post_add</span>
-          Read Blogs
-        </button>
-        <button (click)="navigateTo('/snippets')"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
-                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
-                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
-                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
-          <span class="material-symbols-outlined text-base">data_object</span>
-          Snippets
-        </button>
-        <button (click)="navigateTo('/starred')"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium
-                       bg-white/80 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600
-                       text-gray-700 dark:text-gray-200 hover:border-accent hover:text-accent
-                       dark:hover:text-accent shadow-sm hover:shadow-md transition-all">
-          <span class="material-symbols-outlined text-base">star</span>
-          Starred
-        </button>
-      </div>
-
-      <!-- Hero Stats -->
-      <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 max-w-4xl mx-auto">
-        <div class="text-center">
-          <p class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{{ technologies().length }}<span class="text-accent">+</span></p>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">Technologies</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{{ totalTopics() }}<span class="text-accent">+</span></p>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">Topics</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{{ blogsCount() }}<span class="text-accent">+</span></p>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">Blogs</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{{ snippetStats().total }}<span class="text-accent">+</span></p>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">Snippets</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- =================== SECTION HEADER =================== -->
-  <div class="flex items-center gap-3">
-    <div class="flex items-center gap-2">
-      <span class="material-symbols-outlined text-accent text-xl" style="font-variation-settings: 'FILL' 1;">monitoring</span>
-      <h2 class="text-lg font-bold text-gray-900 dark:text-white">Analytics</h2>
-    </div>
-    <div class="flex-1 h-px bg-gray-200 dark:bg-slate-700"></div>
-    <p class="text-xs text-gray-400 dark:text-gray-500">{{ todayDate }}</p>
-  </div>
-
-  <!-- =================== TOP STATS GRID =================== -->
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-
-    <!-- Technologies -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-accent/30 transition-all cursor-pointer"
-         (click)="navigateTo('/home')">
-      <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-blue-500 text-lg">bookmark_stacks</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ technologies().length }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Technologies</p>
-    </div>
-
-    <!-- Topics -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-emerald-400/30 transition-all cursor-pointer"
-         (click)="navigateTo('/home')">
-      <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-emerald-500 text-lg">description</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ totalTopics() }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Topics</p>
-    </div>
-
-    <!-- Content Docs -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-violet-400/30 transition-all cursor-pointer"
-         (click)="navigateTo('/recent')">
-      <div class="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-violet-500 text-lg">article</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ topContents().length }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Documents</p>
-    </div>
-
-    <!-- Starred -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-amber-400/30 transition-all cursor-pointer"
-         (click)="navigateTo('/starred')">
-      <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-amber-500 text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ starredCount() }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Starred</p>
-    </div>
-
-    <!-- Snippets -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-indigo-400/30 transition-all cursor-pointer"
-         (click)="navigateTo('/snippets')">
-      <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-indigo-500 text-lg">data_object</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ snippetStats().total }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Snippets</p>
-    </div>
-
-    <!-- Finance -->
-    <div class="group p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm
-                hover:shadow-md hover:border-rose-400/30 transition-all cursor-pointer"
-         (click)="navigateTo('/finance')">
-      <div class="w-9 h-9 rounded-xl bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center mb-2.5
-                  group-hover:scale-110 transition-transform">
-        <span class="material-symbols-outlined text-rose-500 text-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-      </div>
-      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ formatCurrency(financeSummary().totalSpent) }}</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium mt-0.5">Spent This Month</p>
-    </div>
-  </div>
-
-  <!-- =================== MID ROW — Finance + Technologies =================== -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-
-    <!-- Finance Overview -->
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-rose-500 text-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-          Finance Overview
-        </h2>
-        <button (click)="navigateTo('/finance')"
-                class="text-xs text-accent hover:text-accent-hover font-medium transition-colors flex items-center gap-1">
-          View details
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </button>
-      </div>
-
-      @if (financeSummary().budget > 0) {
-        <!-- Budget progress -->
-        <div class="mb-4">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Monthly Budget</span>
-            <span class="text-xs font-bold" [ngClass]="financeSummary().percentUsed > 100 ? 'text-red-500' : 'text-gray-900 dark:text-white'">
-              {{ financeSummary().percentUsed }}%
-            </span>
-          </div>
-          <div class="w-full h-2.5 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full rounded-full transition-all duration-500"
-                 [ngClass]="getProgressColor(financeSummary().percentUsed)"
-                 [style.width.%]="financeSummary().percentUsed > 100 ? 100 : financeSummary().percentUsed">
-            </div>
-          </div>
-          <div class="flex justify-between mt-1.5 text-[11px] text-gray-500 dark:text-gray-400">
-            <span>{{ formatCurrency(financeSummary().totalSpent) }} spent</span>
-            <span>{{ formatCurrency(financeSummary().budget) }} budget</span>
-          </div>
-        </div>
-
-        <!-- Quick stats -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-3 rounded-xl bg-gray-50 dark:bg-slate-700/50">
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Remaining</p>
-            <p class="text-lg font-bold"
-               [ngClass]="financeSummary().remaining < 0 ? 'text-red-500' : 'text-green-600 dark:text-green-400'">
-              {{ formatCurrency(financeSummary().remaining) }}
-            </p>
-          </div>
-          <div class="p-3 rounded-xl bg-gray-50 dark:bg-slate-700/50">
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Top Category</p>
-            <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">
-              {{ financeSummary().categoryBreakdown.length > 0 ? financeSummary().categoryBreakdown[0].category : 'N/A' }}
-            </p>
-          </div>
-        </div>
-      } @else {
-        <div class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
-          <span class="material-symbols-outlined text-4xl mb-2">account_balance_wallet</span>
-          <p class="text-sm">No budget set for this month</p>
-          <button (click)="navigateTo('/finance')" class="mt-3 text-xs text-accent hover:text-accent-hover font-medium">
-            Set up budget →
-          </button>
-        </div>
-      }
-    </div>
-
-    <!-- Technologies Breakdown -->
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-500 text-lg">bookmark_stacks</span>
-          Technologies
-        </h2>
-        <span class="text-xs text-gray-400 dark:text-gray-500">{{ technologies().length }} total · {{ totalTopics() }} topics</span>
-      </div>
-
-      @if (technologies().length === 0 && !isLoading()) {
-        <div class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
-          <span class="material-symbols-outlined text-4xl mb-2">folder_off</span>
-          <p class="text-sm">No technologies yet</p>
-        </div>
-      } @else if (isLoading()) {
-        <div class="space-y-3 animate-pulse">
-          <div class="flex items-center gap-3"><div class="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded-lg"></div><div class="h-4 w-32 bg-gray-200 dark:bg-slate-700 rounded"></div></div>
-          <div class="flex items-center gap-3"><div class="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded-lg"></div><div class="h-4 w-24 bg-gray-200 dark:bg-slate-700 rounded"></div></div>
-          <div class="flex items-center gap-3"><div class="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded-lg"></div><div class="h-4 w-28 bg-gray-200 dark:bg-slate-700 rounded"></div></div>
-        </div>
-      } @else {
-        <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
-          @for (tech of technologies(); track tech._id) {
-            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
-              <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-blue-500 text-sm">folder</span>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{{ tech.name }}</p>
-                <p class="text-[11px] text-gray-400 dark:text-gray-500">{{ tech.topics?.length || 0 }} topics</p>
-              </div>
-              <div class="w-16">
-                <div class="w-full h-1.5 bg-gray-100 dark:bg-slate-600 rounded-full overflow-hidden">
-                  <div class="h-full rounded-full bg-blue-400 dark:bg-blue-500 transition-all"
-                       [style.width.%]="totalTopics() > 0 ? ((tech.topics?.length || 0) / totalTopics()) * 100 : 0">
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      }
-    </div>
-  </div>
-
-  <!-- =================== BOTTOM ROW — Snippets + Quick Actions + Activity =================== -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-
-    <!-- Snippet Language Breakdown -->
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-indigo-500 text-lg">data_object</span>
-          Snippets
-        </h2>
-        <button (click)="navigateTo('/snippets')"
-                class="text-xs text-accent hover:text-accent-hover font-medium transition-colors flex items-center gap-1">
-          View all
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </button>
-      </div>
-
-      @if (snippetStats().total === 0) {
-        <div class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
-          <span class="material-symbols-outlined text-4xl mb-2">code_off</span>
-          <p class="text-sm">No snippets yet</p>
-          <button (click)="navigateTo('/snippets')" class="mt-3 text-xs text-accent hover:text-accent-hover font-medium">
-            Create first snippet →
-          </button>
-        </div>
-      } @else {
-        <!-- Mini stats -->
-        <div class="grid grid-cols-3 gap-2 mb-4">
-          <div class="text-center p-2 rounded-xl bg-indigo-50 dark:bg-indigo-900/20">
-            <p class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ snippetStats().total }}</p>
-            <p class="text-[10px] text-gray-500 dark:text-gray-400">Total</p>
-          </div>
-          <div class="text-center p-2 rounded-xl bg-amber-50 dark:bg-amber-900/20">
-            <p class="text-lg font-bold text-amber-600 dark:text-amber-400">{{ snippetStats().favorites }}</p>
-            <p class="text-[10px] text-gray-500 dark:text-gray-400">Favorites</p>
-          </div>
-          <div class="text-center p-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/20">
-            <p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">{{ snippetStats().languages }}</p>
-            <p class="text-[10px] text-gray-500 dark:text-gray-400">Languages</p>
-          </div>
-        </div>
-
-        <!-- Language bars -->
-        <div class="space-y-2.5 max-h-40 overflow-y-auto pr-1">
-          @for (item of snippetsByLanguage(); track item.language) {
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-                   [ngClass]="[item.config.bgColor, item.config.darkBgColor]">
-                <span class="material-symbols-outlined text-xs" [ngClass]="item.config.color">{{ item.config.icon }}</span>
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between mb-0.5">
-                  <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ item.config.label }}</span>
-                  <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">{{ item.count }}</span>
-                </div>
-                <div class="w-full h-1 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div class="h-full rounded-full bg-accent transition-all"
-                       [style.width.%]="(item.count / snippetStats().total) * 100">
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      }
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <h2 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-accent text-lg">bolt</span>
-        Quick Actions
-      </h2>
-      <div class="space-y-2">
-        <button (click)="navigateTo('/snippets')"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-left
-                       hover:bg-gray-50 dark:hover:bg-slate-700/50 border border-gray-100 dark:border-slate-700
-                       hover:border-accent/30 transition-all group">
-          <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-indigo-500 text-lg">add</span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">New Snippet</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Save a code snippet</p>
-          </div>
-        </button>
-        <button (click)="navigateTo('/home')"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-left
-                       hover:bg-gray-50 dark:hover:bg-slate-700/50 border border-gray-100 dark:border-slate-700
-                       hover:border-accent/30 transition-all group">
-          <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-blue-500 text-lg">home</span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Home Feed</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Browse content &amp; resources</p>
-          </div>
-        </button>
-        <button (click)="navigateTo('/blogs')"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-left
-                       hover:bg-gray-50 dark:hover:bg-slate-700/50 border border-gray-100 dark:border-slate-700
-                       hover:border-accent/30 transition-all group">
-          <div class="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-violet-500 text-lg">post_add</span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Blogs</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Read or write articles</p>
-          </div>
-        </button>
-        <button (click)="navigateTo('/finance')"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-left
-                       hover:bg-gray-50 dark:hover:bg-slate-700/50 border border-gray-100 dark:border-slate-700
-                       hover:border-accent/30 transition-all group">
-          <div class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-rose-500 text-lg">account_balance_wallet</span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Finance</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Track expenses &amp; budget</p>
-          </div>
-        </button>
-        <button (click)="navigateTo('/starred')"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-left
-                       hover:bg-gray-50 dark:hover:bg-slate-700/50 border border-gray-100 dark:border-slate-700
-                       hover:border-accent/30 transition-all group">
-          <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-amber-500 text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Starred</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Your bookmarked content</p>
-          </div>
-        </button>
-      </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <h2 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-accent text-lg">history</span>
-        Recent Activity
-      </h2>
-      @if (activityLog().length === 0) {
-        <div class="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
-          <span class="material-symbols-outlined text-4xl mb-2">schedule</span>
-          <p class="text-sm">No recent activity</p>
-          <p class="text-xs mt-1">Your actions will appear here</p>
-        </div>
-      } @else {
-        <div class="space-y-1 max-h-72 overflow-y-auto pr-1">
-          @for (item of activityLog().slice(0, 12); track item.id) {
-            <div class="flex items-start gap-2.5 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors">
-              <div class="w-7 h-7 rounded-lg bg-gray-100 dark:bg-slate-700 flex items-center justify-center shrink-0 mt-0.5">
-                <span class="material-symbols-outlined text-sm" [ngClass]="item.color">{{ item.icon }}</span>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs text-gray-600 dark:text-gray-400">
-                  <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.action }}</span>
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ item.title }}</p>
-                <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">{{ getTimeAgo(item.timestamp) }}</p>
-              </div>
-            </div>
-          }
-        </div>
-      }
-    </div>
-  </div>
-
-  <!-- =================== RECENT SNIPPETS =================== -->
-  @if (recentSnippets().length > 0) {
-    <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-accent text-lg">schedule</span>
-          Recent Snippets
-        </h2>
-        <button (click)="navigateTo('/snippets')"
-                class="text-xs text-accent hover:text-accent-hover font-medium transition-colors flex items-center gap-1">
-          View all
-          <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </button>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-        @for (snippet of recentSnippets(); track snippet.id) {
-          <div class="group p-3 rounded-xl border border-gray-100 dark:border-slate-700 hover:border-accent/30
-                      hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-all cursor-pointer"
-               (click)="navigateTo('/snippets')">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider bg-accent/10 text-accent">
-                {{ snippet.language }}
+          <div class="relative space-y-6">
+            <div class="flex flex-wrap items-center gap-3">
+              <span
+                class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-200"
+              >
+                Workspace home
               </span>
-              @if (snippet.isFavorite) {
-                <span class="material-symbols-outlined text-amber-400 text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span
+                class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined text-sm">calendar_today</span>
+                {{ todayDate }}
+              </span>
+            </div>
+
+            <div class="max-w-3xl space-y-3">
+              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                {{ greeting }}
+              </p>
+              <h1
+                class="max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-5xl"
+              >
+                Build docs, snippets, ideas, and interview prep in one calm workspace.
+              </h1>
+              <p class="max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+                This home screen is tuned to your project now: technologies, topics,
+                Atlas-powered notes, snippets, AI, roadmap work, bookmarks, finance,
+                and interview prep instead of generic meeting or calendar widgets.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              @for (action of workspaceActions(); track action.id) {
+                <button
+                  type="button"
+                  (click)="navigateTo(action.route)"
+                  class="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all"
+                  [ngClass]="
+                    action.primary
+                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-500/25'
+                      : 'border border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:text-violet-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-violet-500/40 dark:hover:text-violet-200'
+                  "
+                >
+                  <span class="material-symbols-outlined text-[18px]">{{ action.icon }}</span>
+                  {{ action.label }}
+                </button>
               }
             </div>
-            <p class="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-accent transition-colors">
-              {{ snippet.title }}
-            </p>
-            <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{{ getTimeAgo(snippet.updatedAt) }}</p>
+
+            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <button
+                type="button"
+                (click)="navigateTo('/recent')"
+                class="rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+              >
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Technologies
+                </p>
+                <p class="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                  {{ technologies().length }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Knowledge tracks in your library
+                </p>
+              </button>
+
+              <button
+                type="button"
+                (click)="navigateTo('/recent')"
+                class="rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-emerald-500/30"
+              >
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Topics
+                </p>
+                <p class="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                  {{ totalTopics() }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Notes and pages connected to core subjects
+                </p>
+              </button>
+
+              <button
+                type="button"
+                (click)="navigateTo('/blogs')"
+                class="rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-amber-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-amber-500/30"
+              >
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Blogs
+                </p>
+                <p class="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                  {{ blogsCount() }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Public write-ups ready to refine or publish
+                </p>
+              </button>
+
+              <button
+                type="button"
+                (click)="navigateTo('/snippets')"
+                class="rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-sky-500/30"
+              >
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Snippets
+                </p>
+                <p class="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
+                  {{ snippetStats().total }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Reusable code blocks across the workspace
+                </p>
+              </button>
+            </div>
           </div>
-        }
+        </section>
+
+        <div class="grid gap-6">
+          <section
+            class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Workspace pulse
+                </p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                  What is moving right now
+                </h2>
+              </div>
+              <span
+                class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-200"
+              >
+                Live
+              </span>
+            </div>
+
+            <div class="mt-6 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/90">
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                  Recent docs
+                </p>
+                <p class="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
+                  {{ recentWorkspaceDocs().length }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Pages recently viewed or edited
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/90">
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                  Saved refs
+                </p>
+                <p class="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
+                  {{ starredCount() }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Starred notes and quick-return links
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/90">
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                  Favorite snippets
+                </p>
+                <p class="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
+                  {{ snippetStats().favorites }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Shortcut code pieces ready to reuse
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/90">
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                  Categories
+                </p>
+                <p class="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
+                  {{ financeSummary().categoryBreakdown.length }}
+                </p>
+                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  Finance categories visible this month
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section
+            class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+          >
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                  Build next
+                </p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                  High-value lanes
+                </h2>
+              </div>
+              <button
+                type="button"
+                (click)="navigateTo('/recent')"
+                class="text-sm font-medium text-violet-700 transition hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200"
+              >
+                Open library
+              </button>
+            </div>
+
+            <div class="mt-5 space-y-3">
+              @for (link of collectionLinks(); track link.id) {
+                <button
+                  type="button"
+                  (click)="navigateTo(link.route)"
+                  class="flex w-full items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+                >
+                  <span
+                    class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-slate-700 shadow-sm dark:bg-slate-900 dark:text-slate-200"
+                  >
+                    <span class="material-symbols-outlined text-[19px]">{{ link.icon }}</span>
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-semibold text-slate-950 dark:text-white">
+                      {{ link.label }}
+                    </span>
+                    <span class="mt-1 block text-sm leading-6 text-slate-500 dark:text-slate-400">
+                      {{ link.description }}
+                    </span>
+                  </span>
+                </button>
+              }
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Knowledge pipeline
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Continue the work already in motion
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="navigateTo('/recent')"
+              class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-violet-300 hover:text-violet-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-violet-500/40 dark:hover:text-violet-200"
+            >
+              <span class="material-symbols-outlined text-[18px]">history</span>
+              View recent
+            </button>
+          </div>
+
+          @if (recentWorkspaceDocs().length > 0) {
+            <div class="mt-6 space-y-3">
+              @for (item of recentWorkspaceDocs(); track item.id || item._id || item.topicId) {
+                <button
+                  type="button"
+                  (click)="navigateToContent(item)"
+                  class="flex w-full items-start gap-4 rounded-[26px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+                >
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-200"
+                  >
+                    <span class="material-symbols-outlined text-[20px]">description</span>
+                  </span>
+
+                  <span class="min-w-0 flex-1">
+                    <span class="flex flex-wrap items-center gap-2">
+                      <span class="text-base font-semibold text-slate-950 dark:text-white">
+                        {{ getContentTitle(item) }}
+                      </span>
+                      <span
+                        class="rounded-full bg-white px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400 dark:bg-slate-900 dark:text-slate-500"
+                      >
+                        {{ getContentTime(item.lastViewed || item.updatedOn || item.updatedAt || item.createdAt) }}
+                      </span>
+                    </span>
+                    <span class="mt-1 block text-sm font-medium text-slate-500 dark:text-slate-400">
+                      {{ getContentContext(item) }}
+                    </span>
+                    <span class="mt-2 block text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {{ getContentExcerpt(item) }}
+                    </span>
+                  </span>
+                </button>
+              }
+            </div>
+          } @else {
+            <div
+              class="mt-6 rounded-[26px] border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center dark:border-slate-700 dark:bg-slate-800/60"
+            >
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">
+                description
+              </span>
+              <p class="mt-4 text-base font-medium text-slate-700 dark:text-slate-200">
+                No recent docs yet
+              </p>
+              <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Start from a topic, create a note, or revisit a page to populate your pipeline.
+              </p>
+            </div>
+          }
+        </section>
+
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Project lanes
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Replace filler widgets with real modules
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="navigateTo('/ai')"
+              class="text-sm font-medium text-violet-700 transition hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200"
+            >
+              Open AI
+            </button>
+          </div>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-2">
+            @for (module of workspaceModules(); track module.id) {
+              <button
+                type="button"
+                (click)="navigateTo(module.route)"
+                class="rounded-[26px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+              >
+                <div
+                  class="rounded-[22px] bg-gradient-to-br p-4"
+                  [ngClass]="module.tone"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <span
+                      class="flex h-11 w-11 items-center justify-center rounded-2xl"
+                      [ngClass]="module.iconTone"
+                    >
+                      <span class="material-symbols-outlined text-[20px]">{{ module.icon }}</span>
+                    </span>
+                    <span
+                      class="rounded-full bg-white/80 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 dark:bg-slate-950/70 dark:text-slate-300"
+                    >
+                      {{ module.metric }}
+                    </span>
+                  </div>
+
+                  <div class="mt-5">
+                    <p class="text-base font-semibold text-slate-950 dark:text-white">
+                      {{ module.label }}
+                    </p>
+                    <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {{ module.description }}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            }
+          </div>
+        </section>
+      </div>
+
+      <div class="mt-6 grid gap-6 xl:grid-cols-3">
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Technology coverage
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Where your knowledge base is strongest
+              </h2>
+            </div>
+            <span class="text-sm text-slate-400 dark:text-slate-500">
+              {{ totalTopics() }} topics
+            </span>
+          </div>
+
+          @if (technologyHighlights().length > 0) {
+            <div class="mt-6 space-y-3">
+              @for (tech of technologyHighlights(); track tech._id) {
+                <button
+                  type="button"
+                  (click)="openTechnology(tech)"
+                  class="flex w-full items-center gap-4 rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+                >
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-200"
+                  >
+                    <span class="material-symbols-outlined text-[20px]">bookmark_stacks</span>
+                  </span>
+
+                  <span class="min-w-0 flex-1">
+                    <span class="flex items-center justify-between gap-3">
+                      <span class="truncate text-base font-semibold text-slate-950 dark:text-white">
+                        {{ tech.name }}
+                      </span>
+                      <span class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                        {{ tech.topics?.length || 0 }}
+                      </span>
+                    </span>
+                    <span class="mt-1 block text-sm text-slate-500 dark:text-slate-400">
+                      {{ tech.description || 'Technology section with organized notes and topics.' }}
+                    </span>
+                    <span class="mt-3 block h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                      <span
+                        class="block h-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-500"
+                        [style.width.%]="getTechnologyTopicShare(tech.topics?.length || 0)"
+                      ></span>
+                    </span>
+                  </span>
+                </button>
+              }
+            </div>
+          } @else {
+            <div
+              class="mt-6 rounded-[26px] border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center dark:border-slate-700 dark:bg-slate-800/60"
+            >
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">
+                folder_off
+              </span>
+              <p class="mt-4 text-base font-medium text-slate-700 dark:text-slate-200">
+                No technologies yet
+              </p>
+            </div>
+          }
+        </section>
+
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Snippet lab
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Reusable code at a glance
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="navigateTo('/snippets')"
+              class="text-sm font-medium text-violet-700 transition hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200"
+            >
+              Open snippets
+            </button>
+          </div>
+
+          <div class="mt-6 grid grid-cols-3 gap-3">
+            <div class="rounded-2xl bg-indigo-50 p-4 text-center dark:bg-indigo-500/10">
+              <p class="text-2xl font-semibold text-indigo-700 dark:text-indigo-200">
+                {{ snippetStats().total }}
+              </p>
+              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-indigo-500 dark:text-indigo-300">
+                Total
+              </p>
+            </div>
+            <div class="rounded-2xl bg-amber-50 p-4 text-center dark:bg-amber-500/10">
+              <p class="text-2xl font-semibold text-amber-700 dark:text-amber-200">
+                {{ snippetStats().favorites }}
+              </p>
+              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-amber-500 dark:text-amber-300">
+                Favorites
+              </p>
+            </div>
+            <div class="rounded-2xl bg-emerald-50 p-4 text-center dark:bg-emerald-500/10">
+              <p class="text-2xl font-semibold text-emerald-700 dark:text-emerald-200">
+                {{ snippetStats().languages }}
+              </p>
+              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-emerald-500 dark:text-emerald-300">
+                Languages
+              </p>
+            </div>
+          </div>
+
+          @if (recentSnippets().length > 0) {
+            <div class="mt-6 space-y-3">
+              @for (snippet of recentSnippets(); track snippet.id) {
+                <button
+                  type="button"
+                  (click)="navigateTo('/snippets')"
+                  class="flex w-full items-center gap-3 rounded-[22px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+                >
+                  <span
+                    class="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {{ snippet.language }}
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-semibold text-slate-950 dark:text-white">
+                      {{ snippet.title }}
+                    </span>
+                    <span class="mt-1 block text-sm text-slate-500 dark:text-slate-400">
+                      {{ getTimeAgo(snippet.updatedAt) }}
+                    </span>
+                  </span>
+                  @if (snippet.isFavorite) {
+                    <span class="material-symbols-outlined text-[18px] text-amber-400">star</span>
+                  }
+                </button>
+              }
+            </div>
+          } @else {
+            <div
+              class="mt-6 rounded-[26px] border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center dark:border-slate-700 dark:bg-slate-800/60"
+            >
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">
+                code_off
+              </span>
+              <p class="mt-4 text-base font-medium text-slate-700 dark:text-slate-200">
+                No snippets saved yet
+              </p>
+            </div>
+          }
+        </section>
+
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Finance snapshot
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Monthly budget context inside the same workspace
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="navigateTo('/finance')"
+              class="text-sm font-medium text-violet-700 transition hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200"
+            >
+              Open finance
+            </button>
+          </div>
+
+          @if (financeSummary().budget > 0 || financeSummary().totalSpent > 0) {
+            <div class="mt-6 rounded-[26px] bg-slate-50/90 p-5 dark:bg-slate-800/90">
+              <div class="flex items-end justify-between gap-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    This month
+                  </p>
+                  <p class="mt-2 text-3xl font-semibold text-slate-950 dark:text-white">
+                    {{ formatCurrency(financeSummary().totalSpent) }}
+                  </p>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    Budget
+                  </p>
+                  <p class="mt-2 text-lg font-semibold text-slate-700 dark:text-slate-200">
+                    {{ formatCurrency(financeSummary().budget) }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <div class="mb-2 flex items-center justify-between text-sm">
+                  <span class="text-slate-500 dark:text-slate-400">Budget used</span>
+                  <span class="font-semibold text-slate-700 dark:text-slate-200">
+                    {{ financeSummary().percentUsed }}%
+                  </span>
+                </div>
+                <div class="h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                  <div
+                    class="h-full rounded-full transition-all"
+                    [ngClass]="getProgressColor(financeSummary().percentUsed)"
+                    [style.width.%]="financeSummary().percentUsed > 100 ? 100 : financeSummary().percentUsed"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-white p-4 dark:bg-slate-900">
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    Remaining
+                  </p>
+                  <p
+                    class="mt-2 text-lg font-semibold"
+                    [ngClass]="financeSummary().remaining < 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-300'"
+                  >
+                    {{ formatCurrency(financeSummary().remaining) }}
+                  </p>
+                </div>
+                <div class="rounded-2xl bg-white p-4 dark:bg-slate-900">
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                    Top category
+                  </p>
+                  <p class="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                    {{
+                      financeSummary().categoryBreakdown.length > 0
+                        ? financeSummary().categoryBreakdown[0].category
+                        : 'N/A'
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div
+              class="mt-6 rounded-[26px] border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center dark:border-slate-700 dark:bg-slate-800/60"
+            >
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">
+                account_balance_wallet
+              </span>
+              <p class="mt-4 text-base font-medium text-slate-700 dark:text-slate-200">
+                No finance summary available yet
+              </p>
+              <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Once budgets or expenses are available, the monthly pulse will show up here.
+              </p>
+            </div>
+          }
+        </section>
+      </div>
+
+      <div class="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Recent activity
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                A compact stream of what changed
+              </h2>
+            </div>
+            <span class="text-sm text-slate-400 dark:text-slate-500">
+              {{ activityPreview().length }} items
+            </span>
+          </div>
+
+          @if (activityPreview().length > 0) {
+            <div class="mt-6 space-y-3">
+              @for (item of activityPreview(); track item.id) {
+                <div
+                  class="flex items-start gap-4 rounded-[24px] border border-slate-200 bg-slate-50/90 p-4 dark:border-slate-700 dark:bg-slate-800/90"
+                >
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-slate-700 shadow-sm dark:bg-slate-900 dark:text-slate-200"
+                  >
+                    <span class="material-symbols-outlined text-[20px]" [ngClass]="item.color">
+                      {{ item.icon }}
+                    </span>
+                  </span>
+
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-semibold text-slate-950 dark:text-white">
+                      {{ item.action }}
+                    </span>
+                    <span class="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                      {{ item.title }}
+                    </span>
+                    <span class="mt-2 block text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                      {{ getTimeAgo(item.timestamp) }}
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          } @else {
+            <div
+              class="mt-6 rounded-[26px] border border-dashed border-slate-300 bg-slate-50/70 p-8 text-center dark:border-slate-700 dark:bg-slate-800/60"
+            >
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">
+                history
+              </span>
+              <p class="mt-4 text-base font-medium text-slate-700 dark:text-slate-200">
+                Activity will appear here
+              </p>
+            </div>
+          }
+        </section>
+
+        <section
+          class="rounded-[30px] border border-white/80 bg-white/88 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/88"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Reference deck
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
+                Quick jumps into your project
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="navigateTo('/bookmarks')"
+              class="text-sm font-medium text-violet-700 transition hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200"
+            >
+              Open bookmarks
+            </button>
+          </div>
+
+          <div class="mt-6 space-y-3">
+            @for (link of collectionLinks(); track link.id) {
+              <button
+                type="button"
+                (click)="navigateTo(link.route)"
+                class="flex w-full items-center gap-3 rounded-[22px] border border-slate-200 bg-slate-50/90 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/90 dark:hover:border-violet-500/30"
+              >
+                <span
+                  class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-slate-700 shadow-sm dark:bg-slate-900 dark:text-slate-200"
+                >
+                  <span class="material-symbols-outlined text-[19px]">{{ link.icon }}</span>
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-sm font-semibold text-slate-950 dark:text-white">
+                    {{ link.label }}
+                  </span>
+                  <span class="mt-1 block text-sm text-slate-500 dark:text-slate-400">
+                    {{ link.description }}
+                  </span>
+                </span>
+              </button>
+            }
+          </div>
+
+          @if (spotlightDocs().length > 0) {
+            <div class="mt-6 border-t border-slate-200 pt-6 dark:border-slate-800">
+              <p class="text-xs uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">
+                Spotlight docs
+              </p>
+              <div class="mt-4 space-y-3">
+                @for (item of spotlightDocs(); track item.id || item._id || item.topicId) {
+                  <button
+                    type="button"
+                    (click)="navigateToContent(item)"
+                    class="w-full rounded-[20px] border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-violet-300 hover:text-violet-700 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-violet-500/30 dark:hover:text-violet-200"
+                  >
+                    <span class="block text-sm font-semibold text-slate-950 dark:text-white">
+                      {{ getContentTitle(item) }}
+                    </span>
+                    <span class="mt-1 block text-sm text-slate-500 dark:text-slate-400">
+                      {{ getContentContext(item) }}
+                    </span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </section>
       </div>
     </div>
-  }
+  </div>
 </div>

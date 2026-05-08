@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->
+<app-atlaskit-side-nav
+      [model]="sideNavModel"
+      [darkMode]="true">
+    </app-atlaskit-side-nav>
+
+    <app-atlaskit-editor
+      [value]="document"
+      [page]="page"
+      [darkMode]="true"
+      [mode]="'editor'">
+    </app-atlaskit-editor>

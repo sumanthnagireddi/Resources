@@ -1,0 +1,155 @@
+<aside class="flex h-full min-h-0 flex-col gap-4 overflow-hidden">
+  <section class="rounded-[32px] border border-white/65 bg-white/72 p-4 shadow-[0_18px_48px_rgba(77,55,26,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#171311]/88 dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+    <div class="flex items-start gap-3">
+      <span
+        class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#efe5d7] bg-[#faf6f1] dark:border-white/10 dark:bg-white/[0.05]"
+        [style.color]="activeAgent().accent"
+      >
+        <span class="material-symbols-outlined text-[20px]">{{ activeAgent().icon }}</span>
+      </span>
+
+      <div>
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Active agent</p>
+        <h3 class="mt-1 text-lg font-semibold tracking-tight text-[#201914] dark:text-[#f7efe6]">{{ activeAgent().name }}</h3>
+        <p class="mt-1 text-sm leading-6 text-[#6f6255] dark:text-[#ccb9a8]">{{ activeAgent().description }}</p>
+      </div>
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      @for (tool of activeAgent().tools; track trackByValue($index, tool)) {
+        <span class="rounded-full border border-[#ebe1d4] bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8]">
+          {{ tool }}
+        </span>
+      }
+    </div>
+  </section>
+
+  @if (liveRun(); as run) {
+    <section class="rounded-[32px] border border-[#ddd1c4] bg-[#faf6f1] p-4 shadow-[0_18px_48px_rgba(56,40,24,0.08)] backdrop-blur-xl dark:border-[#4d3b31] dark:bg-[#1d1714] dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+      <div class="mb-3 flex items-center justify-between">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Live run</p>
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8f5738] dark:bg-black/20 dark:text-[#f1d0b3]">
+          <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-current"></span>
+          Running
+        </span>
+      </div>
+
+      <div class="space-y-2">
+        @for (step of run.steps; track step.id) {
+          <div
+            class="rounded-[18px] border px-3 py-2.5"
+            [ngClass]="step.status === 'active'
+              ? 'border-[#caa88b] bg-white dark:border-[#6b5040] dark:bg-black/20'
+              : step.status === 'complete'
+                ? 'border-emerald-200/80 bg-emerald-50/80 dark:border-emerald-500/20 dark:bg-emerald-500/10'
+                : 'border-[#e5d7c6] bg-white/75 dark:border-white/10 dark:bg-white/[0.04]'"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <span class="text-sm font-medium text-[#201914] dark:text-[#f7efe6]">{{ step.title }}</span>
+              <span
+                class="text-[10px] font-semibold uppercase tracking-[0.12em]"
+                [ngClass]="step.status === 'active'
+                  ? 'text-[#8f5738] dark:text-[#e2b08f]'
+                  : step.status === 'complete'
+                    ? 'text-emerald-600 dark:text-emerald-300'
+                    : 'text-[#7b6a59] dark:text-[#c4b19f]'"
+              >
+                {{ step.status }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <section class="rounded-[32px] border border-white/65 bg-white/72 p-4 shadow-[0_18px_48px_rgba(77,55,26,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#171311]/88 dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Slash workflows</p>
+      <span class="text-xs text-[#7b6a59] dark:text-[#c4b19f]">Type `/`</span>
+    </div>
+
+    <div class="space-y-2">
+      @for (command of commands(); track trackByCommandId($index, command)) {
+        <button
+          type="button"
+          class="w-full rounded-[20px] border border-[#ebe1d4] bg-[#faf6f1] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06]"
+          (click)="commandSelected.emit(command.id)"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ command.command }}</p>
+              <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ command.description }}</p>
+            </div>
+            <span class="rounded-full bg-[#f1e4d7] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7b624e] dark:bg-white/[0.07] dark:text-[#ccb9a8]">
+              {{ command.label }}
+            </span>
+          </div>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="rounded-[32px] border border-white/65 bg-white/72 p-4 shadow-[0_18px_48px_rgba(77,55,26,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#171311]/88 dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Prompt blocks</p>
+      <span class="text-xs text-[#7b6a59] dark:text-[#c4b19f]">Reusable scaffolds</span>
+    </div>
+
+    <div class="space-y-2">
+      @for (insert of editorInserts(); track trackByInsertId($index, insert)) {
+        <button
+          type="button"
+          class="w-full rounded-[20px] border p-3 text-left transition"
+          [ngClass]="lastUsedInsert()?.id === insert.id
+            ? 'border-[#d8ccb8] bg-white dark:border-[#5c4637] dark:bg-[#241d18]'
+            : 'border-[#ebe1d4] bg-[#faf6f1] hover:-translate-y-0.5 hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06]'"
+          (click)="editorInsertSelected.emit(insert.id)"
+        >
+          <div class="flex items-start gap-3">
+            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#f1e4d7] text-[#8f5738] dark:bg-[#2a211b] dark:text-[#e2b08f]">
+              <span class="material-symbols-outlined text-[18px]">{{ insert.icon }}</span>
+            </span>
+            <div>
+              <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ insert.label }}</p>
+              <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ insert.description }}</p>
+            </div>
+          </div>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="rounded-[32px] border border-white/65 bg-white/72 p-4 shadow-[0_18px_48px_rgba(77,55,26,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#171311]/88 dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Context switches</p>
+      <span class="text-xs text-[#7b6a59] dark:text-[#c4b19f]">{{ activeContextCount() }} on</span>
+    </div>
+
+    <div class="space-y-2">
+      @for (context of contexts(); track trackByContextId($index, context)) {
+        <button
+          type="button"
+          class="w-full rounded-[22px] border p-3 text-left transition"
+          [ngClass]="context.active
+            ? 'border-[#d8ccb8] bg-white dark:border-[#5c4637] dark:bg-[#241d18]'
+            : 'border-[#ebe1d4] bg-[#faf6f1] hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06]'"
+          (click)="contextToggled.emit(context.id)"
+        >
+          <div class="flex items-start gap-3">
+            <span
+              class="material-symbols-outlined mt-0.5 text-[18px]"
+              [ngClass]="context.active ? 'text-[#8f5738] dark:text-[#e2b08f]' : 'text-[#7b6a59] dark:text-[#c4b19f]'"
+            >
+              {{ context.icon }}
+            </span>
+            <div>
+              <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ context.label }}</p>
+              <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ context.detail }}</p>
+            </div>
+          </div>
+        </button>
+      }
+    </div>
+  </section>
+</aside>

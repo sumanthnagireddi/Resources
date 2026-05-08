@@ -25,89 +25,143 @@ type AiStreamPayload =
   providedIn: 'root',
 })
 export class AiService {
+  private readonly productionApiUrl = 'https://webservices-rqvr.onrender.com';
+
   constructor(private http: HttpClient) {}
 
   askLegacy(question: string): Observable<AiAskResult> {
     return new Observable<AiAskResult>((observer) => {
-      this.http.post<unknown>(`${environment.API_URL}/ai/ask`, { question }).subscribe({
-        next: (response) => {
-          observer.next({
-            text: this.extractText(response),
-            raw: response,
-          });
-          observer.complete();
-        },
-        error: (error) => observer.error(error),
-      });
+      const urls = this.apiBaseUrls();
+
+      const runRequest = (index: number): void => {
+        this.http.post<unknown>(`${urls[index]}/ai/ask`, { question }).subscribe({
+          next: (response) => {
+            observer.next({
+              text: this.extractText(response),
+              raw: response,
+            });
+            observer.complete();
+          },
+          error: (error) => {
+            if (index < urls.length - 1) {
+              runRequest(index + 1);
+              return;
+            }
+
+            observer.error(error);
+          },
+        });
+      };
+
+      runRequest(0);
     });
   }
 
   askStream(question: string): Observable<string> {
     return new Observable<string>((observer) => {
-      const eventSource = new EventSource(
-        `${environment.API_URL}/ai/ask?question=${encodeURIComponent(question)}`,
-      );
+      const urls = this.apiBaseUrls();
+      let eventSource: EventSource | null = null;
+      let streamedAnyToken = false;
 
-      eventSource.onmessage = (event) => {
-        if (event.data === '[DONE]') {
-          observer.complete();
-          eventSource.close();
-          return;
-        }
+      const connect = (index: number): void => {
+        eventSource?.close();
+        eventSource = new EventSource(
+          `${urls[index]}/ai/ask?question=${encodeURIComponent(question)}`,
+        );
 
-        try {
-          const payload = JSON.parse(event.data) as AiStreamPayload;
-          const token = this.extractText(payload);
-
-          if (token) {
-            observer.next(token);
+        eventSource.onmessage = (event) => {
+          if (event.data === '[DONE]') {
+            observer.complete();
+            eventSource?.close();
             return;
           }
 
-          if (typeof payload === 'string' && payload.trim()) {
-            observer.next(payload);
+          try {
+            const payload = JSON.parse(event.data) as AiStreamPayload;
+            const token = this.extractText(payload);
+
+            if (token) {
+              streamedAnyToken = true;
+              observer.next(token);
+              return;
+            }
+
+            if (typeof payload === 'string' && payload.trim()) {
+              streamedAnyToken = true;
+              observer.next(payload);
+              return;
+            }
+
+            observer.error(new Error('Stream payload did not contain text.'));
+          } catch (error) {
+            if (typeof event.data === 'string' && event.data.trim()) {
+              streamedAnyToken = true;
+              observer.next(event.data);
+            } else {
+              observer.error(error);
+              eventSource?.close();
+            }
+          }
+        };
+
+        eventSource.onerror = (err) => {
+          eventSource?.close();
+
+          if (!streamedAnyToken && index < urls.length - 1) {
+            connect(index + 1);
             return;
           }
 
-          observer.error(new Error('Stream payload did not contain text.'));
-        } catch (error) {
-          if (typeof event.data === 'string' && event.data.trim()) {
-            observer.next(event.data);
-          } else {
-            observer.error(error);
-            eventSource.close();
-          }
-        }
+          observer.error(err);
+        };
       };
 
-      eventSource.onerror = (err) => {
-        observer.error(err);
-        eventSource.close();
-      };
+      connect(0);
 
       return () => {
-        eventSource.close();
+        eventSource?.close();
       };
     });
   }
 
   ask(question: string): Observable<AiAskResult> {
     return new Observable<AiAskResult>((observer) => {
-      this.http
-        .post<unknown>(`${environment.API_URL}/ai/v2/ask`, { message: question })
-        .subscribe({
-          next: (response) => {
-            const text = this.extractText(response);
+      const urls = this.apiBaseUrls();
 
-            observer.next({
-              text,
-              raw: response,
-            });
-            observer.complete();
-          },
-          error: (error) => observer.error(error),
-        });
+      const runRequest = (index: number): void => {
+        this.http
+          .post<unknown>(`${urls[index]}/ai/v2/ask`, { message: question })
+          .subscribe({
+            next: (response) => {
+              const text = this.extractText(response);
+
+              observer.next({
+                text,
+                raw: response,
+              });
+              observer.complete();
+            },
+            error: (error) => {
+              if (index < urls.length - 1) {
+                runRequest(index + 1);
+                return;
+              }
+
+              observer.error(error);
+            },
+          });
+      };
+
+      runRequest(0);
     });
+  }
+
+  private apiBaseUrls(): string[] {
+    if (environment.production || environment.API_URL === this.productionApiUrl) {
+      return [environment.API_URL];
+    }
+
+    return [environment.API_URL, this.productionApiUrl];
   }
 
   private extractText(payload: unknown): string {

@@ -1,6 +1,5 @@
 import {
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   OnInit,
   ViewChild,
@@ -17,6 +16,7 @@ import { toggleStarred } from '../../store/actions/starred.actions';
 import { selectIsStarred } from '../../store/selectors/starred.selector';
 import { AiButtonComponent } from '../../component/ai-button/ai-button.component';
 import { AiService } from '../../services/ai.service';
+import { tryParseAdfDoc } from '../../component/editor/atlas-editor-adapter';
 
 @Component({
   selector: 'app-content-layout',
@@ -30,7 +30,6 @@ import { AiService } from '../../services/ai.service';
   ],
   templateUrl: './content-layout.component.html',
   styleUrl: './content-layout.component.css',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ContentLayoutComponent implements OnInit {
   @ViewChild('contentContainer') contentContainer!: ElementRef<HTMLDivElement>;
@@ -48,6 +47,7 @@ export class ContentLayoutComponent implements OnInit {
   currentTechnology!: string;
   contentLoader: boolean = true;
   headings: any[] = [];
+  usesStructuredContent = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store,
@@ -76,6 +76,10 @@ export class ContentLayoutComponent implements OnInit {
   }
 
   scrollToHeading(text: string) {
+    if (this.usesStructuredContent) {
+      return;
+    }
+
     const container = this.contentContainer.nativeElement;
 
     const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -95,6 +99,10 @@ export class ContentLayoutComponent implements OnInit {
     }
   }
  handleAiClick() {
+  if (this.usesStructuredContent || typeof this.content !== 'string') {
+    return;
+  }
+
   const question = `
 You are an expert technical content writer and HTML formatter.
 
@@ -160,13 +168,26 @@ ${this.content}
       .pipe(catchError((err) => throwError(() => err).pipe(delay(500))))
       .subscribe({
         next: (data: any) => {
-          const rawHtml = data?.body ?? null;
-          this.content = this.addHeadingIds(rawHtml);
-          this.headings = this.extractHeadings(this.content);
-          setTimeout(() => {
-            // this.cacheHeadings();
-            this.onScroll(); // initialize active heading
-          }, 0);
+          const rawBody = data?.body ?? null;
+          const parsedDoc = tryParseAdfDoc(rawBody);
+
+          if (parsedDoc) {
+            this.content = parsedDoc;
+            this.headings = [];
+            this.usesStructuredContent = true;
+          } else if (typeof rawBody === 'string') {
+            this.content = this.addHeadingIds(rawBody);
+            this.headings = this.extractHeadings(this.content);
+            this.usesStructuredContent = false;
+            setTimeout(() => {
+              this.onScroll();
+            }, 0);
+          } else {
+            this.content = null;
+            this.headings = [];
+            this.usesStructuredContent = false;
+          }
+
           this.contentAvailable = !!this.content;
           this.contentLoader = false;
           this.currentTechnology = data?.title;
@@ -184,7 +205,7 @@ ${this.content}
     this.route.navigate([`/edit/${this.currentId}`]);
   }
   onScroll(): void {
-    if (!this.contentContainer) return;
+    if (this.usesStructuredContent || !this.contentContainer) return;
 
     const container = this.contentContainer.nativeElement;
     const containerTop = container.getBoundingClientRect().top;
@@ -222,7 +243,7 @@ ${this.content}
   }
 
   scrollActiveTocItem(): void {
-    if (!this.tocContainer || !this.activeHeading) return;
+    if (this.usesStructuredContent || !this.tocContainer || !this.activeHeading) return;
 
     const container = this.tocContainer.nativeElement;
 

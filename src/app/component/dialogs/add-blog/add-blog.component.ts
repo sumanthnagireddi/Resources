@@ -6,6 +6,7 @@ import { closeDialog } from '../../../store/actions/dialog.actions';
 import { createBlog } from '../../../store/actions/blog.actions';
 import { DialogComponent } from '../../dialogs/dialog/dialog.component';
 import { EditorComponent } from '../../editor/editor.component';
+import { ADFDoc } from '../../editor/atlas-editor.types';
 import { TechnologyService } from '../../../services/technology.service';
 import { RouterLink } from "@angular/router";
 
@@ -35,9 +36,9 @@ export class AddBlogComponent implements OnInit {
   private readonly techService = inject(TechnologyService);
 
   constructor(private store: Store, private fb: FormBuilder) { }
-  onEditorContent(html: string) {
+  onEditorContent(content: ADFDoc) {
     this.form.patchValue({
-      content: html,
+      content,
     });
   }
 

@@ -1,0 +1,89 @@
+<div class="relative flex h-full min-h-0 overflow-hidden rounded-[36px] border border-[#ece3d8] bg-[#f8f6f2] text-[#201914] shadow-[0_24px_90px_rgba(120,97,73,0.10)] dark:border-white/10 dark:bg-[#130f0d] dark:text-[#f7efe6] dark:shadow-[0_40px_110px_rgba(0,0,0,0.45)]">
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(173,157,255,0.34),_transparent_28%),radial-gradient(circle_at_bottom_left,_rgba(245,204,228,0.24),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(220,244,188,0.28),_transparent_26%),linear-gradient(180deg,_rgba(255,255,255,0.7),_rgba(248,246,242,0.95))] dark:bg-[radial-gradient(circle_at_top_left,_rgba(103,71,184,0.18),_transparent_28%),radial-gradient(circle_at_bottom_left,_rgba(126,74,88,0.14),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(75,94,61,0.14),_transparent_24%),linear-gradient(180deg,_rgba(19,15,13,0.98),_rgba(19,15,13,1))]"></div>
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:46px_46px] dark:opacity-20"></div>
+
+  <div class="relative flex h-full min-h-0 w-full flex-col overflow-hidden">
+    <app-ai-studio-header
+      [activeConversation]="store.activeConversation()"
+      [activeAgent]="store.activeAgent()"
+      [conversationCount]="store.conversations().length"
+      [contextCount]="store.activeContextCount()"
+      [commandCount]="store.slashCommands.length"
+      [insertCount]="store.editorInserts.length"
+      [isGenerating]="store.isGenerating()"
+      [responseMode]="store.responseMode()"
+      (newConversation)="handleNewConversation()"
+      (workspaceRequested)="toggleWorkspacePanel()"
+    ></app-ai-studio-header>
+
+    <div class="relative min-h-0 flex-1 overflow-hidden">
+      @if (showWorkspacePanel()) {
+        <button
+          type="button"
+          class="absolute inset-0 z-20 bg-white/40 backdrop-blur-sm dark:bg-black/40"
+          (click)="closeWorkspacePanel()"
+          aria-label="Close workspace panel"
+        ></button>
+
+        <div class="absolute inset-y-4 left-4 z-30 w-[min(24rem,calc(100%-2rem))]">
+          <app-ai-studio-sidebar
+            class="h-full w-full"
+            [agents]="store.agents"
+            [activeAgentId]="store.activeAgent().id"
+            [conversations]="store.conversations()"
+            [activeConversationId]="store.activeConversation()?.id ?? null"
+            (agentSelected)="handleAgentSelected($event)"
+            (conversationSelected)="handleConversationSelected($event)"
+            (newConversation)="handleNewConversation()"
+          ></app-ai-studio-sidebar>
+        </div>
+      }
+
+      @if (store.currentMessages().length || store.isGenerating()) {
+        <div #messageContainer class="relative h-full overflow-y-auto pb-[12rem]">
+          <app-ai-studio-thread
+            [messages]="store.currentMessages()"
+            [liveRun]="store.liveRun()"
+            (followUpSelected)="usePrompt($event)"
+          ></app-ai-studio-thread>
+        </div>
+      } @else {
+        <div class="relative h-full overflow-y-auto pb-[12.5rem]">
+          <app-ai-studio-empty-state
+            [prompts]="store.starterPrompts"
+            [agents]="store.agents"
+            [activeAgentId]="store.activeAgent().id"
+            [editorInserts]="store.editorInserts"
+            (promptSelected)="usePrompt($event)"
+            (agentSelected)="store.selectAgent($event)"
+            (editorInsertSelected)="store.applyEditorInsert($event)"
+          ></app-ai-studio-empty-state>
+        </div>
+      }
+
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-4 pb-4 md:px-6 md:pb-6">
+        <div class="mx-auto max-w-[64rem]">
+          <div class="pointer-events-auto">
+            <app-ai-studio-composer
+              [draft]="store.draft()"
+              [isGenerating]="store.isGenerating()"
+              [activeAgent]="store.activeAgent()"
+              [contexts]="store.contextChips()"
+              [draftCommand]="store.activeDraftCommand()"
+              [showSlashMenu]="store.showSlashMenu()"
+              [commands]="store.filteredSlashCommands()"
+              [editorInserts]="store.editorInserts"
+              [lastUsedInsert]="store.lastUsedInsert()"
+              (draftChange)="store.updateDraft($event)"
+              (sendMessage)="store.sendDraft()"
+              (stopMessage)="store.stopGeneration()"
+              (contextToggled)="store.toggleContext($event)"
+              (commandSelected)="store.applySlashCommand($event)"
+              (editorInsertSelected)="store.applyEditorInsert($event)"
+            ></app-ai-studio-composer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

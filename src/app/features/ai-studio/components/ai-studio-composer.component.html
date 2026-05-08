@@ -1,0 +1,105 @@
+<div class="relative rounded-[28px] border border-white/85 bg-white/96 p-3 shadow-[0_20px_60px_rgba(77,55,26,0.10)] backdrop-blur-xl dark:border-white/10 dark:bg-[#15110f]/96 dark:shadow-[0_30px_90px_rgba(0,0,0,0.38)] md:p-4">
+  @if (showSlashMenu()) {
+    <div class="mb-3 rounded-[22px] border border-[#ebe1d4] bg-[#faf6f1] p-2 shadow-[0_10px_22px_rgba(56,40,24,0.05)] dark:border-white/10 dark:bg-[#1d1714]">
+      <div class="grid gap-2">
+        @for (command of commands(); track trackByCommandId($index, command)) {
+          <button
+            type="button"
+            class="rounded-[16px] border border-transparent bg-white/95 p-3 text-left transition hover:border-[#caa88b] hover:bg-white dark:bg-white/[0.03] dark:hover:border-[#5b4537] dark:hover:bg-white/[0.06]"
+            (click)="selectCommand(command.id)"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ command.command }}</p>
+                <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">{{ command.description }}</p>
+              </div>
+              <span class="rounded-full bg-[#f1e4d7] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7b624e] dark:bg-white/[0.07] dark:text-[#ccb9a8]">
+                {{ command.label }}
+              </span>
+            </div>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="mb-2 flex items-center gap-2">
+    <span class="inline-flex items-center gap-2 rounded-full border border-[#e7ddcf] bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#6d5c4d] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#e2d2c2]">
+      <span class="material-symbols-outlined text-[14px]">{{ activeAgent().icon }}</span>
+      {{ activeAgent().name }}
+    </span>
+
+    @if (draftCommand(); as command) {
+      <span class="inline-flex items-center gap-2 rounded-full border border-[#e3d5c8] bg-[#fff4ea] px-3 py-1.5 text-xs font-medium text-[#8f5738] dark:border-[#5a4132] dark:bg-[#241a14] dark:text-[#f3bf92]">
+        {{ command.command }}
+      </span>
+    }
+  </div>
+
+  <textarea
+    #composerInput
+    rows="1"
+    class="min-h-[72px] w-full resize-none rounded-[22px] border border-[#ebe1d4] bg-[#fcfaf6] px-4 py-4 text-[15px] leading-7 text-[#201914] outline-none transition placeholder:text-[#a59586] focus:border-[#caa88b] focus:bg-white focus:ring-0 dark:border-white/10 dark:bg-white/[0.03] dark:text-[#f7efe6] dark:placeholder:text-[#7d6d61] dark:focus:bg-white/[0.05]"
+    [value]="draft()"
+    [placeholder]="'Ask or search for anything...'"
+    (input)="handleInput($event)"
+    (keydown.enter)="handleEnter($event)"
+  ></textarea>
+
+  <div class="mt-3 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <div class="flex flex-wrap items-center gap-2">
+      @for (insert of editorInserts().slice(0, 3); track trackByInsertId($index, insert)) {
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition"
+          [ngClass]="lastUsedInsert()?.id === insert.id
+            ? 'border-[#d8ccb8] bg-white text-[#8f5738] dark:border-[#5c4637] dark:bg-[#241d18] dark:text-[#f1d0b3]'
+            : 'border-[#e7ddcf] bg-[#faf6f1] text-[#6d5c4d] hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8] dark:hover:border-[#5b4537]'"
+          (click)="selectInsert(insert.id)"
+        >
+          <span class="material-symbols-outlined text-[14px]">{{ insert.icon }}</span>
+          {{ insert.label }}
+        </button>
+      }
+    </div>
+
+    <div class="flex items-center gap-3 self-end lg:self-auto">
+      <span class="hidden text-xs text-[#7c6c5d] dark:text-[#c4b09f] md:inline">Enter sends</span>
+
+      @if (isGenerating()) {
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full bg-[#1f1915] px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-black dark:bg-[#f7efe6] dark:text-[#1b1512] dark:hover:bg-[#efe3d6]"
+          (click)="stopMessage.emit()"
+        >
+          <span class="material-symbols-outlined text-[18px]">stop_circle</span>
+          Stop
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#8f77ff] to-[#7ac9c6] text-white shadow-[0_14px_24px_rgba(143,119,255,0.22)] transition hover:-translate-y-0.5 hover:from-[#8269f0] hover:to-[#6cbdb9]"
+          [disabled]="!draft().trim()"
+          [ngClass]="!draft().trim() ? 'cursor-not-allowed opacity-50 hover:translate-y-0 hover:from-[#8f77ff] hover:to-[#7ac9c6]' : ''"
+          (click)="sendMessage.emit()"
+          aria-label="Send message"
+        >
+          <span class="material-symbols-outlined text-[18px]">arrow_upward</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="mt-3 flex flex-wrap gap-2">
+    @for (context of activeContexts(); track trackByContextId($index, context)) {
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-full border border-[#e7ddcf] bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#6d5c4d] transition hover:border-[#caa88b] hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-[#cdb9a8] dark:hover:border-[#5b4537]"
+        (click)="contextToggled.emit(context.id)"
+      >
+        <span class="material-symbols-outlined text-[14px]">{{ context.icon }}</span>
+        {{ context.label }}
+      </button>
+    }
+  </div>
+</div>

@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   API_URL: 'https://webservices-rqvr.onrender.com',
+  atlasEditorBaseUrl:
+    'https://sumanthnagireddi.github.io/atlas-editor/web-components',
   firebase: {
     projectId: 'sumanthnagireddi-interview',
     appId: '1:690782833147:web:85e61606f3f76fe1b7a35e',

@@ -29,6 +29,7 @@ import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
 import { IdeasComponent } from './pages/ideas/ideas.component';
 import { InterviewBankComponent } from './pages/interview-bank/interview-bank.component';
 import { RoadmapComponent } from './pages/roadmap/roadmap.component';
+import { AiWorkspaceComponent } from './features/ai-chat/ai-workspace.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,10 @@ export const routes: Routes = [
       },
       {
         path: 'home',
+        component: DashboardComponent,
+      },
+      {
+        path: 'discover',
         component: FeedComponent,
       },
       {
@@ -57,10 +62,6 @@ export const routes: Routes = [
       {
         path: 'starred',
         component: StarredComponent,
-      },
-       {
-        path: 'roadmap',
-        component: RoadmapComponent,
       },
       {
         path: 'roadmap',
@@ -124,10 +125,6 @@ export const routes: Routes = [
           },
         ],
       },
-      // {
-      //   path: 'dashboard',
-      //   component: DashboardComponent,
-      // },
       {
         path: 'snippets',
         component: SnippetsComponent,
@@ -141,6 +138,10 @@ export const routes: Routes = [
         path: 'api-docs',
         component: SwaggerComponent,
       },
+      {
+        path:'agents',
+        component:AiWorkspaceComponent
+      }
     ],
   },
   {

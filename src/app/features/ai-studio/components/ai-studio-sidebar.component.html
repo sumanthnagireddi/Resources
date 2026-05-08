@@ -1,0 +1,114 @@
+<aside class="flex h-full min-h-0 flex-col overflow-hidden rounded-[32px] border border-white/65 bg-white/70 shadow-[0_18px_48px_rgba(77,55,26,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#171311]/88 dark:shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+  <div class="border-b border-[#ece2d5] px-4 py-4 dark:border-white/10">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7b6a59] dark:text-[#c4b19f]">Workspace</p>
+        <h2 class="mt-1 text-lg font-semibold tracking-tight text-[#201914] dark:text-[#f7efe6]">Agents & threads</h2>
+      </div>
+
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[#e8dccd] bg-white/90 text-[#6f6255] transition hover:-translate-y-0.5 hover:border-[#c49a7f] hover:text-[#8f5738] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#d0bead]"
+        (click)="newConversation.emit()"
+        aria-label="Start a new conversation"
+      >
+        <span class="material-symbols-outlined text-[18px]">add</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-4">
+    <section class="rounded-[24px] border border-[#ebe1d4] bg-[#faf6f1] p-4 dark:border-white/10 dark:bg-white/[0.05]">
+      <div class="flex items-start gap-3">
+        <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#eee4ff] text-[#7b66d9] dark:bg-[#2a2138] dark:text-[#cabdff]">
+          <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+        </span>
+        <div>
+          <p class="text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">AI for your actual workflow</p>
+          <p class="mt-1 text-xs leading-5 text-[#6f6255] dark:text-[#ccb9a8]">
+            Draft from notes, plan Angular work, create blog outlines, and prep interview answers without leaving the workspace.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="mb-3 flex items-center justify-between">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Agents</p>
+        <span class="text-xs text-[#7b6a59] dark:text-[#c4b19f]">{{ agents().length }} ready</span>
+      </div>
+
+      <div class="space-y-2">
+        @for (agent of agents(); track trackByAgentId($index, agent)) {
+          <button
+            type="button"
+            class="w-full rounded-[24px] border px-3 py-3 text-left transition"
+            [ngClass]="activeAgentId() === agent.id
+              ? 'border-[#d8ccb8] bg-white text-[#201914] shadow-[0_14px_30px_rgba(56,40,24,0.08)] dark:border-[#5c4637] dark:bg-[#241d18] dark:text-[#f7efe6]'
+              : 'border-[#e8dccd] bg-white/75 hover:-translate-y-0.5 hover:border-[#d0b195] hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-[#594235] dark:hover:bg-white/[0.05]'"
+            (click)="agentSelected.emit(agent.id)"
+          >
+            <div class="flex items-center gap-3">
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#efe5d7] bg-[#faf6f1] dark:border-[#352c25] dark:bg-[#261f1a]"
+                [style.color]="agent.accent"
+              >
+                <span class="material-symbols-outlined text-[18px]">{{ agent.icon }}</span>
+              </span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <p class="truncate text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ agent.name }}</p>
+                  <span class="rounded-full bg-[#f4ede5] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#755c49] dark:bg-white/[0.07] dark:text-[#c8b4a2]">
+                    {{ agent.badge }}
+                  </span>
+                </div>
+                <p class="mt-1 truncate text-xs text-[#6f6255] dark:text-[#ccb9a8]">{{ agent.subtitle }}</p>
+              </div>
+            </div>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="flex min-h-0 flex-1 flex-col">
+      <div class="mb-3 flex items-center justify-between">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7b6a59] dark:text-[#c4b19f]">Recent threads</p>
+        <span class="text-xs text-[#7b6a59] dark:text-[#c4b19f]">{{ conversations().length }}</span>
+      </div>
+
+      @if (conversations().length) {
+        <div class="space-y-2">
+          @for (conversation of conversations(); track trackByConversationId($index, conversation)) {
+            <button
+              type="button"
+              class="w-full rounded-[24px] border px-3 py-3 text-left transition"
+              [ngClass]="activeConversationId() === conversation.id
+                ? 'border-[#d8ccb8] bg-white shadow-[0_14px_30px_rgba(56,40,24,0.08)] dark:border-[#5c4637] dark:bg-[#241d18]'
+                : 'border-[#e8dccd] bg-white/75 hover:-translate-y-0.5 hover:border-[#d0b195] hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-[#594235] dark:hover:bg-white/[0.05]'"
+              (click)="conversationSelected.emit(conversation.id)"
+            >
+              <div class="flex items-center gap-3">
+                <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-[#efe5d7] bg-[#faf6f1] text-[#8f5738] dark:border-[#352c25] dark:bg-[#261f1a] dark:text-[#e2b08f]">
+                  <span class="material-symbols-outlined text-[15px]">chat_bubble</span>
+                </span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <p class="truncate text-sm font-semibold text-[#201914] dark:text-[#f7efe6]">{{ conversation.title }}</p>
+                    <span class="shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7b6a59] dark:text-[#c4b19f]">
+                      {{ formatUpdatedAt(conversation.updatedAt) }}
+                    </span>
+                  </div>
+                  <p class="mt-1 truncate text-xs text-[#6f6255] dark:text-[#ccb9a8]">{{ conversation.preview || 'Open to continue the thread.' }}</p>
+                </div>
+              </div>
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="rounded-[24px] border border-dashed border-[#d9c8b4] bg-white/75 p-4 text-sm leading-6 text-[#6f6255] dark:border-[#3a2f27] dark:bg-white/[0.03] dark:text-[#ccb9a8]">
+          No saved threads yet. Start with a prompt, switch agents when the job changes, or drop in a plan, brief, checklist, or handoff block.
+        </div>
+      }
+    </section>
+  </div>
+</aside>

@@ -103,7 +103,7 @@ export class ThemeService {
    */
   private getStoredTheme(): ThemeMode {
     const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemeMode;
-    return stored || 'system';
+    return stored || 'dark';
   }
 
   /**

@@ -14,6 +14,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { toggleSidebar } from '../../../store/actions/sidebar.actions';
 import { selectStarredCount } from '../../../store/selectors/starred.selector';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 export interface MenuItem {
   id: string;
@@ -112,12 +113,24 @@ export class SidebarV3Component implements OnInit {
   selectedMenuItem: string | null = null;
   constructor(
     private router: Router,
+    private http: HttpClient,
     private route: ActivatedRoute,
   ) {
     this.starredCount$ = this.store.select(selectStarredCount);
   }
 
   ngOnInit(): void {
+    // this.http.get('http://localhost:3000/health').subscribe(data => {
+    //   this.menuItems.push({
+    //     id: 'content_v2',
+    //     label: 'Content',
+    //     icon: 'article',
+    //     hasItems: true,
+    //     isOpen: true,
+    //     url: 'content',
+    //     children: data as any,
+    //   },);
+    // });
     this.store.dispatch(getTechnologies());
     this.store.select(selectTechnologies).subscribe((technologies) => {
       this.updateContentChildren(technologies);

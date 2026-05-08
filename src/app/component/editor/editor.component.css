@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .prose h1,
+:host ::ng-deep .prose h2,
+:host ::ng-deep .prose h3,
+:host ::ng-deep .prose h4,
+:host ::ng-deep .prose h5,
+:host ::ng-deep .prose h6 {
+  scroll-margin-top: 96px;
+}
