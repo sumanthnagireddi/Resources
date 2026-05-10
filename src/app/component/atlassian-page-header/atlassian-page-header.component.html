@@ -1,0 +1,117 @@
+<header
+  class="atlassian-page-header sticky top-0 z-20 overflow-hidden border-b bg-white/95 backdrop-blur-xl transition-all duration-200 dark:bg-slate-950/95"
+  [ngClass]="collapsed
+    ? 'border-gray-200/80 shadow-[0_12px_30px_rgba(15,23,42,0.08)] dark:border-slate-800/80'
+    : 'border-transparent shadow-none'"
+>
+  <div
+    class="mx-auto flex min-w-0 justify-between gap-4 px-4 transition-all duration-200 sm:px-6 lg:px-8"
+    [ngClass]="collapsed ? 'items-center py-3' : 'items-start py-4 sm:py-5'"
+  > 
+    <div class="min-w-0 flex-1">
+      <div
+        class="flex items-center gap-3 transition-all duration-200"
+        [ngClass]="collapsed
+          ? 'max-h-12 translate-y-0 opacity-100'
+          : 'pointer-events-none max-h-0 -translate-y-2 overflow-hidden opacity-0'"
+      >
+        <span class="material-symbols-outlined text-lg text-gray-500 dark:text-slate-400">
+          expand_more
+        </span>
+        <span
+          class="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+        >
+          <span class="material-symbols-outlined text-[18px]">article</span>
+        </span>
+        <p class="truncate text-xl font-semibold text-slate-900 dark:text-slate-50">
+          {{ title }}
+        </p>
+      </div>
+
+      <div
+        class="transition-all duration-200"
+        [ngClass]="collapsed
+          ? 'pointer-events-none max-h-0 -translate-y-2 overflow-hidden opacity-0'
+          : 'max-h-[18rem] translate-y-0 opacity-100'"
+      >
+        <div class="pb-1 pt-12 sm:pt-16">
+          <h1
+            class="w-full text-2xl font-medium tracking-[-0.03em] text-slate-800 dark:text-slate-50"
+          >
+            {{ title }}
+          </h1>
+
+          <div
+            class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-600 dark:text-slate-300"
+          >
+            <span class="inline-flex items-center gap-2">
+              <span
+                class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-xs font-semibold text-white"
+              >
+                {{ authorInitial }}
+              </span>
+              <span >By {{ authorName }}</span>
+            </span>
+
+            <span class="inline-flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">menu_book</span>
+              <span>{{ readTimeMinutes }} min</span>
+            </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex shrink-0 items-center gap-2 self-start text-slate-700 dark:text-slate-200 sm:gap-3"
+      [ngClass]="collapsed ? 'pt-0' : 'pt-1'"
+    >
+      <span class="hidden whitespace-nowrap text-sm font-medium text-slate-500 dark:text-slate-400 sm:inline">
+        {{ publishedLabel }}
+      </span>
+
+      <span
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white ring-2 ring-white dark:ring-slate-950"
+      >
+        {{ authorInitial }}
+      </span>
+
+      <button
+        type="button"
+        class="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200/80 bg-white px-3 text-sm font-medium transition-colors hover:bg-gray-50 dark:border-slate-700/80 dark:bg-slate-900 dark:hover:bg-slate-800"
+        (click)="openEdit()"
+      >
+        <span class="material-symbols-outlined text-[18px]">edit_square</span>
+        <span class="hidden sm:inline">Edit</span>
+      </button>
+
+      <button
+        type="button"
+        class="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200/80 bg-white px-3 text-sm font-medium transition-colors hover:bg-gray-50 dark:border-slate-700/80 dark:bg-slate-900 dark:hover:bg-slate-800"
+        (click)="sharePage()"
+      >
+        <span class="material-symbols-outlined text-[18px]">ios_share</span>
+        <span class="hidden sm:inline">Share</span>
+      </button>
+
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200/80 bg-white transition-colors hover:bg-gray-50 dark:border-slate-700/80 dark:bg-slate-900 dark:hover:bg-slate-800"
+        (click)="copyLink()"
+        title="Copy page link"
+      >
+        <span class="material-symbols-outlined text-[18px]">link</span>
+      </button>
+
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-gray-100 dark:hover:bg-slate-800"
+        (click)="openMore()"
+        title="Open page in Atlassian"
+      >
+        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,8 +1,11 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject, Injectable } from '@angular/core';
-import {  exhaustMap, map, of } from 'rxjs';
+import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 import { ContentService } from '../../services/content.service';
 import {
+  loadPage,
+  loadPageFailure,
+  loadPageSuccess,
   loadTopContents,
   loadTopContentsSuccess,
 } from '../actions/content.actions';
@@ -21,6 +24,18 @@ export class ContentEffects {
           map((content: any) => {
             return loadTopContentsSuccess({ topContents: content });
           })
+        )
+      )
+    )
+  );
+
+  loadPage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadPage),
+      switchMap(({ pageId }) =>
+        this.contentService.fetchPage(pageId).pipe(
+          map((page: any) => loadPageSuccess({ page })),
+          catchError((error) => of(loadPageFailure({ error })))
         )
       )
     )

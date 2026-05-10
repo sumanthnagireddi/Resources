@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EditorComponent } from '../../component/editor/editor.component';
 import { BreadcrumbComponent } from '../../component/breadcrumb/breadcrumb.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +7,7 @@ import { ContentService } from '../../services/content.service';
 
 @Component({
   selector: 'app-create-doc',
-  imports: [EditorComponent, BreadcrumbComponent, CommonModule],
+  imports: [ BreadcrumbComponent, CommonModule],
   templateUrl: './create-doc.component.html',
   styleUrl: './create-doc.component.css',
 })

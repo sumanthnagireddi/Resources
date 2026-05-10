@@ -29,12 +29,14 @@ import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
 import { IdeasComponent } from './pages/ideas/ideas.component';
 import { InterviewBankComponent } from './pages/interview-bank/interview-bank.component';
 import { RoadmapComponent } from './pages/roadmap/roadmap.component';
+import { ReactPlaygroundComponent } from './pages/react-playground/react-playground.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -87,8 +89,16 @@ export const routes: Routes = [
         component: InterviewBankComponent,
       },
       {
+        path: 'react-playground',
+        component: ReactPlaygroundComponent,
+      },
+      {
         path: 'drafts',
         component: DraftsComponent,
+      },
+      {
+        path: 'notifications',
+        component: NotificationsComponent,
       },
       {
         path: 'pages/:pageId',
@@ -109,6 +119,10 @@ export const routes: Routes = [
           {
             path: '',
             component: BlogsHomeComponent,
+          },
+          {
+            path: 'post/:blogId',
+            component: ViewBlogComponent,
           },
           {
             path: 'view/:blogId',

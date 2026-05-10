@@ -1,18 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorComponent } from './editor.component';
+import { AtlasEditorComponent } from './editor.component';
 
-describe('EditorComponent', () => {
-  let component: EditorComponent;
-  let fixture: ComponentFixture<EditorComponent>;
+describe('AtlasEditorComponent', () => {
+  let component: AtlasEditorComponent;
+  let fixture: ComponentFixture<AtlasEditorComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EditorComponent]
-    })
-    .compileComponents();
+    if (!customElements.get('atlas-editor-angular')) {
+      customElements.define('atlas-editor-angular', class extends HTMLElement {});
+    }
 
-    fixture = TestBed.createComponent(EditorComponent);
+    await TestBed.configureTestingModule({
+      imports: [AtlasEditorComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AtlasEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

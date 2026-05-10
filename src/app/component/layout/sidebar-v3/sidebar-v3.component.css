@@ -1,0 +1,23 @@
+button,
+:host a,
+:host input,
+:host select,
+:host textarea,
+:host [role='button'],
+:host .clickable {
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:host ::ng-deep .animate-spin {
+  animation: spin 1s linear infinite;
+}

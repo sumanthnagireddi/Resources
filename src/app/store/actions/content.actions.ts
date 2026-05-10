@@ -11,6 +11,10 @@ export enum ContentActionTypes {
   loadTopContentsSuccess = '[Content] Load Top Contents Success',
   loadTopContentsFailure = '[Content] Load Top Contents Failure',
 
+  loadPage = '[Content] Load Page',
+  loadPageSuccess = '[Content] Load Page Success',
+  loadPageFailure = '[Content] Load Page Failure',
+
   loadRecentVisited = '[Content] Load Recent Visited',
   loadRecentVisitedSuccess = '[Content] Load Recent Visited Success',
   loadRecentVisitedFailure = '[Content] Load Recent Visited Failure',
@@ -42,6 +46,23 @@ export const loadTopContentsSuccess = createAction(
 
 export const loadTopContentsFailure = createAction(
   ContentActionTypes.loadTopContentsFailure,
+  props<{ error: any }>()
+);
+
+/* ---------- CURRENT PAGE ---------- */
+
+export const loadPage = createAction(
+  ContentActionTypes.loadPage,
+  props<{ pageId: string }>()
+);
+
+export const loadPageSuccess = createAction(
+  ContentActionTypes.loadPageSuccess,
+  props<{ page: any }>()
+);
+
+export const loadPageFailure = createAction(
+  ContentActionTypes.loadPageFailure,
   props<{ error: any }>()
 );
 

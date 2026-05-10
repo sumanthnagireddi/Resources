@@ -9,9 +9,11 @@ import { selectSelectedMonth } from '../../../../store/selectors/finance.selecto
 @Component({
   selector: 'app-finance-month-nav',
   standalone: true,
+  host: {
+    class: 'block w-full sm:w-auto',
+  },
   imports: [DatePipe, AsyncPipe],
   templateUrl: './finance-month-nav.component.html',
-  styleUrl: './finance-month-nav.component.css',
 })
 export class FinanceMonthNavComponent {
   private store = inject(Store);

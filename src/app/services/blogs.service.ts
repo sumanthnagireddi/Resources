@@ -14,9 +14,10 @@ export class BlogsService {
     return this.http.get(this.blogs_endpoint);
   }
   addBlogToMongo(blog_payload: any) {
+    const titleSource = blog_payload?.title ?? blog_payload?.name ?? 'untitled-post';
     const payload = {
       ...blog_payload,
-      slug: blog_payload?.name
+      slug: titleSource
         ?.trim() // remove leading/trailing spaces
         .toLowerCase() // convert to lowercase
         .replace(/\s+/g, '-') // replace spaces (one or more) with hyphens

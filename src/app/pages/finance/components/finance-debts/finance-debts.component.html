@@ -10,7 +10,7 @@
       </h1>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Track who owes you and whom you owe</p>
     </div>
-    <button (click)="openAdd()" class="px-4 py-2 rounded-xl text-sm font-medium text-white btn-accent
+    <button (click)="openAdd()" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-accent hover:bg-accent/90 transition
                    shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
       <span class="material-symbols-outlined text-lg">add</span>
       Add Debt
@@ -233,7 +233,7 @@
 
         <button (click)="recordPartial(debt._id)"
           [disabled]="!partialAmounts[debt._id] || partialAmounts[debt._id] <= 0" class="px-3 py-1.5 rounded-lg text-sm font-medium
-                             text-white btn-accent
+                             text-white bg-accent hover:bg-accent/90 transition
                              disabled:opacity-50 disabled:cursor-not-allowed
                              transition-all whitespace-nowrap">
           Record
@@ -268,7 +268,7 @@
     </p>
 
     <button (click)="openAdd()" class="px-4 py-2 rounded-lg text-sm font-medium
-                     text-white btn-accent shadow-sm hover:shadow-md
+                     text-white bg-accent hover:bg-accent/90 transition shadow-sm hover:shadow-md
                      transition-all">
       Add your first debt
     </button>
@@ -306,7 +306,7 @@
           Cancel
         </button>
         <button (click)="submitAdd()" [disabled]="!newDebt.name.trim() || newDebt.amount <= 0 || saving()"
-          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent disabled:opacity-50">
+          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-accent hover:bg-accent/90 transition disabled:opacity-50">
           {{ saving() ? 'Saving...' : 'Add Debt' }}
         </button>
       </div>
@@ -342,7 +342,7 @@
           Cancel
         </button>
         <button (click)="submitEdit()" [disabled]="!editDebt.name.trim() || editDebt.amount <= 0 || saving()"
-          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent disabled:opacity-50">
+          class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-accent hover:bg-accent/90 transition disabled:opacity-50">
           {{ saving() ? 'Saving...' : 'Update Debt' }}
         </button>
       </div>

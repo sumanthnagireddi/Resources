@@ -1,143 +1,166 @@
-<!-- ===================== -->
-<!-- Loading State (Skeleton) -->
-<!-- ===================== -->
-<div *ngIf="blogResource.isLoading()" class="mx-auto p-6 animate-pulse">
-  <div class="h-8 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mb-3"></div>
-  <div class="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full mb-2"></div>
-  <div class="h-4 bg-gray-200 dark:bg-slate-700 rounded w-5/6 mb-6"></div>
-
-  <div class="flex gap-2 mb-6">
-    <div class="h-6 w-20 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
-    <div class="h-6 w-24 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
-    <div class="h-6 w-16 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
-  </div>
-
-  <div class="space-y-3">
-    <div class="h-4 bg-gray-200 dark:bg-slate-700 rounded"></div>
-    <div class="h-4 bg-gray-200 dark:bg-slate-700 rounded w-11/12"></div>
-    <div class="h-4 bg-gray-200 dark:bg-slate-700 rounded w-10/12"></div>
-  </div>
-</div>
-
-<!-- ===================== -->
-<!-- Error State -->
-<!-- ===================== -->
-<div *ngIf="blogResource.error()" class="text-center py-16">
-  <div class="inline-flex flex-col items-center gap-3 text-red-600 dark:text-red-400">
-    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M12 9v3.75m0 3h.008M3.75 19.5h16.5c.966 0 1.48-1.054.96-1.8L12.96 4.8a1.1 1.1 0 0 0-1.92 0L2.79 17.7c-.52.746-.006 1.8.96 1.8Z" />
-    </svg>
-    <p class="font-medium">Failed to load blog</p>
-  </div>
-</div>
-
-<!-- ===================== -->
-<!-- Blog Content -->
-<!-- ===================== -->
-<div *ngIf="blogResource.value() as blog" class="mx-auto px-5 sm:px-8 py-8">
-
-  <!-- Header Card -->
-  <div class="rounded-2xl bg-gradient-to-br from-[var(--color-accent-light)] via-white to-blue-50
-              dark:from-slate-800 dark:via-slate-800 dark:to-slate-900
-              border border-gray-200 dark:border-slate-700 p-6 shadow-sm dark:shadow-slate-900/50">
-
-    <!-- Title & Description -->
-    <h1 class="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-      {{ blog.title }}
-    </h1>
-    <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm sm:text-base max-w-3xl">
-      {{ blog.description }}
-    </p>
-
-    <!-- Tags -->
-    <div class="mt-4 flex flex-wrap gap-2">
-      <span *ngFor="let tag of blog.tags"
-        class="inline-flex items-center gap-1 rounded-full bg-accent-light dark:bg-[var(--color-accent)]/20
-               px-3 py-1 text-xs font-semibold text-accent hover:bg-[var(--color-accent)]/20
-               dark:hover:bg-[var(--color-accent)]/30 transition">
-        #{{ tag }}
-      </span>
-    </div>
-
-    <!-- Meta + Actions -->
-    <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-
-      <!-- Meta -->
-      <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-        <span class="inline-flex items-center gap-2">
-          <img *ngIf="blog.authorAvatarUrl"
-               [src]="blog.authorAvatarUrl"
-               class="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-700"
-               alt="Author" />
-          <span class="font-medium text-gray-700 dark:text-gray-300">
-            {{ blog.authorName || 'Sumanth Nagireddi' }}
-          </span>
-        </span>
-
-        <span>•</span>
-        <span>{{ blog.createdAt | date:'mediumDate' }}</span>
-
-        <span *ngIf="blog.status === 'SCHEDULED'" class="text-yellow-600 dark:text-yellow-400 font-medium">
-          • Publishes {{ blog.publishedAt | date:'medium' }}
-        </span>
-
-        <span *ngIf="!blog.isFeatured" class="text-purple-700 dark:text-purple-400 font-semibold inline-flex items-center gap-1">
-          ★ Featured
-        </span>
-
-        <span *ngIf="!blog.isPinned" class="text-accent font-semibold inline-flex items-center gap-1">
-          📌 Pinned
-        </span>
+@if (blogResource.isLoading()) {
+  <div class="min-h-full bg-white pb-16 dark:bg-slate-950">
+    <div class="mx-auto max-w-[1180px] animate-pulse px-4 pt-8 sm:px-6 lg:px-8 lg:pt-10">
+      <div class="h-10 w-32 rounded-full bg-slate-200 dark:bg-slate-800"></div>
+      <div class="mt-6 rounded-[34px] border border-slate-200 bg-slate-100 px-6 py-10 dark:border-slate-800 dark:bg-slate-900">
+        <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-800"></div>
+        <div class="mt-5 h-16 w-4/5 rounded bg-slate-200 dark:bg-slate-800"></div>
+        <div class="mt-4 h-6 w-3/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          @for (item of [1, 2, 3]; track item) {
+            <div class="h-10 w-28 rounded-full bg-slate-200 dark:bg-slate-800"></div>
+          }
+        </div>
       </div>
-
-      <!-- Actions -->
-      <div class="flex items-center gap-3 text-sm">
-
-        <!-- Reading Time -->
-        <span class="inline-flex items-center gap-1 rounded-md bg-gray-100 dark:bg-slate-700 px-2 py-1 text-gray-600 dark:text-gray-300">
-          ⏱ {{ blog.readingTimeMinutes || 5 }} min
-        </span>
-
-        <!-- Views -->
-        <span class="inline-flex items-center gap-1 text-gray-600 dark:text-gray-400">
-          👁 {{ blog.viewCount || 0 }}
-        </span>
-
-       <span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="size-4 cursor-pointer text-gray-500 dark:text-gray-400 hover:text-accent">
-          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157
-                   3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM
-                   19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25
-                   0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933
-                   l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-        </svg>
-      </span>
-      <span class="cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="size-4 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400">
-          <path fill-rule="evenodd"
-            d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
-            clip-rule="evenodd" />
-        </svg>
-      </span>
-
-      <svg class="size-5 cursor-pointer text-gray-500 dark:text-gray-400 hover:text-accent" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-      </svg>
-      </div>
-
+      <div class="mt-8 h-[520px] rounded-[30px] bg-slate-100 dark:bg-slate-900"></div>
     </div>
   </div>
-
-  <!-- Divider -->
-  <div class="my-8 border-t border-dashed border-gray-300 dark:border-slate-700"></div>
-
-  <!-- Blog Body -->
-  <div class="prose prose-emerald dark:prose-invert max-w-none text-gray-800 dark:text-gray-200">
-    <app-editor [mode]="'view'" [data]="blog.content"></app-editor>
+} @else if (blogResource.error()) {
+  <div class="min-h-full bg-white px-4 py-16 text-center dark:bg-slate-950 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-xl rounded-[30px] border border-rose-200 bg-rose-50 px-6 py-10 shadow-sm dark:border-rose-900/40 dark:bg-rose-950/20">
+      <span class="material-symbols-outlined text-4xl text-rose-500">warning</span>
+      <h2 class="mt-4 text-2xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-slate-50">
+        Failed to load blog
+      </h2>
+      <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+        Refresh the page or check whether the blog API is available.
+      </p>
+      <a
+        routerLink="/blogs"
+        class="mt-6 inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-white"
+      >
+        Back to blogs
+      </a>
+    </div>
   </div>
+} @else {
+  @if (blogResource.value(); as blog) {
+    <div class="min-h-full bg-white pb-16 dark:bg-slate-950">
+      <div class="mx-auto max-w-[1180px] px-4 pt-8 sm:px-6 lg:px-8 lg:pt-10">
+        <a
+          routerLink="/blogs"
+          class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+        >
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+          Back to the journal
+        </a>
 
-</div>
+        <section
+          class="mt-6 overflow-hidden rounded-[36px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(205,233,255,0.9),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(255,210,245,0.9),_transparent_28%),linear-gradient(180deg,_#ffffff_0%,_#f8fbff_100%)] px-6 py-8 shadow-[0_24px_80px_-44px_rgba(15,23,42,0.25)] dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_left,_rgba(30,64,175,0.22),_transparent_32%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.2),_transparent_26%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] sm:px-10 sm:py-12"
+        >
+          <div class="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_320px] lg:items-end">
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-[0.42em] text-rose-500">
+                Product journal
+              </p>
+              <h1 class="mt-5 text-[clamp(2.5rem,6vw,4.8rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-slate-950 dark:text-slate-50">
+                {{ blog.title }}
+              </h1>
+              <p class="mt-5 max-w-3xl text-[15px] leading-8 text-slate-600 dark:text-slate-300 sm:text-base">
+                {{ blog.description || 'A detailed write-up from the product journal.' }}
+              </p>
+
+              @if (getTopicPreview(blog).length) {
+                <div class="mt-6 flex flex-wrap gap-2">
+                  @for (topic of getTopicPreview(blog); track topic) {
+                    <span class="inline-flex rounded-full border border-white/70 bg-white/80 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300">
+                      {{ topic }}
+                    </span>
+                  }
+                </div>
+              }
+
+              <div class="mt-8 flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                <span>{{ blog.authorName || 'Sumanth Nagireddi' }}</span>
+                <span>/</span>
+                <span>{{ getDisplayDate(blog) }}</span>
+                <span>/</span>
+                <span>{{ blog.readingTimeMinutes || 5 }} min read</span>
+                <span>/</span>
+                <span>{{ blog.viewCount || 0 }} views</span>
+              </div>
+            </div>
+
+            <aside class="rounded-[28px] border border-white/80 bg-white/80 p-5 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/80">
+              <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
+                Read snapshot
+              </p>
+              <div class="mt-5 space-y-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Status</p>
+                  <p class="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    {{ getStatusLabel(blog) }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Published</p>
+                  <p class="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    {{ getDisplayDate(blog) }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Category</p>
+                  <p class="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    {{ blog.category || 'Product notes' }}
+                  </p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="mt-8 overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_22px_70px_-46px_rgba(15,23,42,0.25)] dark:border-slate-800 dark:bg-slate-900">
+          <div class="border-b border-slate-200 px-5 py-4 dark:border-slate-800 sm:px-6">
+            <p class="text-lg font-semibold tracking-[-0.03em] text-slate-950 dark:text-slate-50">
+              Article
+            </p>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              Rendered with Atlas editor for the final reading view.
+            </p>
+          </div>
+
+          <div class="p-4 sm:p-6 lg:p-8">
+            <app-atlas-editor
+              *ngIf="blogAtlasDocument() as atlasDocument; else plainContent"
+              [content]="atlasDocument"
+              [contentWidth]="'narrow'"
+              [description]="blog.description || 'Blog article'"
+              [heading]="blog.title"
+              [minHeight]="420"
+              [mode]="'view'"
+            ></app-atlas-editor>
+
+            <ng-template #plainContent>
+              <div class="rounded-[28px] border border-slate-200 bg-slate-50 px-6 py-6 text-base leading-8 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200">
+                <p class="whitespace-pre-line">
+                  {{ blogPlainText() || 'This post does not have any saved article content yet.' }}
+                </p>
+              </div>
+            </ng-template>
+          </div>
+        </section>
+
+        @if (recommendedBlogs().length > 0) {
+          <section class="mt-12">
+            <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
+                  Continue reading
+                </p>
+                <h2 class="mt-2 text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950 dark:text-slate-50">
+                  More from the archive
+                </h2>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+              @for (item of recommendedBlogs(); track item._id) {
+                <app-blog-card [blog]="item" [variant]="'cover'"></app-blog-card>
+              }
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+  }
+}

@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { closeDialog } from '../../../store/actions/dialog.actions';
 import { createBlog } from '../../../store/actions/blog.actions';
 import { DialogComponent } from '../../dialogs/dialog/dialog.component';
-import { EditorComponent } from '../../editor/editor.component';
 import { TechnologyService } from '../../../services/technology.service';
 import { RouterLink } from "@angular/router";
 
@@ -17,14 +16,14 @@ import { RouterLink } from "@angular/router";
     NgClass,
     ReactiveFormsModule,
     FormsModule,
-    EditorComponent,
+    // EditorComponent,
     RouterLink
   ],
   templateUrl: './add-blog.component.html',
   styleUrl: './add-blog.component.css',
 })
 export class AddBlogComponent implements OnInit {
-  @ViewChild('editor') editor!: EditorComponent; // 🔥 reference child
+  // @ViewChild('editor') editor!: EditorComponent; // 🔥 reference child
   @Input() payload!: any;
   @Output() onDialogOutputButton = new EventEmitter<any>();
 
@@ -35,12 +34,7 @@ export class AddBlogComponent implements OnInit {
   private readonly techService = inject(TechnologyService);
 
   constructor(private store: Store, private fb: FormBuilder) { }
-  onEditorContent(html: string) {
-    this.form.patchValue({
-      content: html,
-    });
-  }
-
+  
   ngOnInit(): void {
     this.techService.getTechnologiesFromMongo().subscribe((data: any) => {
       this.categories = data;
@@ -73,7 +67,7 @@ export class AddBlogComponent implements OnInit {
   }
 
   submit() {
-    this.editor.getContent();
+    // this.editor.getContent();
     const formValue = this.form.value;
 
     const tagsArray =

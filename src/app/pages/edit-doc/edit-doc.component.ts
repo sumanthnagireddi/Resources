@@ -1,6 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../component/breadcrumb/breadcrumb.component';
-import { EditorComponent } from '../../component/editor/editor.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ContentService } from '../../services/content.service';
@@ -9,7 +8,7 @@ import { SkeletonComponent } from '../../component/skeleton/skeleton.component';
 
 @Component({
   selector: 'app-edit-doc',
-  imports: [BreadcrumbComponent, EditorComponent, CommonModule, SkeletonComponent],
+  imports: [BreadcrumbComponent, CommonModule, SkeletonComponent],
   templateUrl: './edit-doc.component.html',
   styleUrl: './edit-doc.component.css',
 })

@@ -1,26 +1,26 @@
-<div class="w-full max-w-full overflow-x-hidden bg-gray-50/25 dark:bg-slate-950 relative transition-colors duration-200">
+<div
+  class="w-full max-w-full overflow-x-hidden bg-gray-50/25 dark:bg-slate-950 relative transition-colors duration-200">
   <app-header></app-header>
-<div class="flex h-[calc(100vh-56px)] min-h-0 relative overflow-x-hidden">
+  <div class="flex h-[calc(100vh-56px)] min-h-0 relative overflow-x-hidden">
 
-  <!-- Mobile Backdrop Overlay -->
-  <div *ngIf="sidebarToggleStatus"
-       class="fixed md:hidden inset-0 z-30 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
-       (click)="handleSidebarToggle()">
+    <!-- Mobile Backdrop Overlay -->
+    <div *ngIf="sidebarToggleStatus"
+      class="fixed md:hidden inset-0 z-30 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+      (click)="handleSidebarToggle()">
+    </div>
+
+    <!-- Sidebar Container -->
+    <div *ngIf="sidebarToggleStatus" class="relative z-40 md:z-20 overflow-visible flex-shrink-0">
+      <app-sidebar-v3></app-sidebar-v3>
+    </div>
+
+    <div class="flex-1  min-w-0 min-h-0 overflow-y-auto overflow-x-hidden relative z-0"
+     >
+
+      <router-outlet></router-outlet>
+
+    </div>
   </div>
-
-  <!-- Sidebar Container -->
-  <div *ngIf="sidebarToggleStatus" class="relative z-40 md:z-20 overflow-visible flex-shrink-0">
-    <app-sidebar-v3></app-sidebar-v3>
-  </div>
-
-  <div
-    class="flex-1 min-w-0 min-h-0 overflow-y-auto overflow-x-hidden md:p-6 relative z-0"
-    [ngClass]="!sidebarToggleStatus ? 'md:mx-[1vw] mx-2' : 'mx-0'">
-
-    <router-outlet></router-outlet>
-
-  </div>
-</div>
 
   <ng-container *ngIf="isDialogOpen && dialogConfig as config">
     <ng-container [ngSwitch]="config.type">

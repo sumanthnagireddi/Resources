@@ -1,35 +1,36 @@
-// finance-header.component.ts
 import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
+
 import { FinancePayloadType } from '../../../../model/finance.model';
 import {
-  selectMonthLabel,
-  selectShowBudgetSettings,
-  selectShowAddForm,
   selectCurrentBudget,
+  selectCurrentMonthKey,
+  selectMonthLabel,
+  selectPayloadType,
   selectSavingBudget,
   selectSelectedMonth,
-  selectCurrentMonthKey,
-  selectPayloadType,
+  selectShowAddForm,
+  selectShowBudgetSettings,
 } from '../../../../store/selectors/finance.selector';
 import * as FinanceActions from '../../../../store/actions/finance.action';
-
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-finance-header',
   standalone: true,
+  host: {
+    class: 'block',
+  },
   imports: [FormsModule, CommonModule],
   templateUrl: './finance-header.component.html',
-  styleUrl: './finance-header.component.css',
 })
 export class FinanceHeaderComponent implements OnInit {
-  private store = inject(Store);
+  private readonly store = inject(Store);
+  readonly authService = inject(AuthService);
 
-  // ── Selectors → template observables ──
   monthLabel$ = this.store.select(selectMonthLabel);
   showBudgetSettings$ = this.store.select(selectShowBudgetSettings);
   showAddForm$ = this.store.select(selectShowAddForm);
@@ -38,19 +39,26 @@ export class FinanceHeaderComponent implements OnInit {
   payloadType$ = this.store.select(selectPayloadType);
 
   payloadOptions = [
-    { value: 'expense' as const, label: 'Normal', icon: 'account_balance_wallet' },
-    { value: 'construction' as const, label: 'Construction', icon: 'engineering' },
+    {
+      value: 'expense' as const,
+      label: 'Spend mode',
+      shortLabel: 'Spend',
+      icon: 'credit_card',
+    },
+    {
+      value: 'construction' as const,
+      label: 'Build mode',
+      shortLabel: 'Build',
+      icon: 'engineering',
+    },
   ];
-  // Local form model — only lives here, not in store
-  // (budget values are pre-filled from store when modal opens)
+
   budgetForm = {
     monthlyBudget: 0,
     alertThreshold: 80,
   };
 
   ngOnInit(): void {
-    // Sync budgetForm whenever the store's currentBudget changes
-    // (e.g. after loadBudgetForMonthSuccess fires on modal open)
     this.currentBudget$.subscribe((budget) => {
       if (budget) {
         this.budgetForm.monthlyBudget = budget.monthlyBudget;
@@ -59,15 +67,11 @@ export class FinanceHeaderComponent implements OnInit {
     });
   }
 
-  // ── Actions ──
-
   switchPayloadType(type: FinancePayloadType): void {
     this.store.dispatch(FinanceActions.setFinancePayloadType({ payloadType: type }));
   }
 
   openBudgetSettings(): void {
-    // Effect will call loadBudgetForMonth → success will update
-    // currentBudget$ → ngOnInit subscription syncs budgetForm
     this.store.dispatch(FinanceActions.openBudgetSettings());
   }
 
@@ -88,9 +92,9 @@ export class FinanceHeaderComponent implements OnInit {
       .select(selectSelectedMonth)
       .pipe(take(1))
       .subscribe((date) => {
-        const prev = new Date(date);
-        prev.setMonth(prev.getMonth() - 1);
-        const prevMonthKey = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+        const previousMonth = new Date(date);
+        previousMonth.setMonth(previousMonth.getMonth() - 1);
+        const prevMonthKey = `${previousMonth.getFullYear()}-${String(previousMonth.getMonth() + 1).padStart(2, '0')}`;
 
         this.store
           .select(selectCurrentMonthKey)
@@ -100,7 +104,7 @@ export class FinanceHeaderComponent implements OnInit {
               FinanceActions.copyBudgetFromPrevMonth({
                 currentMonthKey,
                 prevMonthKey,
-              })
+              }),
             );
           });
       });
@@ -118,7 +122,7 @@ export class FinanceHeaderComponent implements OnInit {
               monthlyBudget: this.budgetForm.monthlyBudget,
               alertThreshold: this.budgetForm.alertThreshold,
             },
-          })
+          }),
         );
       });
   }

@@ -19,6 +19,7 @@ import { environment } from '../../environments/environment';
 })
 export class ContentService {
   topics_endpoint: any = environment.API_URL + '/content';
+  pages_endpoint: any = environment.API_URL + '/atlassian/pages';
   firestore = inject(Firestore);
   contentCollectionRef = collection(this.firestore, 'content_new');
   contentCollectionRefString = 'content_new';
@@ -27,6 +28,11 @@ export class ContentService {
   createContent(contentPayload: any) {
     return this.http.post(this.topics_endpoint, contentPayload);
   }
+
+  fetchPage(pageId: string) {
+    return this.http.get(this.pages_endpoint + '/' + pageId);
+  }
+
   fetchContent(contentId: string) {
     return this.http.get(this.topics_endpoint + '/' + contentId);
   }

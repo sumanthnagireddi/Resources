@@ -1,18 +1,25 @@
-<!-- finance-month-nav.component.html -->
-<div class="flex items-center justify-center gap-4 mb-6">
-  <button (click)="navigatePrev()"
-          class="w-9 h-9 rounded-xl flex items-center justify-center border border-gray-200
-                 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
-    <span class="material-symbols-outlined text-gray-600 dark:text-gray-400">chevron_left</span>
+<div
+  class="flex w-full items-center justify-between gap-2 rounded-2xl border border-[#e7ebe6] bg-white p-1.5 sm:inline-flex sm:w-auto sm:justify-center"
+>
+  <button
+    type="button"
+    (click)="navigatePrev()"
+    aria-label="Previous month"
+    class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#f5f7f4] text-[#545853] transition hover:bg-[#edf2eb]"
+  >
+    <span class="material-symbols-outlined text-[18px]">chevron_left</span>
   </button>
 
-  <span class="text-lg font-semibold text-gray-900 dark:text-white min-w-[180px] text-center">
+  <span class="min-w-[132px] px-2 text-center text-sm font-medium text-[#181918]">
     {{ selectedMonth$ | async | date: 'MMMM y' }}
   </span>
 
-  <button (click)="navigateNext()"
-          class="w-9 h-9 rounded-xl flex items-center justify-center border border-gray-200
-                 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
-    <span class="material-symbols-outlined text-gray-600 dark:text-gray-400">chevron_right</span>
+  <button
+    type="button"
+    (click)="navigateNext()"
+    aria-label="Next month"
+    class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#f5f7f4] text-[#545853] transition hover:bg-[#edf2eb]"
+  >
+    <span class="material-symbols-outlined text-[18px]">chevron_right</span>
   </button>
 </div>

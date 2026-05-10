@@ -1,0 +1,73 @@
+<section class="space-y-6 p-4 sm:p-6">
+  <div
+    class="flex flex-col gap-5 rounded-2xl border border-gray-200 bg-white/90 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900/90 lg:flex-row lg:items-start lg:justify-between"
+  >
+    <div class="space-y-2">
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+        Dynamic inputs
+      </p>
+      <div class="space-y-1">
+        <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
+          React editor playground
+        </h1>
+        <p class="max-w-2xl text-sm leading-6 text-gray-500 dark:text-slate-400">
+          Switch presets from Angular and inspect the Atlaskit editor surface rendered
+          inside the custom element bridge.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <button
+        type="button"
+        class="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        (click)="loadCommentPreset()"
+      >
+        Comment
+      </button>
+      <button
+        type="button"
+        class="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        (click)="loadDocsPreset()"
+      >
+        Docs
+      </button>
+      <button
+        type="button"
+        class="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        (click)="loadReviewPreset()"
+      >
+        Review
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+    <span
+      class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+    >
+      {{ appearance }}
+    </span>
+    <span
+      class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+    >
+      {{ payloadLabel }}
+    </span>
+    <code
+      class="rounded-full border border-accent/20 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent"
+    >
+      {{ bundlePath }}
+    </code>
+  </div>
+
+  <app-atlas-editor
+    [appearance]="appearance"
+    [description]="description"
+    [heading]="heading"
+    [minHeight]="minHeight"
+    [placeholder]="placeholder"
+    (documentChange)="handleDocumentChange($event)"
+  ></app-atlas-editor>
+
+  <p class="text-sm text-gray-500 dark:text-slate-400">{{ lastEvent }}</p>
+</section>

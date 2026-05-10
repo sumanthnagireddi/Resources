@@ -1,0 +1,209 @@
+<section class="min-h-full bg-gray-50 dark:bg-slate-950 transition-colors duration-200">
+  <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+    <div class="overflow-hidden rounded-3xl border border-gray-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="relative overflow-hidden border-b border-gray-200/80 px-6 py-6 dark:border-slate-800">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.12),_transparent_42%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.1),_transparent_36%)]"></div>
+        <div class="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div class="flex items-start gap-4">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-sky-500 text-white shadow-lg shadow-accent/20">
+              <span class="material-symbols-outlined text-[28px]">notifications_active</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gray-400 dark:text-slate-500">
+                Activity Feed
+              </p>
+              <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
+                Notifications
+              </h1>
+              <p class="mt-2 max-w-2xl text-sm text-gray-500 dark:text-slate-400">
+                Live Atlassian sync events, content updates, and page activity from the notification stream.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset" [ngClass]="getConnectionClasses()">
+              <span class="h-2 w-2 rounded-full bg-current"></span>
+              {{ getConnectionLabel() }}
+            </span>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-accent hover:text-accent dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+              (click)="notificationsService.refresh()"
+            >
+              <span class="material-symbols-outlined text-lg">refresh</span>
+              Refresh
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+              (click)="notificationsService.clearAll()"
+              [disabled]="!notificationsService.notifications().length"
+            >
+              <span class="material-symbols-outlined text-lg">delete_sweep</span>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4 border-b border-gray-200/80 px-6 py-5 sm:grid-cols-3 dark:border-slate-800">
+        <div class="rounded-2xl bg-gray-50 px-4 py-4 dark:bg-slate-800/70">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 dark:text-slate-500">Unread</p>
+          <div class="mt-2 flex items-end justify-between gap-3">
+            <p class="text-3xl font-semibold text-gray-900 dark:text-white">
+              {{ notificationsService.unreadCount() }}
+            </p>
+            <button
+              type="button"
+              class="text-xs font-semibold text-accent transition hover:underline"
+              (click)="notificationsService.markAllAsRead()"
+              [disabled]="!notificationsService.unreadCount()"
+            >
+              Mark all read
+            </button>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-gray-50 px-4 py-4 dark:bg-slate-800/70">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 dark:text-slate-500">Total items</p>
+          <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">
+            {{ notificationsService.notifications().length }}
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-gray-50 px-4 py-4 dark:bg-slate-800/70">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 dark:text-slate-500">Errors</p>
+          <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">
+            {{ errorCount() }}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 px-6 py-4">
+        <button
+          type="button"
+          class="rounded-full px-3 py-1.5 text-sm font-medium transition"
+          [ngClass]="activeFilter() === 'all'
+            ? 'bg-accent text-white shadow-md shadow-accent/20'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'"
+          (click)="setFilter('all')"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          class="rounded-full px-3 py-1.5 text-sm font-medium transition"
+          [ngClass]="activeFilter() === 'unread'
+            ? 'bg-accent text-white shadow-md shadow-accent/20'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'"
+          (click)="setFilter('unread')"
+        >
+          Unread
+        </button>
+        <button
+          type="button"
+          class="rounded-full px-3 py-1.5 text-sm font-medium transition"
+          [ngClass]="activeFilter() === 'errors'
+            ? 'bg-accent text-white shadow-md shadow-accent/20'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'"
+          (click)="setFilter('errors')"
+        >
+          Errors
+        </button>
+      </div>
+
+      <div class="border-t border-gray-200/80 dark:border-slate-800">
+        @if (notificationsService.isLoading() && !notificationsService.notifications().length) {
+          <div class="space-y-3 px-6 py-6">
+            @for (item of skeletonItems; track item) {
+              <div class="animate-pulse rounded-2xl border border-gray-200/80 p-4 dark:border-slate-800">
+                <div class="h-4 w-32 rounded bg-gray-200 dark:bg-slate-700"></div>
+                <div class="mt-3 h-5 w-3/4 rounded bg-gray-200 dark:bg-slate-700"></div>
+                <div class="mt-2 h-4 w-1/2 rounded bg-gray-200 dark:bg-slate-700"></div>
+              </div>
+            }
+          </div>
+        } @else if (!filteredNotifications().length) {
+          <div class="flex flex-col items-center justify-center px-6 py-16 text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 dark:bg-slate-800 dark:text-slate-500">
+              <span class="material-symbols-outlined text-[30px]">notifications_off</span>
+            </div>
+            <h2 class="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+              No notifications to show
+            </h2>
+            <p class="mt-2 max-w-md text-sm text-gray-500 dark:text-slate-400">
+              Try switching filters or wait for the next sync event to arrive from the live stream.
+            </p>
+          </div>
+        } @else {
+          <div class="divide-y divide-gray-200/80 dark:divide-slate-800">
+            @for (item of filteredNotifications(); track item.id) {
+              <article
+                class="flex flex-col gap-4 px-6 py-5 transition hover:bg-gray-50/80 dark:hover:bg-slate-800/35 lg:flex-row lg:items-start lg:justify-between"
+                [ngClass]="!item.read ? 'bg-accent/5' : ''"
+                (click)="markAsRead(item)"
+              >
+                <div class="flex min-w-0 gap-4">
+                  <div class="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl" [ngClass]="getStatusClasses(item)">
+                    <span class="material-symbols-outlined text-xl">{{ item.icon }}</span>
+                  </div>
+
+                  <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-semibold text-gray-600 dark:bg-slate-800 dark:text-slate-300">
+                        {{ item.serviceLabel }}
+                      </span>
+                      <span class="rounded-full px-2.5 py-1 text-[11px] font-semibold" [ngClass]="getStatusClasses(item)">
+                        {{ item.eventLabel }}
+                      </span>
+                      @if (item.entityId) {
+                        <span class="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-mono text-gray-500 dark:bg-slate-800 dark:text-slate-400">
+                          {{ item.entityId }}
+                        </span>
+                      }
+                    </div>
+
+                    <p class="mt-3 text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                      {{ item.message }}
+                    </p>
+
+                    <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-gray-500 dark:text-slate-400">
+                      <span>{{ notificationsService.formatRelativeTime(item.createdAt) }}</span>
+                      <span>{{ notificationsService.formatExactTime(item.createdAt) }}</span>
+                      @if (!item.read) {
+                        <span class="inline-flex items-center gap-1 font-semibold text-accent">
+                          <span class="h-2 w-2 rounded-full bg-current"></span>
+                          Unread
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 lg:justify-end">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-accent hover:text-accent dark:border-slate-700 dark:text-slate-300"
+                    (click)="markAsReadFromAction(item, $event)"
+                  >
+                    <span class="material-symbols-outlined text-lg">done</span>
+                    Mark read
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300"
+                    (click)="dismissFromAction(item, $event)"
+                  >
+                    <span class="material-symbols-outlined text-lg">close</span>
+                    Dismiss
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

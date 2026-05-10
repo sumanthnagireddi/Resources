@@ -14,9 +14,7 @@ import { Router } from '@angular/router';
 export class RecentDocsComponent implements OnInit {
   @Input() docs: any;
   private readonly router = inject(Router);
-  ngOnInit(): void {
-    console.log('d', this.docs);
-  }
+  ngOnInit(): void {}
   navigateTo(item: any) {
     this.router.navigate([`/pages/${item.topicId}`]);
   }

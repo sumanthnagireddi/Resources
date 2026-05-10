@@ -1,0 +1,220 @@
+Node.js version v21.7.3 detected.
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.
+[1m[33mComponent HMR has been enabled, see https://angular.dev/hmr for more info.[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: BreadcrumbComponent is not used within the template of ContentLayoutComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/content-layout/content-layout.component.ts:23:4:
+[37m      23 │     [32mBreadcrumbComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

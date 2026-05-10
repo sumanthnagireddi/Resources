@@ -30,9 +30,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [
-              "src/assets/my-react-app.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

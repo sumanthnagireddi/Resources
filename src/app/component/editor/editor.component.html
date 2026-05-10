@@ -1,14 +1,31 @@
-<div *ngIf="mode === 'view'" class="rounded-lg shadow-sm max-w-sm sm:max-w-screen-2xl ">
-  <notion-editor #editorElem readonly="true" style="display: block; width: 100%"></notion-editor>
-</div>
-<div *ngIf="mode === 'edit'" class="rounded-lg shadow-sm ">
-  <div class="flex justify-end">
-    <button *ngIf="ShowSaveButton" (click)="getContent()"
-      class="rounded-md -mt-8 bg-emerald- 600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg bg-emerald-600 focus:shadow-none active:bg-emerald-700 hover:bg-emerald-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2"
-      type="button">
-      Save
-    </button>
-  </div>
-  <br>
-  <notion-editor #editorElem readonly="false" style="display: block; width: 100%;"></notion-editor>
-</div>
+<section
+  class="min-w-0 dark:border-slate-700 dark:bg-slate-900/90"
+>
+
+  <atlas-editor-angular
+    class="block w-full"
+    [appearance]="resolvedAppearance"
+    [content]="resolvedContent"
+    [contentWidth]="resolvedContentWidth"
+    [description]="description"
+    [heading]="heading"
+    [minHeight]="minHeight"
+    [mode]="mode"
+    [placeholder]="placeholder"
+    (editordocumentchange)="handleDocumentChange($event)"
+  ></atlas-editor-angular>
+
+  <p
+    *ngIf="!widgetBundleReady && !widgetBundleError"
+    class="text-sm text-gray-500 dark:text-slate-400"
+  >
+    Loading editor shell...
+  </p>
+
+  <p
+    *ngIf="widgetBundleError"
+    class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-300"
+  >
+    {{ widgetBundleError }}
+  </p>
+</section>

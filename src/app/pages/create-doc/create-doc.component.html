@@ -4,8 +4,7 @@
       <div class="flex justify-between items-center">
         <app-breadcrumb [category]="currentContentTopic"></app-breadcrumb>
       </div>
-      <app-editor [mode]="'edit'" (content)="handleContent($event)"
-        ></app-editor>
+      <!-- <app-editor></app-editor> -->
     </div>
     <ng-template #noContentTemplate>
       <div class="flex flex-col items-center justify-center h-96 text-center text-gray-500">

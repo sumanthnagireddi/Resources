@@ -1,155 +1,285 @@
-<div
-  class="group relative overflow-hidden rounded-xl border border-gray-200 dark:border-slate-700
-         bg-white dark:bg-slate-800 p-5 shadow-sm dark:shadow-slate-900/50
-         transition-all hover:-translate-y-0.5 hover:shadow-xl dark:hover:shadow-slate-900/70">
-  <!-- Gradient Accent -->
-  <!-- <div
-    class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500">
-  </div> -->
+@if (variant === 'cover') {
+  <article class="h-full">
+    <a
+      class="group block h-full"
+      [routerLink]="articleLink"
+    >
+      <div class="relative aspect-[1.55/1] overflow-hidden rounded-[28px] border border-slate-200 bg-slate-900 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_26px_60px_-26px_rgba(15,23,42,0.35)] dark:border-slate-800 dark:hover:border-slate-700">
+        @if (hasImage) {
+          <img
+            [src]="blog.coverImageUrl"
+            [alt]="blog.title"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+          />
+        } @else {
+          <div
+            class="absolute inset-0"
+            [style.background-image]="fallbackBackground"
+          ></div>
+        }
 
-  <!-- Pinned Ribbon -->
-  <div *ngIf="blog.isPinned"
-    class="absolute -right-10 top-4 rotate-45 btn-accent px-10 py-1 text-xs font-semibold text-white shadow-md">
-    📌 PINNED
-  </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent"></div>
 
-  <!-- Header -->
-  <div class="flex items-start justify-between">
-    <!-- Blog Icon -->
-    <!-- <div class="flex gap-2"> -->
-      <span class="inline-flex rounded-lg bg-accent-light dark:bg-[var(--color-accent)]/20 p-2
-                   text-accent ring-1 ring-[var(--color-accent)]/20">
-        <!-- Document Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M7 7h10M7 11h10M7 15h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
-        </svg>
-      </span>
+        <div class="absolute left-4 top-4 flex flex-wrap items-center gap-2">
+          <span class="inline-flex rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-900">
+            {{ coverLabel }}
+          </span>
+          @if (showStateBadge) {
+            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]" [ngClass]="stateBadgeClasses">
+              {{ statusLabel }}
+            </span>
+          }
+        </div>
 
-    <!-- </div> -->
+        <div class="absolute inset-x-0 bottom-0 p-5 text-white">
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-white/70">
+            {{ getDisplayDate() }} / {{ readingTime }} min read
+          </p>
+          <h3 class="mt-2 text-xl font-semibold leading-[1.02] tracking-[-0.04em] text-white sm:text-[1.65rem]">
+            {{ blog.title }}
+          </h3>
+        </div>
+      </div>
+    </a>
+  </article>
+} @else if (variant === 'feature') {
+  <article class="h-full">
+    <a
+      class="group grid h-full overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_30px_72px_-32px_rgba(15,23,42,0.28)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+      [routerLink]="articleLink"
+    >
+      <div class="relative min-h-[300px] overflow-hidden bg-slate-900">
+        @if (hasImage) {
+          <img
+            [src]="blog.coverImageUrl"
+            [alt]="blog.title"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+          />
+        } @else {
+          <div
+            class="absolute inset-0"
+            [style.background-image]="fallbackBackground"
+          ></div>
+        }
 
-    <!-- Status -->
-    <span class="px-4 py-1 rounded-lg border text-xs font-medium" [ngClass]="{
-        'bg-gray-100/60 dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-slate-600': blog.status === 'DRAFT',
-        'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800': blog.status === 'PUBLISHED',
-        'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-100 dark:border-yellow-800': blog.status === 'SCHEDULED'
-      }">
-      <span class="size-1.5 rounded-full bg-current"></span>
-      {{ blog.status }}
-    </span>
-  </div>
-
-  <!-- Featured -->
-  <div *ngIf="!blog.isFeatured"
-        class="mt-3 inline-flex items-center gap-1 rounded-full bg-purple-100 dark:bg-purple-900/30
-               px-3 py-1 text-xs font-semibold text-purple-700 dark:text-purple-400">
-        <!-- Star Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.975h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.46 1.287 3.974c.3.922-.755 1.688-1.538 1.118L10 13.347l-3.37 2.917c-.783.57-1.838-.196-1.538-1.118l1.287-3.974-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.18l1.287-3.975z" />
-        </svg>
-        Featured
+        <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/75 via-slate-950/15 to-transparent"></div>
+        <div class="absolute left-5 top-5 flex flex-wrap items-center gap-2">
+          <span class="inline-flex rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-900">
+            Editor's pick
+          </span>
+          @if (showStateBadge) {
+            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]" [ngClass]="stateBadgeClasses">
+              {{ statusLabel }}
+            </span>
+          }
+        </div>
       </div>
 
-  <!-- Title -->
-  <a [routerLink]="['view', blog._id]">
-    <h3 class="mt-3 text-lg font-semibold text-gray-900 dark:text-white transition group-hover:text-accent">
-      {{ blog.title }}
-    </h3>
-  </a>
+      <div class="flex flex-col p-6 sm:p-7">
+        <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-rose-500">
+          {{ coverLabel }}
+        </p>
+        <h3 class="mt-4 text-[2rem] font-semibold leading-[0.95] tracking-[-0.05em] text-slate-950 dark:text-slate-50 sm:text-[2.4rem]">
+          {{ blog.title }}
+        </h3>
+        <p class="mt-4 text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+          {{ getExcerpt(210) }}
+        </p>
 
-  <!-- Description -->
-  <p class="mt-2 line-clamp-3 text-sm text-gray-500 dark:text-gray-400">
-    {{ blog.description }}
-  </p>
+        @if (tagPreview.length) {
+          <div class="mt-5 flex flex-wrap gap-2">
+            @for (tag of tagPreview; track tag) {
+              <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                {{ tag }}
+              </span>
+            }
+          </div>
+        }
 
-  <!-- Tags -->
-  <div class="mt-4 flex flex-wrap gap-2">
-    <span *ngFor="let tag of blog.tags"
-      class="rounded-full bg-accent-light dark:bg-[var(--color-accent)]/20 px-3 py-1 text-xs
-             font-medium text-accent hover:bg-[var(--color-accent)]/20 dark:hover:bg-[var(--color-accent)]/30 transition">
-      #{{ tag }}
-    </span>
-  </div>
+        <div class="mt-auto flex flex-wrap items-center justify-between gap-4 pt-8 text-sm text-slate-500 dark:text-slate-400">
+          <div class="flex flex-wrap items-center gap-2">
+            <span>{{ authorLabel }}</span>
+            <span>/</span>
+            <span>{{ getDisplayDate() }}</span>
+            <span>/</span>
+            <span>{{ readingTime }} min read</span>
+          </div>
 
-  <!-- Footer -->
-  <div class="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 dark:border-slate-700 pt-4">
-    <!-- Meta -->
-    <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-      <!-- Author -->
-      <span class="inline-flex items-center gap-1">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="size-4">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-        </svg>
+          <span class="inline-flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
+            Read story
+            <span class="material-symbols-outlined text-[18px]">arrow_outward</span>
+          </span>
+        </div>
+      </div>
+    </a>
+  </article>
+} @else if (variant === 'compact') {
+  <article class="h-full">
+    <a
+      class="group flex h-full items-center gap-4 rounded-[26px] border border-slate-200 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_22px_52px_-28px_rgba(15,23,42,0.26)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+      [routerLink]="articleLink"
+    >
+      <div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-[18px] bg-slate-900">
+        @if (hasImage) {
+          <img
+            [src]="blog.coverImageUrl"
+            [alt]="blog.title"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]"
+          />
+        } @else {
+          <div
+            class="absolute inset-0"
+            [style.background-image]="fallbackBackground"
+          ></div>
+        }
 
-        {{ blog.authorName || 'Sumanth Nagireddi' }}
-      </span>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent"></div>
+      </div>
 
-      <span>•</span>
+      <div class="min-w-0">
+        <p class="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+          {{ coverLabel }}
+        </p>
+        <h3 class="mt-2 text-[1.15rem] font-semibold leading-5 tracking-[-0.03em] text-slate-950 dark:text-slate-50">
+          {{ blog.title }}
+        </h3>
+        <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+          {{ getExcerpt(92) }}
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-[12px] text-slate-400 dark:text-slate-500">
+          <span>{{ getDisplayDate() }}</span>
+          <span>/</span>
+          <span>{{ readingTime }} min</span>
+        </div>
+      </div>
+    </a>
+  </article>
+} @else if (variant === 'wide') {
+  <article class="h-full">
+    <a
+      class="group grid h-full overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_28px_66px_-30px_rgba(15,23,42,0.28)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 md:grid-cols-[minmax(230px,0.88fr)_minmax(0,1.12fr)]"
+      [routerLink]="articleLink"
+    >
+      <div class="relative min-h-[220px] overflow-hidden bg-slate-900">
+        @if (hasImage) {
+          <img
+            [src]="blog.coverImageUrl"
+            [alt]="blog.title"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+          />
+        } @else {
+          <div
+            class="absolute inset-0"
+            [style.background-image]="fallbackBackground"
+          ></div>
+        }
 
-      <!-- Date -->
-      <span class="inline-flex items-center gap-1">
-        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-        {{ blog.createdAt | date:'mediumDate' }}
-      </span>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 to-transparent"></div>
+      </div>
 
-      <span *ngIf="blog.status === 'SCHEDULED'" class="text-yellow-600 dark:text-yellow-400">
-        • Publishes {{ blog.publishedAt | date:'medium' }}
-      </span>
-    </div>
+      <div class="flex flex-col p-6">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[11px] font-medium uppercase tracking-[0.18em] text-rose-500">
+            {{ coverLabel }}
+          </span>
+          @if (showStateBadge) {
+            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]" [ngClass]="stateBadgeClasses">
+              {{ statusLabel }}
+            </span>
+          }
+        </div>
 
-    <!-- Actions -->
-    <div class="flex items-center gap-3 text-gray-400 dark:text-gray-500">
-      <!-- Reading Time -->
-      <span class="inline-flex items-center gap-1 rounded-md bg-gray-100 dark:bg-slate-700
-                   px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="size-3.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
+        <h3 class="mt-4 text-[1.7rem] font-semibold leading-[1.02] tracking-[-0.045em] text-slate-950 dark:text-slate-50 sm:text-[2rem]">
+          {{ blog.title }}
+        </h3>
+        <p class="mt-4 max-w-2xl text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+          {{ getExcerpt(210) }}
+        </p>
 
-        5 min
-      </span>
+        <div class="mt-auto flex flex-wrap items-center justify-between gap-4 pt-8 text-sm text-slate-500 dark:text-slate-400">
+          <div class="flex flex-wrap items-center gap-2">
+            <span>{{ authorLabel }}</span>
+            <span>/</span>
+            <span>{{ getDisplayDate() }}</span>
+            <span>/</span>
+            <span>{{ viewCount }} views</span>
+          </div>
 
-      <!-- Views -->
-      <span class="inline-flex items-center gap-1 text-xs">
-        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-        {{ blog.viewCount }}
-      </span>
+          <span class="inline-flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
+            Open article
+            <span class="material-symbols-outlined text-[18px]">arrow_outward</span>
+          </span>
+        </div>
+      </div>
+    </a>
+  </article>
+} @else {
+  <article class="h-full">
+    <a
+      class="group flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_26px_62px_-30px_rgba(15,23,42,0.26)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+      [routerLink]="articleLink"
+    >
+      <div class="relative aspect-[1.38/1] overflow-hidden bg-slate-900">
+        @if (hasImage) {
+          <img
+            [src]="blog.coverImageUrl"
+            [alt]="blog.title"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+          />
+        } @else {
+          <div
+            class="absolute inset-0"
+            [style.background-image]="fallbackBackground"
+          ></div>
+        }
 
-      <!-- Actions -->
-      <span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="size-4 cursor-pointer hover:text-accent">
-          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157
-                   3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM
-                   19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25
-                   0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933
-                   l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-        </svg>
-      </span>
-      <span class="cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="size-4 hover:text-red-600 dark:hover:text-red-400">
-          <path fill-rule="evenodd"
-            d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
-            clip-rule="evenodd" />
-        </svg>
-      </span>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/10 to-transparent"></div>
+        <div class="absolute left-4 top-4 flex flex-wrap items-center gap-2">
+          <span class="inline-flex rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-900">
+            {{ coverLabel }}
+          </span>
+          @if (showStateBadge) {
+            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]" [ngClass]="stateBadgeClasses">
+              {{ statusLabel }}
+            </span>
+          }
+        </div>
+      </div>
 
-      <svg class="size-5 cursor-pointer hover:text-accent" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-      </svg>
-    </div>
-  </div>
-</div>
+      <div class="flex flex-1 flex-col p-5">
+        <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+          {{ getDisplayDate() }}
+        </p>
+        <h3 class="mt-3 text-[1.35rem] font-semibold leading-[1.04] tracking-[-0.04em] text-slate-950 dark:text-slate-50">
+          {{ blog.title }}
+        </h3>
+        <p class="mt-3 text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+          {{ getExcerpt(140) }}
+        </p>
+
+        @if (tagPreview.length) {
+          <div class="mt-4 flex flex-wrap gap-2">
+            @for (tag of tagPreview; track tag) {
+              <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                {{ tag }}
+              </span>
+            }
+          </div>
+        }
+
+        <div class="mt-auto flex flex-wrap items-center justify-between gap-4 pt-6 text-sm text-slate-500 dark:text-slate-400">
+          <div class="flex flex-wrap items-center gap-2">
+            <span>{{ authorLabel }}</span>
+            <span>/</span>
+            <span>{{ readingTime }} min</span>
+          </div>
+
+          <span class="inline-flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
+            Read
+            <span class="material-symbols-outlined text-[18px]">arrow_outward</span>
+          </span>
+        </div>
+      </div>
+    </a>
+  </article>
+}

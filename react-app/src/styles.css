@@ -1,0 +1,153 @@
+[data-react-widget-mount='true'][data-color-mode='light'],
+[data-react-app-root][data-color-mode='light'] {
+  --atlas-editor-text-primary: #0f172a;
+  --atlas-editor-border-light: rgba(148, 163, 184, 0.24);
+  --atlas-editor-surface-elevated: rgba(255, 255, 255, 0.98);
+  --atlas-editor-surface-subtle: rgba(248, 250, 252, 0.84);
+  --atlas-editor-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+  --atlas-editor-block-controls-surface: rgba(248, 250, 252, 0.92);
+  --atlas-editor-block-controls-surface-hover: rgba(226, 232, 240, 0.96);
+  --atlas-editor-block-controls-surface-pressed: rgba(203, 213, 225, 0.98);
+  --atlas-editor-block-controls-border: rgba(148, 163, 184, 0.28);
+}
+
+[data-react-widget-mount='true'][data-color-mode='dark'],
+[data-react-app-root][data-color-mode='dark'] {
+  --atlas-editor-text-primary: #e2e8f0;
+  --atlas-editor-border-light: rgba(148, 163, 184, 0.24);
+  --atlas-editor-surface-elevated: rgba(15, 23, 42, 0.96);
+  --atlas-editor-surface-subtle: rgba(2, 6, 23, 0.5);
+  --atlas-editor-shadow: 0 28px 72px rgba(2, 6, 23, 0.42);
+  --atlas-editor-block-controls-surface: rgba(15, 23, 42, 0.92);
+  --atlas-editor-block-controls-surface-hover: rgba(30, 41, 59, 0.96);
+  --atlas-editor-block-controls-surface-pressed: rgba(51, 65, 85, 0.98);
+  --atlas-editor-block-controls-border: rgba(71, 85, 105, 0.62);
+}
+
+:host,
+[data-react-widget-mount='true'],
+[data-react-app-root],
+[data-atlas-editor-root] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  color: var(--atlas-editor-text-primary, #0f172a);
+}
+
+[data-atlas-editor-root] {
+  overflow: visible;
+}
+
+.atlas-editor-shell {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: var(--atlas-editor-min-height, 420px);
+  container-type: inline-size;
+  border-radius: 1rem;
+  border: 1px solid var(--atlas-editor-border-light, rgba(148, 163, 184, 0.24));
+  background:
+    linear-gradient(180deg, var(--atlas-editor-surface-elevated, rgba(255, 255, 255, 0.98)) 0%, var(--atlas-editor-surface-subtle, rgba(248, 250, 252, 0.84)) 100%);
+  box-shadow: var(--atlas-editor-shadow, 0 18px 48px rgba(15, 23, 42, 0.08));
+}
+
+.atlas-editor-shell--comment {
+  padding: 0.75rem;
+}
+
+.atlas-editor-shell--document {
+  min-height: var(--atlas-editor-min-height, 520px);
+}
+
+.atlas-editor-shell--document .ak-editor-content-area {
+  padding-inline: 0.875rem;
+}
+
+.atlas-editor-shell--document .ProseMirror {
+  padding-inline: 2.5rem 1rem;
+}
+
+.atlas-editor-shell--content-full-width .ak-editor-content-area {
+  padding-inline: 0;
+}
+
+.atlas-editor-shell--content-full-width .ProseMirror {
+  padding-inline: 1.25rem;
+}
+
+.atlas-editor-shell .ak-editor-content-area,
+.atlas-editor-shell .ak-editor-content-area > div,
+.atlas-editor-shell .fabric-editor-popup-scroll-parent,
+.atlas-editor-shell .ProseMirror {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.atlas-editor-shell .ak-editor-content-area,
+.atlas-editor-shell .fabric-editor-popup-scroll-parent {
+  overflow-x: auto;
+}
+
+.atlas-editor-shell [contenteditable='true'],
+.atlas-editor-shell .ProseMirror {
+  min-height: var(--atlas-editor-min-height, 420px);
+  outline: none;
+}
+
+.atlas-editor-shell .ak-editor-content-area {
+  min-height: var(--atlas-editor-min-height, 420px);
+}
+
+.atlas-editor-shell--view {
+  min-height: 0;
+}
+
+.atlas-editor-shell--view .ak-editor-content-area,
+.atlas-editor-shell--view .ProseMirror {
+  min-height: 0;
+}
+
+.atlas-editor-shell--view [role='toolbar'] {
+  display: none !important;
+}
+
+.atlas-editor-shell--view .ak-editor-content-area {
+  padding-top: 1.25rem;
+}
+
+.atlas-editor-shell--content-narrow.atlas-editor-shell--view .ProseMirror {
+  padding-inline: 2rem 1.25rem;
+}
+
+.atlas-editor-shell--content-full-width.atlas-editor-shell--view .ProseMirror {
+  padding-inline: 1.25rem;
+}
+
+.atlas-editor-shell [data-testid='block-ctrl-drag-handle'] {
+  background: var(
+    --atlas-editor-block-controls-surface,
+    rgba(248, 250, 252, 0.92)
+  );
+  box-shadow:
+    0 0 0 1px
+      var(--atlas-editor-block-controls-border, rgba(148, 163, 184, 0.28)),
+    0 10px 24px rgba(15, 23, 42, 0.16);
+  color: var(--ds-icon-subtle, var(--atlas-editor-text-primary, #0f172a));
+}
+
+.atlas-editor-shell [data-testid='block-ctrl-drag-handle']:hover {
+  background: var(
+    --atlas-editor-block-controls-surface-hover,
+    rgba(226, 232, 240, 0.96)
+  );
+}
+
+.atlas-editor-shell [data-testid='block-ctrl-drag-handle']:active {
+  background: var(
+    --atlas-editor-block-controls-surface-pressed,
+    rgba(203, 213, 225, 0.98)
+  );
+}

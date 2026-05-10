@@ -1,1 +1,399 @@
-<app-add-blog></app-add-blog>
+<div class="min-h-full bg-[#edf2f7] p-3 dark:bg-slate-950 sm:p-5 lg:p-6">
+  <div
+    class="mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-[1600px] flex-col overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_32px_90px_-48px_rgba(15,23,42,0.4)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[0_32px_90px_-48px_rgba(2,6,23,0.88)]"
+  >
+    <header class="border-b border-slate-200 px-4 py-3 dark:border-slate-800 sm:px-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <a
+            routerLink="/blogs"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+            aria-label="Back to blogs"
+          >
+            <span class="material-symbols-outlined">arrow_back</span>
+          </a>
+
+          <div class="min-w-0">
+            <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
+              Blog Studio
+            </p>
+            <h1 class="truncate text-xl font-semibold text-slate-950 dark:text-slate-50">
+              Create Blog Post
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex rounded-2xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800">
+            <button
+              type="button"
+              (click)="setComposerMode('ai')"
+              class="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition"
+              [ngClass]="composerMode === 'ai'
+                ? 'bg-slate-950 text-white shadow-sm dark:bg-slate-50 dark:text-slate-950'
+                : 'text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-slate-50'"
+            >
+              <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+              AI Draft
+            </button>
+
+            <button
+              type="button"
+              (click)="setComposerMode('manual')"
+              class="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition"
+              [ngClass]="composerMode === 'manual'
+                ? 'bg-slate-950 text-white shadow-sm dark:bg-slate-50 dark:text-slate-950'
+                : 'text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-slate-50'"
+            >
+              <span class="material-symbols-outlined text-[18px]">edit_square</span>
+              Manual
+            </button>
+          </div>
+
+          <span
+            class="inline-flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300"
+          >
+            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+            {{ saveNotice }}
+          </span>
+
+          <button
+            type="button"
+            (click)="saveDraft()"
+            [disabled]="isSaving"
+            class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+          >
+            <span class="material-symbols-outlined text-[18px]">save</span>
+            Save draft
+          </button>
+
+          <button
+            type="button"
+            (click)="publishBlog()"
+            [disabled]="isSaving"
+            class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_-18px_rgba(5,150,105,0.9)] transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-500 dark:hover:bg-emerald-400"
+          >
+            <span class="material-symbols-outlined text-[18px]">publish</span>
+            Publish
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <aside class="hidden w-16 shrink-0 border-r border-slate-200 bg-slate-50/70 dark:border-slate-800 dark:bg-slate-950/70 lg:flex lg:flex-col lg:items-center lg:gap-3 lg:px-3 lg:py-5">
+        <span
+          class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-[0_16px_32px_-20px_rgba(15,23,42,0.95)] dark:bg-slate-50 dark:text-slate-950 dark:shadow-[0_16px_32px_-20px_rgba(248,250,252,0.22)]"
+        >
+          <span class="material-symbols-outlined text-[20px]">article</span>
+        </span>
+
+        <button
+          type="button"
+          (click)="setComposerMode('ai')"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border text-slate-700 transition"
+          [ngClass]="composerMode === 'ai'
+            ? 'border-slate-900 bg-slate-900 text-white dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950'
+            : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50'"
+          aria-label="Open AI assistant"
+        >
+          <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+        </button>
+
+        <button
+          type="button"
+          (click)="setComposerMode('manual')"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border text-slate-700 transition"
+          [ngClass]="composerMode === 'manual'
+            ? 'border-slate-900 bg-slate-900 text-white dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950'
+            : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50'"
+          aria-label="Switch to manual editing"
+        >
+          <span class="material-symbols-outlined text-[20px]">edit_square</span>
+        </button>
+
+        <div class="mt-auto flex flex-col items-center gap-3">
+          <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-violet-500"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+        </div>
+      </aside>
+
+      <aside
+        *ngIf="composerMode === 'ai'"
+        class="w-full shrink-0 border-b border-slate-200 bg-[linear-gradient(180deg,#fafcff_0%,#f7f9fc_100%)] dark:border-slate-800 dark:bg-[linear-gradient(180deg,#0f172a_0%,#111827_100%)] lg:max-w-[360px] lg:border-b-0 lg:border-r"
+      >
+        <div class="flex h-full flex-col">
+          <div class="border-b border-slate-200 px-5 py-5 dark:border-slate-800 sm:px-6">
+            <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
+              AI Brief
+            </p>
+            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
+              Shape the first draft
+            </h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-300">
+              Describe the audience, the angle, and the examples you want. The generated draft
+              lands directly in the atlas editor so you can keep refining it manually.
+            </p>
+          </div>
+
+          <div class="flex-1 overflow-y-auto px-5 py-5 sm:px-6">
+            <form [formGroup]="aiForm" class="space-y-5">
+              <div class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                <span class="material-symbols-outlined text-[18px]">translate</span>
+                English draft
+              </div>
+
+              <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-none">
+                <label class="block text-sm font-medium text-slate-900 dark:text-slate-50">
+                  Who is this blog post for?
+                </label>
+                <input
+                  type="text"
+                  formControlName="targetAudience"
+                  placeholder="Frontend teams, UX leads, founders..."
+                  class="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+                />
+              </div>
+
+              <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-none">
+                <label class="block text-sm font-medium text-slate-900 dark:text-slate-50">
+                  What key points should be covered?
+                </label>
+                <textarea
+                  rows="5"
+                  formControlName="keyPoints"
+                  placeholder="Call out the most important ideas, frameworks, or sections."
+                  class="mt-3 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+                ></textarea>
+              </div>
+
+              <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-none">
+                <label class="block text-sm font-medium text-slate-900 dark:text-slate-50">
+                  Examples or references to include
+                </label>
+                <textarea
+                  rows="5"
+                  formControlName="examples"
+                  placeholder="Mention stories, case studies, product examples, or scenarios."
+                  class="mt-3 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+                ></textarea>
+              </div>
+
+              <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-none">
+                <label class="block text-sm font-medium text-slate-900 dark:text-slate-50">Choose a tone</label>
+                <select
+                  formControlName="tone"
+                  class="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:focus:bg-slate-900"
+                >
+                  <option *ngFor="let option of toneOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-none">
+                <p class="text-sm font-medium text-slate-900 dark:text-slate-50">Current post metadata</p>
+                <div class="mt-3 space-y-2 text-sm text-slate-500 dark:text-slate-400">
+                  <p>
+                    <span class="font-medium text-slate-700 dark:text-slate-200">Title:</span>
+                    {{ blogForm.controls.title.value?.trim() || 'Untitled draft' }}
+                  </p>
+                  <p>
+                    <span class="font-medium text-slate-700 dark:text-slate-200">Category:</span>
+                    {{ blogForm.controls.category.value?.trim() || 'General' }}
+                  </p>
+                  <p>
+                    <span class="font-medium text-slate-700 dark:text-slate-200">Tags:</span>
+                    {{ tagPreview.length ? tagPreview.join(', ') : 'No tags yet' }}
+                  </p>
+                </div>
+              </div>
+
+              <div
+                *ngIf="generationError"
+                class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+              >
+                {{ generationError }}
+              </div>
+
+              <div class="space-y-3 pb-4">
+                <button
+                  type="button"
+                  (click)="generateDraft()"
+                  [disabled]="isGenerating"
+                  class="flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-white"
+                >
+                  <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                  {{ isGenerating ? 'Generating draft...' : 'Generate blog post now' }}
+                </button>
+
+                <button
+                  *ngIf="isGenerating"
+                  type="button"
+                  (click)="stopGeneration()"
+                  class="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+                >
+                  <span class="material-symbols-outlined text-[18px]">stop_circle</span>
+                  Stop generating
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </aside>
+
+      <main class="min-w-0 flex-1 overflow-y-auto bg-[#fbfcff] dark:bg-slate-950">
+        <div class="mx-auto flex w-full max-w-[1160px] flex-col gap-6 p-4 sm:p-6 lg:p-8">
+          <section [formGroup]="blogForm" class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none sm:p-6">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
+                  Draft title
+                </p>
+                <input
+                  type="text"
+                  formControlName="title"
+                  placeholder="Essential tips for creating engaging digital experiences"
+                  class="mt-3 w-full border-0 bg-transparent px-0 text-3xl font-semibold tracking-tight text-slate-950 outline-none placeholder:text-slate-300 dark:text-slate-50 dark:placeholder:text-slate-600 sm:text-4xl"
+                />
+                <p *ngIf="titleInvalid" class="mt-2 text-sm text-rose-600 dark:text-rose-400">
+                  Add a title so the post can be saved.
+                </p>
+
+                <textarea
+                  rows="3"
+                  formControlName="description"
+                  placeholder="Write a crisp summary that explains what readers will get from this post."
+                  class="mt-4 w-full resize-none rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+                ></textarea>
+              </div>
+
+              <div class="w-full max-w-[280px] rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4 dark:border-slate-700 dark:bg-slate-950">
+                <p class="text-sm font-semibold text-slate-900 dark:text-slate-50">Editor health</p>
+                <div class="mt-3 space-y-2 text-sm text-slate-500 dark:text-slate-400">
+                  <p>{{ draftSummary }}</p>
+                  <p>Status: {{ statusValue }}</p>
+                  <p>Mode: {{ composerMode === 'ai' ? 'AI assisted' : 'Manual only' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <label class="block">
+                <span class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Category</span>
+                <select
+                  formControlName="category"
+                  class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:focus:bg-slate-900"
+                >
+                  <option value="">Select category</option>
+                  <option *ngFor="let category of categories" [value]="category">
+                    {{ category }}
+                  </option>
+                </select>
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Tags</span>
+                <input
+                  type="text"
+                  formControlName="tags"
+                  placeholder="angular, design systems, ngrx"
+                  class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:bg-slate-900"
+                />
+              </label>
+
+              <label class="block">
+                <span class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Status</span>
+                <select
+                  formControlName="status"
+                  class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:focus:bg-slate-900"
+                >
+                  <option value="DRAFT">Draft</option>
+                  <option value="PUBLISHED">Published</option>
+                  <option value="SCHEDULED">Scheduled</option>
+                </select>
+              </label>
+            </div>
+
+            <label *ngIf="statusValue === 'SCHEDULED'" class="mt-4 block">
+              <span class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Publish date</span>
+              <input
+                type="datetime-local"
+                formControlName="publishedAt"
+                class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:bg-white dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:focus:bg-slate-900"
+              />
+            </label>
+
+            <div *ngIf="tagPreview.length" class="mt-4 flex flex-wrap gap-2">
+              <span
+                *ngFor="let tag of tagPreview"
+                class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300"
+              >
+                #{{ tag }}
+              </span>
+            </div>
+
+            <div
+              *ngIf="saveError"
+              class="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+            >
+              {{ saveError }}
+            </div>
+          </section>
+
+          <section class="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+              <div>
+                <p class="text-lg font-semibold text-slate-950 dark:text-slate-50">
+                  {{ composerMode === 'ai' ? 'AI assisted editor' : 'Manual editor' }}
+                </p>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  {{ composerMode === 'ai'
+                    ? 'Generate a first pass in the left rail, then polish the article here.'
+                    : 'Write freely in atlas editor. You can reopen AI help whenever you want.' }}
+                </p>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                <button
+                  *ngIf="composerMode === 'manual'"
+                  type="button"
+                  (click)="setComposerMode('ai')"
+                  class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+                >
+                  <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                  Open AI sidebar
+                </button>
+
+                <span
+                  class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
+                >
+                  <span class="material-symbols-outlined text-[18px]">edit_note</span>
+                  {{ draftSummary }}
+                </span>
+              </div>
+            </div>
+
+            <div class="p-4 sm:p-5 lg:p-6">
+              <ng-container *ngIf="editorMounted">
+                <app-atlas-editor
+                  [content]="editorDocument"
+                  [contentWidth]="'narrow'"
+                  [description]="composerMode === 'ai'
+                    ? 'Your generated draft and manual edits stay in one place.'
+                    : 'Write the article manually here, or open AI help anytime.'"
+                  [heading]="blogForm.controls.title.value?.trim() || 'New blog post'"
+                  [minHeight]="680"
+                  [mode]="'edit'"
+                  [placeholder]="'Start the story, add structure, and refine the post here...'"
+                  (documentChange)="handleDocumentChange($event)"
+                ></app-atlas-editor>
+              </ng-container>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

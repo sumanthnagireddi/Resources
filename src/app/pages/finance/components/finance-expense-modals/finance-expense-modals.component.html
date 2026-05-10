@@ -27,7 +27,7 @@
         Cancel
       </button>
       <button (click)="submitAdd()" [disabled]="!newExpense.title.trim() || newExpense.amount <= 0 || (saving$ | async)"
-        class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent
+        class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-accent transition hover:bg-accent/90
                            disabled:opacity-50 disabled:cursor-not-allowed">
         {{ (saving$ | async) ? 'Saving...' : 'Add Expense' }}
       </button>
@@ -65,7 +65,7 @@
         Cancel
       </button>
       <button (click)="submitEdit()"
-        [disabled]="!editExpense.title.trim() || editExpense.amount <= 0 || (saving$ | async)" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white btn-accent
+        [disabled]="!editExpense.title.trim() || editExpense.amount <= 0 || (saving$ | async)" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-accent transition hover:bg-accent/90
                            disabled:opacity-50 disabled:cursor-not-allowed">
         {{ (saving$ | async) ? 'Saving...' : 'Update Transaction' }}
       </button>

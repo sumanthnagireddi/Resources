@@ -1,45 +1,259 @@
-<div class="relative isolate">
+<div class="min-h-full bg-white pb-16 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+  <div class="mx-auto max-w-[1280px] px-4 pt-8 sm:px-6 lg:px-8 lg:pt-10">
+    <section
+      class="relative overflow-hidden rounded-[36px] border border-slate-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(205,233,255,0.9),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(255,210,245,0.95),_transparent_28%),linear-gradient(180deg,_#ffffff_0%,_#f8fbff_100%)] px-6 py-10 shadow-[0_24px_80px_-44px_rgba(15,23,42,0.25)] dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_left,_rgba(30,64,175,0.22),_transparent_32%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.2),_transparent_26%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] sm:px-10 sm:py-14"
+    >
+      <div class="relative mx-auto max-w-3xl text-center">
+        <p class="text-[10px] font-semibold uppercase tracking-[0.42em] text-rose-500">
+          Blog
+        </p>
+        <h1 class="mt-5 text-[clamp(2.5rem,7vw,4.9rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-slate-950 dark:text-slate-50">
+          Blogs on product management &amp; user feedback
+        </h1>
+        <p class="mx-auto mt-5 max-w-2xl text-[15px] leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+          A landing surface for essays, experiments, roadmaps, launches, and the small product
+          decisions that shape stronger teams.
+        </p>
+      </div>
 
-    <div class="mx-auto max-w-4xl py-4 mb-10">
-        <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div
-                class="relative rounded-full px-3 py-1 text-sm/6 text-slate-600 dark:text-slate-400
-                       ring-1 ring-slate-900/10 dark:ring-slate-700 hover:ring-slate-900/20 dark:hover:ring-slate-600">
-                Writing about Web Development, JavaScript, Angular, and AWS.
-                <a href="home" class="font-semibold text-accent">
-                    <span aria-hidden="true" class="absolute inset-0"></span>
-                    Explore resources <span aria-hidden="true">→</span>
-                </a>
-            </div>
+      <div class="relative mt-8 flex flex-wrap items-center justify-center gap-3">
+        @for (item of collectionSummary(); track item.label) {
+          <div class="rounded-full border border-white/70 bg-white/75 px-4 py-2 text-left shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/70">
+            <strong class="block text-sm font-semibold text-slate-950 dark:text-slate-50">
+              {{ item.value }}
+            </strong>
+            <span class="block text-xs text-slate-500 dark:text-slate-400">
+              {{ item.label }}
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+
+    @if (hasLoadError()) {
+      <section class="mt-10 rounded-[30px] border border-rose-200 bg-rose-50 px-6 py-10 text-center shadow-sm dark:border-rose-900/40 dark:bg-rose-950/20">
+        <div class="mx-auto max-w-xl">
+          <span class="material-symbols-outlined text-4xl text-rose-500">warning</span>
+          <h2 class="mt-4 text-2xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-slate-50">
+            The journal could not be loaded
+          </h2>
+          <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+            Check the blogs API connection and refresh the page. Once the feed is back, this
+            landing view will repopulate automatically.
+          </p>
         </div>
-
-        <div class="text-center">
-            <h1 class="text-5xl font-semibold text-balance text-slate-900 dark:text-white">
-                Discover my latest blogs and articles
-            </h1>
-
-            <p class="mt-8 text-lg font-medium text-pretty text-slate-600 dark:text-slate-400 sm:text-xl/8">
-                A personal blog by Sumanth Nagireddi, sharing practical insights and experiences in web development
-                using JavaScript, Angular, React, Node.js, and cloud technologies.
+      </section>
+    } @else {
+      <section class="mt-10">
+        <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
+              Recently published
             </p>
+            <h2 class="mt-2 text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950 dark:text-slate-50">
+              Fresh stories from the journal
+            </h2>
+          </div>
 
-            <div class="hidden md:flex items-center justify-center gap-4 flex-1 mx-4 mt-4">
-                <div class="flex-1 max-w-sm">
-                    <input type="text" placeholder="Search" class="w-full px-3 py-2 rounded-md border text-sm
-                           bg-white dark:bg-slate-800 border-gray-400/70 dark:border-slate-600
-                           text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
-                           focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent transition-colors" />
-                </div>
-                <button class="btn-accent font-medium text-white text-base px-6 py-1.5 rounded-md">
-                    Search
-                </button>
-            </div>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            {{ archiveCountLabel() }}
+          </p>
         </div>
-    </div>
 
-</div>
+        @if (isLoading()) {
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+            @for (item of [1, 2, 3]; track item) {
+              <div class="aspect-[1.55/1] animate-pulse rounded-[28px] bg-slate-200/80 dark:bg-slate-800"></div>
+            }
+          </div>
+        } @else if (recentStories().length > 0) {
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+            @for (blog of recentStories(); track trackByBlog($index, blog)) {
+              <app-blog-card [blog]="blog" [variant]="'cover'"></app-blog-card>
+            }
+          </div>
+        } @else {
+          <div class="rounded-[28px] border border-slate-200 bg-slate-50 px-6 py-12 text-center dark:border-slate-800 dark:bg-slate-900/70">
+            <span class="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-500">article</span>
+            <h2 class="mt-4 text-2xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-slate-50">
+              No blog posts yet
+            </h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+              Publish the first article and this landing surface will turn into a living archive.
+            </p>
+            <a
+              routerLink="create-blog"
+              class="mt-6 inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-white"
+            >
+              Create first post
+            </a>
+          </div>
+        }
+      </section>
 
-<div class="py-4 px-4">
-  <app-recent-blogs></app-recent-blogs>
-  <app-all-blogs></app-all-blogs>
+      @if (!isLoading()) {
+        @if (spotlightStory(); as featuredStory) {
+          <section class="mt-12">
+            <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
+                  Editor's picks
+                </p>
+                <h2 class="mt-2 text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950 dark:text-slate-50">
+                  The stories worth opening next
+                </h2>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                @for (topic of topicCatalog().slice(1, 5); track topic.label) {
+                  <button
+                    type="button"
+                    class="rounded-full border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.14em] transition"
+                    [ngClass]="activeTopic() === topic.label
+                      ? 'border-slate-950 bg-slate-950 text-white dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950'
+                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50'"
+                    (click)="selectTopic(topic.label)"
+                  >
+                    {{ topic.label }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.9fr)]">
+              <app-blog-card [blog]="featuredStory" [variant]="'feature'"></app-blog-card>
+
+              <div class="space-y-5">
+                @for (blog of featureRailStories(); track trackByBlog($index, blog)) {
+                  <app-blog-card [blog]="blog" [variant]="'compact'"></app-blog-card>
+                }
+              </div>
+            </div>
+          </section>
+        }
+      }
+
+      @if (!isLoading() && filteredBlogs().length > 0) {
+        <section class="mt-12 rounded-[34px] border border-slate-200 bg-slate-50/70 p-5 shadow-[0_24px_70px_-50px_rgba(15,23,42,0.3)] dark:border-slate-800 dark:bg-slate-900/70 sm:p-6 lg:p-8">
+          <div class="flex flex-col gap-5 border-b border-slate-200 pb-6 dark:border-slate-800 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-2xl">
+              <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
+                All articles
+              </p>
+              <h2 class="mt-2 text-[1.9rem] font-semibold tracking-[-0.05em] text-slate-950 dark:text-slate-50">
+                A searchable archive of product notes
+              </h2>
+              <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                Explore the full stream, jump across topics, or surface the most-viewed work.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <a
+                routerLink="create-blog"
+                class="inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-white"
+              >
+                Write post
+              </a>
+              <a
+                routerLink="admin"
+                class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+              >
+                Admin
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <label class="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-950">
+              <span class="material-symbols-outlined text-[20px] text-slate-400">search</span>
+              <input
+                type="text"
+                placeholder="Search by title, tag, or topic"
+                [value]="searchQuery()"
+                (input)="updateSearch($any($event.target).value)"
+                class="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
+              />
+              @if (searchQuery()) {
+                <button
+                  type="button"
+                  (click)="clearSearch()"
+                  class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+                  aria-label="Clear search"
+                >
+                  <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              }
+            </label>
+
+            <div class="flex flex-wrap items-center gap-2">
+              @for (mode of sortModes; track mode) {
+                <button
+                  type="button"
+                  class="rounded-full border px-4 py-2 text-sm font-medium transition"
+                  [ngClass]="sortMode() === mode
+                    ? 'border-slate-950 bg-slate-950 text-white dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50'"
+                  (click)="setSortMode(mode)"
+                >
+                  {{ mode }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-2">
+            @for (topic of topicCatalog(); track trackByTopic($index, topic)) {
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] transition"
+                [ngClass]="activeTopic() === topic.label
+                  ? 'border-slate-950 bg-slate-950 text-white dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50'"
+                (click)="selectTopic(topic.label)"
+              >
+                <span>{{ topic.label }}</span>
+                <span class="rounded-full bg-black/5 px-2 py-0.5 text-[10px] dark:bg-white/10">
+                  {{ topic.count }}
+                </span>
+              </button>
+            }
+          </div>
+
+          <div class="mt-8">
+            @if (archiveStories().length > 0) {
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                @for (blog of archiveStories(); track trackByBlog($index, blog)) {
+                  <div [ngClass]="getArchiveWrapperClasses($index)">
+                    <app-blog-card
+                      [blog]="blog"
+                      [variant]="getArchiveCardVariant($index)"
+                    ></app-blog-card>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="rounded-[28px] border border-dashed border-slate-300 bg-white px-6 py-10 text-center dark:border-slate-700 dark:bg-slate-950">
+                <span class="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-500">filter_alt_off</span>
+                <h3 class="mt-4 text-2xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-slate-50">
+                  No extra stories beyond the featured set
+                </h3>
+                <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  The current search and topic filter are already captured in the stories above.
+                  Try widening the filter to bring more of the archive into view.
+                </p>
+                <button
+                  type="button"
+                  class="mt-6 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50"
+                  (click)="selectTopic('All topics'); clearSearch()"
+                >
+                  Reset filters
+                </button>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
 </div>

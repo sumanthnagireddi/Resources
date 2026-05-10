@@ -1,23 +1,28 @@
-import { Component, inject, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { toggleSidebar } from '../../../store/actions/sidebar.actions';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+  computed,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { ThemeService, AccentColor, ACCENT_COLORS, ThemeMode } from '../../../services/theme.service';
-import { GlobalSearchComponent } from '../../global-search/global-search.component';
+import { Store } from '@ngrx/store';
+import { environment } from '../../../../environments/environment';
+import { NotificationListItem } from '../../../model/notification.model';
 import { AuthService } from '../../../services/auth.service';
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-type: 'info' | 'success' | 'warning' | 'error';
-  icon: string;
-}
+import {
+  ACCENT_COLORS,
+  AccentColor,
+  ThemeMode,
+  ThemeService,
+} from '../../../services/theme.service';
+import { NotificationsService } from '../../../services/notifications.service';
+import { toggleSidebar } from '../../../store/actions/sidebar.actions';
+import { GlobalSearchComponent } from '../../global-search/global-search.component';
 
 @Component({
   selector: 'app-header',
@@ -35,71 +40,41 @@ export class HeaderComponent implements OnInit {
   showAppsPopover = false;
   showProfilePopover = false;
 
-  // Personal projects/apps - Add more apps here in the future
+  readonly visibleNotifications = computed(() =>
+    this.notificationsService.notifications().slice(0, 8),
+  );
+
   readonly personalApps = [
     {
       name: 'Portfolio',
       url: 'https://sumanthnagireddi1.web.app',
       image: 'https://sumanthnagireddi1.web.app/assets/imag3.jpg',
       description: 'My personal portfolio website',
-    }
+    },
   ];
 
   private readonly store = inject(Store);
   private readonly http = inject(HttpClient);
-  readonly themeService = inject(ThemeService);
   private readonly elementRef = inject(ElementRef);
+  readonly themeService = inject(ThemeService);
   readonly authService = inject(AuthService);
+  readonly notificationsService = inject(NotificationsService);
 
-  // Sample notifications - replace with actual service data
-  notifications: Notification[] = [
-    {
-      id: '1',
-      title: 'New content added',
-      message: 'Angular 19 features documentation has been published',
-      time: '5 min ago',
-      read: false,
-      type: 'info',
-      icon: 'article'
-    },
-    {
-      id: '2',
-      title: 'Build successful',
-      message: 'Your latest deployment completed successfully',
-      time: '1 hour ago',
-      read: false,
-      type: 'success',
-      icon: 'check_circle'
-    },
-    {
-      id: '3',
-      title: 'New comment',
-      message: 'Someone commented on your blog post',
-      time: '2 hours ago',
-      read: true,
-      type: 'info',
-      icon: 'chat_bubble'
-    }
-  ];
-
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.read).length;
-  }
-
-  // Theme options
   readonly accentColors = ACCENT_COLORS;
   readonly themeModes: { label: string; value: ThemeMode; icon: string }[] = [
     { label: 'Light', value: 'light', icon: 'light_mode' },
     { label: 'Dark', value: 'dark', icon: 'dark_mode' },
-    { label: 'System', value: 'system', icon: 'contrast' }
+    { label: 'System', value: 'system', icon: 'contrast' },
   ];
 
   ngOnInit(): void {
+    this.notificationsService.init();
+
     this.http
       .get<{ status: boolean }>(`${environment.API_URL}/health`)
       .subscribe({
         next: (data) => {
-          this.isServerOn = data ? true : false;
+          this.isServerOn = !!data;
         },
         error: () => {
           this.isServerOn = false;
@@ -130,8 +105,6 @@ export class HeaderComponent implements OnInit {
     this.store.dispatch(toggleSidebar({ show: this.sidebarToggleStatus }));
   }
 
-
-
   toggleThemePopover(event: MouseEvent): void {
     event.stopPropagation();
     this.showThemePopover = !this.showThemePopover;
@@ -148,21 +121,26 @@ export class HeaderComponent implements OnInit {
     this.showProfilePopover = false;
   }
 
-  markAsRead(notification: Notification): void {
-    notification.read = true;
+  markAsRead(notification: NotificationListItem): void {
+    this.notificationsService.markAsRead(notification.id);
   }
 
   markAllAsRead(): void {
-    this.notifications.forEach(n => n.read = true);
+    this.notificationsService.markAllAsRead();
   }
 
   removeNotification(id: string, event: MouseEvent): void {
     event.stopPropagation();
-    this.notifications = this.notifications.filter(n => n.id !== id);
+    this.notificationsService.remove(id);
   }
 
   clearAllNotifications(): void {
-    this.notifications = [];
+    this.notificationsService.clearAll();
+  }
+
+  refreshNotifications(event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.notificationsService.refresh();
   }
 
   setThemeMode(mode: ThemeMode): void {
@@ -192,5 +170,42 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     this.showProfilePopover = false;
     this.authService.logout();
+  }
+
+  getConnectionLabel(): string {
+    switch (this.notificationsService.connectionState()) {
+      case 'live':
+        return 'Live';
+      case 'connecting':
+        return 'Connecting';
+      case 'reconnecting':
+        return 'Reconnecting';
+      default:
+        return 'Offline';
+    }
+  }
+
+  getConnectionClasses(): string {
+    switch (this.notificationsService.connectionState()) {
+      case 'live':
+        return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-500/20';
+      case 'connecting':
+        return 'bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-sky-500/20';
+      case 'reconnecting':
+        return 'bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-500/20';
+      default:
+        return 'bg-slate-500/10 text-slate-700 dark:text-slate-300 ring-slate-500/20';
+    }
+  }
+
+  getNotificationToneClasses(notification: NotificationListItem): string {
+    switch (notification.status) {
+      case 'success':
+        return 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-300';
+      case 'error':
+        return 'bg-red-100 dark:bg-red-500/15 text-red-600 dark:text-red-300';
+      default:
+        return 'bg-sky-100 dark:bg-sky-500/15 text-sky-600 dark:text-sky-300';
+    }
   }
 }

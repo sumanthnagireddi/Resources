@@ -13,6 +13,26 @@ export const selectRecentContents = createSelector(
   (state: ContentState) => state?.recentContent || []
 );
 
+export const selectCurrentPage = createSelector(
+  selectContentState,
+  (state: ContentState) => state?.currentContent || null
+);
+
+export const selectCurrentPageBody = createSelector(
+  selectCurrentPage,
+  (currentContent) => currentContent?.body ?? null
+);
+
+export const selectCurrentPageLoading = createSelector(
+  selectContentState,
+  (state: ContentState) => state?.currentContentLoading ?? false
+);
+
+export const selectCurrentPageError = createSelector(
+  selectContentState,
+  (state: ContentState) => state?.currentContentError ?? null
+);
+
 export const selectAllContent = createSelector(
   selectContentState,
   (state: ContentState) => {
