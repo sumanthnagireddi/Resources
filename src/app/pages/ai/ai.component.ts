@@ -137,7 +137,7 @@ export class AiComponent implements OnInit, AfterViewChecked {
     this.http
       .post<{
         data: string;
-      }>(`${environment.API_URL}/ai/ask`, { question: text })
+      }>(`https://ai-webservices.onrender.com/ai/ask`, { question: text })
       .subscribe({
         next: (res) => {
           chat.messages.push({
